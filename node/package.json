@@ -1,0 +1,28 @@
+{
+  "name": "scandesk",
+  "version": "1.0.0",
+  "description": "web-app to scan products with your phone and manage them",
+  "keywords": [
+    "scanner",
+    "scan",
+    "barcode",
+    "crud",
+    "products",
+    "websockets"
+  ],
+  "homepage": "https://github.com/oriioll/scandesk#readme",
+  "bugs": {
+    "url": "https://github.com/oriioll/scandesk/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oriioll/scandesk.git"
+  },
+  "license": "ISC",
+  "author": "Oriol Plazas León",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
