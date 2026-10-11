@@ -17,7 +17,7 @@ desktop.ini
 .idea/
 *.swp
 *.swo
-
+AGENTS.md
 node_modules/
 
 angular/dist/
@@ -31,7 +31,7 @@ laravel/vendor/
 
 laravel/storage/
 laravel/bootstrap/cache/
-
+.kimi
 laravel/.env
 laravel/.env.*
 
