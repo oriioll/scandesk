@@ -1,1 +1,289 @@
 /* You can add global styles to this file, and also import other style files */
+/* ==========================================================================
+   ScanDesk — src/styles.css
+   ========================================================================== */
+
+/* @import must be the first rule in the file */
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Figtree:wght@300..900&display=swap");
+
+/* --------------------------------------------------------------------------
+   1. Brand palette (raw values, from the brand PDF)
+   Don't use these directly in components: use the semantic tokens (section 2).
+   -------------------------------------------------------------------------- */
+:root {
+    /* Light mode */
+    --snow: #fcfcfd;
+    --cloud-gray: #f0f1f5;
+    --graphite: #1e2128;
+    --amethyst: #6a4c93;
+    --sea-green: #2a9d8f;
+    --forest-green: #2f8f4e;
+    /* status only: success */
+    --amber-rust: #b45f06;
+    /* status only: warning */
+    --ruby: #b3202f;
+    /* status only: error */
+
+    /* Dark mode */
+    --obsidian: #121231;
+    /* PDF says #1212317 (7 digits) -> assumed #121231 */
+    --charcoal: #1c1e25;
+    --platinum: #e8e9ee;
+    --lavender: #b79ce0;
+    --seafoam: #5ccfc0;
+    --leaf-green: #6ccb82;
+    /* status only: success */
+    --soft-amber: #f0b65a;
+    /* status only: warning */
+    --rose-red: #ff6b7a;
+    /* status only: error */
+
+    /* ------------------------------------------------------------------------
+     2. Semantic tokens: the ones components should use.
+     light-dark(<light>, <dark>) picks the value based on `color-scheme`.
+     ------------------------------------------------------------------------ */
+    --bg: light-dark(var(--snow), var(--obsidian));
+    --surface: light-dark(var(--cloud-gray), var(--charcoal));
+    --text: light-dark(var(--graphite), var(--platinum));
+    --text-muted: color-mix(in srgb, var(--text) 68%, var(--bg));
+    --border: color-mix(in srgb, var(--text) 14%, var(--bg));
+
+    --primary: light-dark(var(--amethyst), var(--lavender));
+    --primary-hover: color-mix(in srgb, var(--primary) 82%, var(--text));
+    --accent: light-dark(var(--sea-green), var(--seafoam));
+    --focus-ring: var(--accent);
+
+    /* Status colors: ONLY for .success / .warning / .error and feedback UI */
+    --success: light-dark(var(--forest-green), var(--leaf-green));
+    --warning: light-dark(var(--amber-rust), var(--soft-amber));
+    --error: light-dark(var(--ruby), var(--rose-red));
+
+    /* ------------------------------------------------------------------------
+     3. Fonts
+     ------------------------------------------------------------------------ */
+    --font-heading: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI",
+        Roboto, sans-serif;
+    --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto,
+        sans-serif;
+
+    /* ------------------------------------------------------------------------
+     4. Fluid type scale (clamp: min on ~360px phones, max on ~1280px+ desktop)
+     ------------------------------------------------------------------------ */
+    --text-xs: clamp(0.75rem, 0.73rem + 0.08vw, 0.8125rem);
+    /* 12 -> 13 */
+    --text-sm: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+    /* 13 -> 14 */
+    --text-base: clamp(0.9375rem, 0.92rem + 0.1vw, 1rem);
+    /* 15 -> 16 */
+    --text-lg: clamp(1.0625rem, 1.03rem + 0.2vw, 1.1875rem);
+    /* 17 -> 19 */
+    --text-xl: clamp(1.1875rem, 1.1rem + 0.45vw, 1.375rem);
+    /* 19 -> 22 */
+    --text-2xl: clamp(1.4375rem, 1.25rem + 0.9vw, 1.875rem);
+    /* 23 -> 30 */
+    --text-3xl: clamp(1.75rem, 1.4rem + 1.8vw, 2.5rem);
+    /* 28 -> 40 */
+    --text-4xl: clamp(2rem, 1.5rem + 2.6vw, 3.25rem);
+    /* 32 -> 52 */
+
+    /* Line heights: tighter for big text, relaxed only for body */
+    --leading-tight: 1.15;
+    --leading-snug: 1.3;
+    --leading-normal: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   5. Theme switching
+   - No attribute  -> follows the OS (prefers-color-scheme)
+   - data-theme="light" | "dark" on <html> -> forces it
+   -------------------------------------------------------------------------- */
+:root {
+    color-scheme: light dark;
+}
+
+:root[data-theme="light"] {
+    color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+}
+
+/* --------------------------------------------------------------------------
+   6. Base
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    /* stops iOS from inflating text in landscape */
+    text-size-adjust: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 400;
+    line-height: var(--leading-normal);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+::selection {
+    background: color-mix(in srgb, var(--primary) 30%, transparent);
+}
+
+:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   7. Headings (Bricolage Grotesque)
+   -------------------------------------------------------------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.brand {
+    margin: 0;
+    font-family: var(--font-heading);
+    color: var(--text);
+    text-wrap: balance;
+}
+
+h1 {
+    font-size: var(--text-4xl);
+    font-weight: 800;
+    line-height: var(--leading-tight);
+    letter-spacing: -0.025em;
+}
+
+h2 {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    line-height: var(--leading-tight);
+    letter-spacing: -0.02em;
+}
+
+h3 {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    line-height: var(--leading-snug);
+    letter-spacing: -0.015em;
+}
+
+h4 {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    line-height: var(--leading-snug);
+    letter-spacing: -0.01em;
+}
+
+h5 {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    line-height: var(--leading-snug);
+}
+
+h6 {
+    font-size: var(--text-base);
+    font-weight: 600;
+    line-height: var(--leading-snug);
+}
+
+.brand {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+
+/* --------------------------------------------------------------------------
+   8. Text (Figtree)
+   -------------------------------------------------------------------------- */
+p {
+    margin: 0;
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    color: var(--text);
+    text-wrap: pretty;
+    /* avoids orphan words on the last line */
+}
+
+/* span is inline on purpose: it inherits from its parent so it never breaks context */
+span {
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+}
+
+label {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    line-height: var(--leading-snug);
+    color: var(--text);
+}
+
+a {
+    color: var(--primary);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: color 0.15s ease;
+}
+
+a:hover {
+    color: var(--primary-hover);
+    text-decoration-thickness: 2px;
+}
+
+small {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+/* Helpers */
+.text-muted {
+    color: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   9. Status messages (the only place status colors are used)
+   -------------------------------------------------------------------------- */
+.success,
+.warning,
+.error {
+    font-weight: 700;
+}
+
+.success {
+    color: var(--success);
+}
+
+.warning {
+    color: var(--warning);
+}
+
+.error {
+    color: var(--error);
+}
