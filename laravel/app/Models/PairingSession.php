@@ -9,7 +9,7 @@ class PairingSession extends Model
 {
     // PairingSession.php
     protected $fillable = ['token_hash', 'expires_at'];
-    protected $casts = ['is_active' => 'boolean', 'expires_at' => 'datetime'];
+    protected $casts = ['is_active' => 'boolean', 'expires_at' => 'datetime', 'claimed_at' => 'datetime'];
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
