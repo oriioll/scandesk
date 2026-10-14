@@ -1,6 +1,10 @@
 <?php
 
 return [
+    /**
+     * TEST ENV VARIABLE: TO SKIP LOGIN AS A DEV
+     */
+    'dev_auto_login' => env('DEV_AUTO_LOGIN', false),
 
     /*
     |--------------------------------------------------------------------------
