@@ -1,8 +1,13 @@
 import { Routes } from '@angular/router';
+import { ScanPage } from './pages/scan-page/scan-page';
 
 const TODO: any = null;
-
 export const routes: Routes = [
+  { path: '', pathMatch: 'full', redirectTo: 'scan' }, // temporal, hasta tener Landing
+  { path: 'scan', component: ScanPage },
+  { path: '**', redirectTo: 'scan' }, // temporal, hasta tener 404
+];
+export const routes_future: Routes = [
   // Public
   { path: '', pathMatch: 'full', component: TODO }, // Landing page
   { path: 'login', component: TODO }, //Login page
@@ -22,7 +27,7 @@ export const routes: Routes = [
       { path: 'orders/:id', component: TODO }, // order detail page
     ],
   },
-  { path: 'scan', component: TODO }, //Scan -> Get items and post them
+  { path: 'scan', component: ScanPage }, //Scan -> Get items and post them
   { path: 'checkout', component: TODO }, //checkout -> Get items and use checkout modes
 
   { path: '**', component: TODO }, // 404
