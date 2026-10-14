@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PairingSessionController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -76,7 +77,7 @@ Route::middleware('auth:sanctum')->group(function () {
      */
     Route::prefix('sync')->group(function () {
         // POST /sync/pair-code - create sync session and return token of the session
-        Route::post('/pair-code');
+        Route::post('/pair-code', [PairingSessionController::class, 'store']);
 
         // POST /sync/close-conn - Closes the current connection
         Route::post('/close-conn');
