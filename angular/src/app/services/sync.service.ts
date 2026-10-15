@@ -4,6 +4,7 @@ import { SessionResponse } from '../model/SessionResponse';
 import { map, Observable } from 'rxjs';
 import { ApiResponse } from '../model/ApiResponse';
 import { environment } from '../../environments/environment';
+import { VerifySessionResponse } from '../model/VerifySessionResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +20,15 @@ export class SyncService {
   public createSession(): Observable<SessionResponse> {
     return this.http
       .post<ApiResponse<SessionResponse>>(`${this.apiBaseUrl}/sync/pair-code`, {})
+      .pipe(map((res) => res.data)); //Remove data from api response
+  }
+  /**
+   * Verifies if a session exists
+   * @returns Observable<VerifySessionResponse> of the api response
+   */
+  public verifySession(token: string): Observable<VerifySessionResponse> {
+    return this.http
+      .post<ApiResponse<VerifySessionResponse>>(`${this.apiBaseUrl}/sync/verify`, token)
       .pipe(map((res) => res.data)); //Remove data from api response
   }
 }

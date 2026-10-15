@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
 import { ScanPage } from './pages/scan-page/scan-page.component';
+import { PairPage } from './pages/pair-page/pair-page';
 
 const TODO: any = null;
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'scan' }, // temporal, hasta tener Landing
   { path: 'scan', component: ScanPage },
+  { path: 'pair', component: PairPage },
   { path: '**', redirectTo: 'scan' }, // temporal, hasta tener 404
 ];
 export const routes_future: Routes = [
