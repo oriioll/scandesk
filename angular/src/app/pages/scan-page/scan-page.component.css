@@ -22,7 +22,7 @@
 .card {
     width: min(100%, 22rem);
     padding: 2rem 1.5rem;
-    border-radius: 12px;
+    border-radius: 8px;
     background: var(--surface);
     border: 1px solid var(--border);
     box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 8%, transparent);
