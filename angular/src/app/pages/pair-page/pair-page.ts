@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal, Signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+import { SyncService } from '../../services/sync.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-pair-page',
@@ -6,4 +10,54 @@ import { Component } from '@angular/core';
   templateUrl: './pair-page.html',
   styleUrl: './pair-page.css',
 })
-export class PairPage {}
+export class PairPage implements OnInit {
+  private session_token = signal<string>('');
+  //UX-UI VARIABLES
+  public token_error = signal<boolean>(false);
+  public session_error = signal<boolean>(false);
+  public session_exists = signal<boolean>(false);
+  public loading = signal<boolean>(false);
+  constructor(
+    private route: ActivatedRoute,
+    private location: Location,
+    private syncService: SyncService,
+  ) {}
+  ngOnInit(): void {
+    this.loading.set(true);
+    if (!this.parseTokenHash()) {
+      this.loading.set(false);
+      return;
+    }
+    this.verifySession();
+  }
+  /**
+   * Gets the token from the hash in the url and updated session_token signal
+   * @returns boolean if token was parsed successfully or not
+   */
+  private parseTokenHash(): boolean {
+    this.token_error.set(false);
+    //Get the token from url hash (#)
+    this.session_token.set(this.route.snapshot.fragment || '');
+    if (this.session_token().length === 0) {
+      this.token_error.set(true);
+      return false;
+    }
+    //Remove token from url
+    this.location.replaceState(this.location.path());
+    return true;
+  }
+
+  /**
+   * Verifies if the session with the token gotten exists
+   * using sync service
+   */
+  private verifySession(): void {
+    this.syncService
+      .verifySession(this.session_token())
+      .pipe(finalize(() => this.loading.set(false))) //Loading state
+      .subscribe({
+        next: () => this.session_exists.set(true),
+        error: () => this.session_error.set(true),
+      });
+  }
+}
