@@ -12,6 +12,12 @@ ng serve
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
+## API configuration
+
+Angular does not load `.env` files automatically with this project's build setup. The API base URL is configured in `src/environments/environment.ts`, which is excluded from Git.
+
+For a fresh checkout, copy `src/environments/environment.example.ts` to `src/environments/environment.ts` and set `apiBaseUrl` to the API origin and path, for example `http://localhost:8000/api`. This value is included in the browser bundle, so it must not contain secrets.
+
 ## Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
