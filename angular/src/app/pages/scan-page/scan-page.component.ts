@@ -3,12 +3,14 @@ import { SyncService } from '../../services/sync.service';
 import { SessionResponse } from '../../model/SessionResponse';
 import { finalize } from 'rxjs';
 import QRCode from 'qrcode';
+import { QrCodeComponent } from './qr-code/qr-code.component';
+import { SyncPhoneDialogComponent } from '../../shared/sync-phone-dialog/sync-phone-dialog.component';
 
 @Component({
   selector: 'app-scan-page',
-  imports: [],
-  templateUrl: './scan-page.html',
-  styleUrl: './scan-page.css',
+  imports: [QrCodeComponent, SyncPhoneDialogComponent],
+  templateUrl: './scan-page.component.html',
+  styleUrl: './scan-page.component.css',
 })
 export class ScanPage {
   public sessionData?: SessionResponse;

@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { ScanPage } from './pages/scan-page/scan-page';
+import { ScanPage } from './pages/scan-page/scan-page.component';
 
 const TODO: any = null;
 export const routes: Routes = [

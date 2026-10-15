@@ -1,0 +1,19 @@
+<main class="page">
+    <!--HEADINGS-->
+    <div class="heading">
+        <h1>Scan Products</h1>
+        <p>Pair your phone, scan the products and store them.</p>
+    </div>
+    <!--QR AND PRODUCTS RECEIVED -->
+    <section class="stage">
+        <article class="card">
+            @if (qrGenerated()) {
+            <!--QR ALREADY GENERATED-->
+            <app-qr-code [qrUrl]="qrUrl()" />
+            } @else {
+            <!--DIALOG TO CREATE A SESSION-->
+            <app-sync-phone-dialog [loadingQr]="loadingQr()" (createSession)="onCreateSession()" />
+            }
+        </article>
+    </section>
+</main>
