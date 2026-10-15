@@ -20,4 +20,17 @@ class PairingSessionService
             'expires_at' => now()->addMinutes(10),
         ]);
     }
+    /**
+     * Verifies if a pairing session exists
+     * @param string $token token of the session to verify
+     * @return PairingSession if exists or null
+     */
+    public function verifySession(string $token): ?PairingSession
+    {
+        $session = PairingSession::where('token_hash', $token)->first();
+        if ($session) {
+            $session->update(['is_active' => true]);
+        }
+        return $session;
+    }
 }

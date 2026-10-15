@@ -100,5 +100,5 @@ Route::prefix('auth')->group(function () {
 Route::prefix('sync')->group(function () {
     // POST /sync/verify - sent from phone, verify that exists a session with that code
     //Rate limit: 10 x minute
-    Route::post('/verify')->middleware('throttle:10,1');
+    Route::post('/verify', [PairingSessionController::class, 'verify'])->middleware('throttle:10,1');
 });
