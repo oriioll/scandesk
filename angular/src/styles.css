@@ -87,6 +87,7 @@
     /* 32 -> 52 */
 
     /* Line heights: tighter for big text, relaxed only for body */
+    --page-gutter: clamp(1rem, 5vw, 4rem);
     --leading-tight: 1.15;
     --leading-snug: 1.3;
     --leading-normal: 1.5;
@@ -266,12 +267,21 @@ small {
 }
 
 button {
-    padding: 7px;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 7rem;
+    padding: 0 1rem;
+    height: 2.5rem;
     border-radius: 4px;
     border: 1px solid transparent;
     background-color: var(--primary);
     color: var(--on-primary);
     font: 700 var(--text-base) / var(--leading-snug) var(--font-body);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     cursor: pointer;
     transition: all .15s ease;
 }
