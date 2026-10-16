@@ -3,10 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { SyncService } from '../../services/sync.service';
 import { finalize } from 'rxjs';
+import { BarcodeScannerComponent } from '../../shared/barcode-scanner/barcode-scanner.component';
 
 @Component({
   selector: 'app-pair-page',
-  imports: [],
+  imports: [BarcodeScannerComponent],
   templateUrl: './pair-page.html',
   styleUrl: './pair-page.css',
 })

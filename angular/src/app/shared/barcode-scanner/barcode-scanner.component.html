@@ -1,0 +1,16 @@
+<div class="scanner" [attr.aria-busy]="loading()">
+    <video #video playsinline muted autoplay [class.ready]="!loading() && !cameraErrorMessage()"></video>
+    @if (loading()) {
+    <div class="scanner-state scanner-loading" role="status" aria-live="polite">
+        <app-skeleton class="scanner-skeleton" width="var(--frame-w)" height="var(--frame-h)" radius="6px" />
+        <p class="scanner-label">Starting camera…</p>
+    </div>
+    } @else if (cameraErrorMessage()) {
+    <div class="scanner-state scanner-error" role="alert">
+        <h2>Camera unavailable</h2>
+        <p>{{ cameraErrorMessage() }}</p>
+    </div>
+    } @else {
+    <div class="frame" aria-hidden="true"></div>
+    }
+</div>

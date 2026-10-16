@@ -4,21 +4,26 @@
         <h1>Connect your phone</h1>
         <p>Use this device as a barcode scanner for your ScanDesk session.</p>
     </div>
-    @if(loading()) {
-    <!--SKELETON FAST-->
-    <div class="skeleton-card">
-        <div class="skeleton skeleton-avatar"></div>
-        <div class="skeleton-lines">
-            <div class="skeleton skeleton-line"></div>
-            <div class="skeleton skeleton-line short"></div>
+    <div class="camera">
+        <app-barcode-scanner />
+        <!--
+    LOADING
+    ERROR WITH TOKEN? DISPLAY FIRST
+    DISPLAY CAMERA
+    ERROR WITH CAMERA, DISPLAY CAMERA CONTAINER BUT SHOW ERROR
+    -->
+        <div class="status" aria-live="polite">
+            @if (loading()) {
+            <div class="skeleton-card"> ... </div>
+            } @else if (token_error()) {
+            <p class="error">No token available, scan back your qr code</p>
+            } @else if (session_error()) {
+            <p class="error">That session doesn't exist or it expired</p>
+            } @else {
+            <p class="success">SESSION FOUND</p>
+            <button>Connect now!</button>
+            }
         </div>
     </div>
-    } @else if(token_error()){
-    <p class="error">No token available, scan back your qr code</p>
-    } @else if(session_error()) {
-    <p class="error">That session doesn't not exists or it expired</p>
-    } @else {
-    <p class="success">SESSION FOUND</p>
-    <button>Connect now!</button>
-    }
+
 </main>
