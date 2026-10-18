@@ -1,10 +1,12 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, signal } from '@angular/core';
 import { SyncService } from '../../services/sync.service';
 import { SessionResponse } from '../../model/SessionResponse';
 import { finalize } from 'rxjs';
 import QRCode from 'qrcode';
 import { QrCodeComponent } from './qr-code/qr-code.component';
 import { SyncPhoneDialogComponent } from '../../shared/sync-phone-dialog/sync-phone-dialog.component';
+import { ScanService } from '../../services/scan.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-scan-page',
@@ -12,14 +14,31 @@ import { SyncPhoneDialogComponent } from '../../shared/sync-phone-dialog/sync-ph
   templateUrl: './scan-page.component.html',
   styleUrl: './scan-page.component.css',
 })
-export class ScanPage {
+export class ScanPage implements OnInit {
   public sessionData?: SessionResponse;
   public loadingQr = signal(false);
   public errorMessage = signal('');
+  public barcode = signal('');
+  public barcodeReceived = signal(false);
   public qrUrl = signal('');
   public qrGenerated = signal(false);
-  constructor(private syncService: SyncService) {}
+  constructor(
+    private syncService: SyncService,
+    private scanService: ScanService,
+    private destroyRef: DestroyRef,
+  ) {}
 
+  /**
+   * Listener of ws event when getting a barcode scanned
+   */
+  ngOnInit(): void {
+    this.scanService
+      .onReceiveBarcode()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((barcode) => {
+        this.handleBarcodeScanned(barcode);
+      });
+  }
   /**
    * Handles when the button to create session is clicked
    */
@@ -39,11 +58,17 @@ export class ScanPage {
       )
       .subscribe({
         next: async (res) => {
-          this.sessionData = res;
-          //Create code with that session
-          const url: string = await this.getQrLink('http://localhost/pair#' + res.token_hash);
-          this.qrUrl.set(url);
-          this.qrGenerated.set(true);
+          try {
+            this.sessionData = res;
+            const url: string = await this.getQrLink(
+              'https://speculative-glynis-trusting.ngrok-free.dev/pair#' + res.token_hash,
+            );
+            this.scanService.joinSession(res.token_hash);
+            this.qrUrl.set(url);
+            this.qrGenerated.set(true);
+          } catch (error) {
+            this.errorMessage.set("Couldn't prepare the pairing code, please try again.");
+          }
         },
         error: (err) => {
           this.errorMessage.set("Couldn't create a session, please try again later");
@@ -59,4 +84,15 @@ export class ScanPage {
   private async getQrLink(url: string): Promise<string> {
     return await QRCode.toDataURL(url, { width: 256, margin: 2, errorCorrectionLevel: 'M' });
   }
+
+  private handleBarcodeScanned(barcode: string) {
+    if (this.barcodeReceived()) {
+      return;
+    }
+    this.barcodeReceived.set(true);
+    this.barcode.set(barcode);
+    //Set from
+  }
+
+  public onProductFormSubmit() {}
 }

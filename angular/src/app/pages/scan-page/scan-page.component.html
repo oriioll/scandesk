@@ -4,6 +4,7 @@
         <h1>Scan Products</h1>
         <p>Pair your phone, scan the products and store them.</p>
     </div>
+    @if(!barcodeReceived()) {
     <!--QR AND PRODUCTS RECEIVED -->
     <section class="stage">
         <article class="card">
@@ -16,4 +17,12 @@
             }
         </article>
     </section>
+    } @else {
+    <section class="stage">
+        <div class="card">
+            <h5 style="color: var(--accent);">{{barcode()}}</h5>
+        </div>
+    </section>
+    }
+
 </main>
