@@ -15,6 +15,7 @@ const FRAME_W = 0.8;
 const FRAME_H = 0.35;
 const SCAN_INTERVAL_MS = 150;
 const DEBOUNCE_MS = 1500;
+const SUCCESS_FEEDBACK_MS = 3000;
 
 @Component({
   selector: 'app-barcode-scanner',
@@ -28,15 +29,19 @@ export class BarcodeScannerComponent implements AfterViewInit, OnDestroy {
   public cameraError = output<string>();
   public loading = signal(true);
   public cameraErrorMessage = signal<string | null>(null);
+  public scanSuccessful = signal(false);
 
   private stream?: MediaStream;
   private timer?: ReturnType<typeof setTimeout>;
+  private successTimer?: ReturnType<typeof setTimeout>;
   private destroyed = false;
+  private loopStarted = false;
   private detector = new BarcodeDetector({
-    formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128'],
+    formats: ['qr_code', 'ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128'],
   });
   private canvas = document.createElement('canvas');
   private last = { code: '', at: 0 };
+  private lastDetectionError: string | null = null;
 
   /**
    * Starts the camera after checking media access and permissions.
@@ -77,7 +82,7 @@ export class BarcodeScannerComponent implements AfterViewInit, OnDestroy {
     v.srcObject = this.stream;
     try {
       await v.play();
-    } catch {
+    } catch (error) {
       this.stopStream();
       this.reportCameraError(
         'Could not start the camera. Check your browser permissions and try again.',
@@ -93,6 +98,9 @@ export class BarcodeScannerComponent implements AfterViewInit, OnDestroy {
 
   private loop = async () => {
     if (this.destroyed) return;
+    if (!this.loopStarted) {
+      this.loopStarted = true;
+    }
     try {
       const v = this.videoRef().nativeElement;
       if (v.videoWidth) {
@@ -107,18 +115,33 @@ export class BarcodeScannerComponent implements AfterViewInit, OnDestroy {
         this.canvas.height = sh;
         this.canvas.getContext('2d')!.drawImage(v, sx, sy, sw, sh, 0, 0, sw, sh);
         const [hit] = await this.detector.detect(this.canvas);
+        this.lastDetectionError = null;
         const now = Date.now();
         if (hit && (hit.rawValue !== this.last.code || now - this.last.at > DEBOUNCE_MS)) {
           this.last = { code: hit.rawValue, at: now };
+          this.flashSuccess();
           this.scanned.emit(hit.rawValue);
         }
       }
     } catch (e) {
-      console.error('Barcode detection failed', e);
+      const message = e instanceof Error ? `${e.name}: ${e.message}` : String(e);
+      if (message !== this.lastDetectionError) {
+        this.lastDetectionError = message;
+      }
     } finally {
       if (!this.destroyed) this.timer = setTimeout(this.loop, SCAN_INTERVAL_MS);
     }
   };
+
+  /**
+   * Shows local confirmation that a code was detected, independently of the network.
+   * @returns void
+   */
+  private flashSuccess(): void {
+    clearTimeout(this.successTimer);
+    this.scanSuccessful.set(true);
+    this.successTimer = setTimeout(() => this.scanSuccessful.set(false), SUCCESS_FEEDBACK_MS);
+  }
 
   /**
    * Stops the camera
@@ -126,6 +149,7 @@ export class BarcodeScannerComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed = true;
     clearTimeout(this.timer);
+    clearTimeout(this.successTimer);
     this.stopStream();
   }
 
