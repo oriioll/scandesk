@@ -15,8 +15,8 @@ class SessionExistsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'exists'   => $this->exists,
-            'message' => $this->message
+            'exists'  => $this->resource['exists'],
+            'message' => $this->resource['message'],
         ];
     }
 }

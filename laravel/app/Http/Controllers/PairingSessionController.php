@@ -30,9 +30,9 @@ class PairingSessionController extends Controller
      */
     public function verify(VerifySessionRequest $request)
     {
-        $session = $this->pairingSessionService->verifySession($request->validated());
+        $session = $this->pairingSessionService->verifySession($request->validated('token_hash'));
         if (!$session) {
-            return SessionExistsResource::make(['exists' => true, 'message' => 'Session not found'])->response()->setStatusCode(404);
+            return SessionExistsResource::make(['exists' => false, 'message' => 'Session not found'])->response()->setStatusCode(404);
         }
         return SessionExistsResource::make(['exists' => true, 'message' => 'Session found successfully']);
     }

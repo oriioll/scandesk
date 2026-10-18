@@ -28,7 +28,9 @@ export class SyncService {
    */
   public verifySession(token: string): Observable<VerifySessionResponse> {
     return this.http
-      .post<ApiResponse<VerifySessionResponse>>(`${this.apiBaseUrl}/sync/verify`, token)
+      .post<ApiResponse<VerifySessionResponse>>(`${this.apiBaseUrl}/sync/verify`, {
+        token_hash: token,
+      })
       .pipe(map((res) => res.data)); //Remove data from api response
   }
 }
