@@ -4,10 +4,12 @@ import { Location } from '@angular/common';
 import { SyncService } from '../../services/sync.service';
 import { finalize } from 'rxjs';
 import { BarcodeScannerComponent } from '../../shared/barcode-scanner/barcode-scanner.component';
+import { SkeletonComponent } from '../../shared/skeleton/skeleton.component';
+import { ScanService } from '../../services/scan.service';
 
 @Component({
   selector: 'app-pair-page',
-  imports: [BarcodeScannerComponent],
+  imports: [BarcodeScannerComponent, SkeletonComponent],
   templateUrl: './pair-page.html',
   styleUrl: './pair-page.css',
 })
@@ -22,6 +24,7 @@ export class PairPage implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private syncService: SyncService,
+    private scanService: ScanService,
   ) {}
   ngOnInit(): void {
     this.loading.set(true);
@@ -57,8 +60,22 @@ export class PairPage implements OnInit {
       .verifySession(this.session_token())
       .pipe(finalize(() => this.loading.set(false))) //Loading state
       .subscribe({
-        next: () => this.session_exists.set(true),
-        error: () => this.session_error.set(true),
+        next: () => {
+          this.session_exists.set(true);
+          //Join session
+          this.scanService.joinSession(this.session_token());
+        },
+        error: (e) => {
+          this.session_error.set(true);
+        },
       });
+  }
+
+  /**
+   * When the camera scans a barcode use scanService to send the barcode
+   * @param barcode The barcode scanned
+   */
+  public onBarcodeScanned(barcode: string) {
+    this.scanService.sendBarcode(barcode);
   }
 }

@@ -5,25 +5,20 @@
         <p>Use this device as a barcode scanner for your ScanDesk session.</p>
     </div>
     <div class="camera">
-        <app-barcode-scanner />
-        <!--
-    LOADING
-    ERROR WITH TOKEN? DISPLAY FIRST
-    DISPLAY CAMERA
-    ERROR WITH CAMERA, DISPLAY CAMERA CONTAINER BUT SHOW ERROR
-    -->
-        <div class="status" aria-live="polite">
+        <div class="stage" [attr.aria-busy]="loading()">
             @if (loading()) {
-            <div class="skeleton-card"> ... </div>
+            <app-skeleton class="stage-skeleton" height="auto" />
             } @else if (token_error()) {
-            <p class="error">No token available, scan back your qr code</p>
+            <div class="stage-box" role="alert">
+                <p class="error">No token available, scan your QR code again</p>
+            </div>
             } @else if (session_error()) {
-            <p class="error">That session doesn't exist or it expired</p>
+            <div class="stage-box" role="alert">
+                <p class="error">That session doesn't exist or it expired</p>
+            </div>
             } @else {
-            <p class="success">SESSION FOUND</p>
-            <button>Connect now!</button>
+            <app-barcode-scanner (scanned)="onBarcodeScanned($event)" />
             }
         </div>
     </div>
-
 </main>
