@@ -124,6 +124,10 @@ video.ready {
     border: 2px solid var(--success);
 }
 
+.scanner.success {
+    border: 1px solid var(--success);
+}
+
 @keyframes frame-in {
     from {
         opacity: 0;

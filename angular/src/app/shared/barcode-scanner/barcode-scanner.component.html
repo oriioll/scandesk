@@ -1,4 +1,4 @@
-<div class="scanner" [attr.aria-busy]="loading()">
+<div class="scanner" [class.success]="scanSuccessful()" [attr.aria-busy]="loading()">
     <video #video playsinline muted autoplay [class.ready]="!loading() && !cameraErrorMessage()"></video>
     @if (loading()) {
     <app-skeleton class="scanner-skeleton" width="100%" height="100%" radius="0" />
