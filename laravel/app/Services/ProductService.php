@@ -18,6 +18,17 @@ class ProductService
     }
 
     /**
+     * Get the product with a barcode if created by the user
+     * @param User $user
+     * @param string $barcode The barcode to search the product
+     * @return Product
+     */
+    public function getByBarcode(User $user, string $barcode): Product
+    {
+        return $user->products()->where('barcode', $barcode)->firstOrFail();
+    }
+
+    /**
      * Inserts a user into the db, for the logged user
      * @param User $user
      * @param array $products Array of products gotten from request
@@ -26,5 +37,20 @@ class ProductService
     public function postProduct(User $user, array $products): Product
     {
         return $user->products()->create($products);
+    }
+
+    /**
+     * Updates a product if created by the user
+     * @param User $user
+     * @param string $id The id of the product to update
+     * @param array $data Validated data gotten from request
+     * @return Product Updated
+     */
+    public function updateProduct(User $user, string $id, array $data): Product
+    {
+        $product = $user->products()->findOrFail($id);
+        $product->update($data);
+
+        return $product;
     }
 }

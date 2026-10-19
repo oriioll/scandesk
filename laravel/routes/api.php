@@ -29,11 +29,14 @@ Route::middleware('auth:sanctum')->group(function () {
         // GET /products/:id - Get product by id (only if user owns it)
         Route::get('/{id}');
 
+        // GET /products/:barcode - Get product by barcode (only if user owns it)
+        Route::get('/{barcode}', [ProductController::class, 'showByBarcode']);
+
         // POST /products - Post a product for the user
-        Route::post('/');
+        Route::post('/', [ProductController::class, 'store']);
 
         // PUT /products/:id - Updates the product (only if user owns it)
-        Route::put('/{id}');
+        Route::put('/{id}', [ProductController::class, 'update']);
 
         // DELETE /products/:id - Deletes the product (only if user owns it)
         Route::delete('/{id}');
