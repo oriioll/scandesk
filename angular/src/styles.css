@@ -312,6 +312,29 @@ button.secondary:hover:not(:disabled) {
     background-color: color-mix(in srgb, var(--primary) 12%, transparent);
 }
 
+input {
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    border-radius: 6px;
+    padding: 4px 6px;
+    border: solid 2px var(--border);
+    background-color: var(--surface);
+    transition: all .2s ease;
+}
+
+input:active,
+input:focus {
+    border-radius: 6px;
+    border: solid 2px var(--primary);
+    outline: none;
+}
+
+input::placeholder {
+    color: var(--text-muted);
+}
+
+
 /* --------------------------------------------------------------------------
    9. Status messages 
    -------------------------------------------------------------------------- */
@@ -331,4 +354,41 @@ button.secondary:hover:not(:disabled) {
 
 .error {
     color: var(--error);
+}
+
+/* --------------------------------------------------------------------------
+   10. Toasts (ngx-sonner)
+   Selector includes [data-styled] to beat the library's own rule.
+   -------------------------------------------------------------------------- */
+body [data-sonner-toaster] {
+    font-family: var(--font-body);
+}
+
+body [data-sonner-toast][data-styled="true"] {
+    --toast-bg: var(--surface);
+    --toast-fg: var(--text);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    border-radius: 6px;
+    background: var(--toast-bg);
+    color: var(--toast-fg);
+    border: 1px solid var(--toast-bg);
+}
+
+body [data-sonner-toast][data-type="success"] {
+    --toast-bg: var(--success);
+    --toast-fg: light-dark(var(--snow), var(--obsidian));
+}
+
+body [data-sonner-toast][data-type="error"] {
+    --toast-bg: var(--error);
+    --toast-fg: light-dark(var(--snow), var(--obsidian));
+}
+
+/* Icon, title and description follow the toast text color */
+body [data-sonner-toast] [data-icon],
+body [data-sonner-toast] [data-title],
+body [data-sonner-toast] [data-description] {
+    color: var(--toast-fg);
 }
