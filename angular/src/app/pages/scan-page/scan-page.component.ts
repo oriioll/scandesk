@@ -7,6 +7,7 @@ import { QrCodeComponent } from './qr-code/qr-code.component';
 import { SyncPhoneDialogComponent } from '../../shared/sync-phone-dialog/sync-phone-dialog.component';
 import { ScanService } from '../../services/scan.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-scan-page',
@@ -17,7 +18,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class ScanPage implements OnInit {
   public sessionData?: SessionResponse;
   public loadingQr = signal(false);
-  public errorMessage = signal('');
+  public sessionError = signal('');
   public barcode = signal('');
   public barcodeReceived = signal(false);
   public qrUrl = signal('');
@@ -46,7 +47,7 @@ export class ScanPage implements OnInit {
     //UI-UX States
     this.qrGenerated.set(false);
     this.loadingQr.set(true);
-    this.errorMessage.set('');
+    this.sessionError.set('');
 
     //API Request
     this.syncService
@@ -67,11 +68,13 @@ export class ScanPage implements OnInit {
             this.qrUrl.set(url);
             this.qrGenerated.set(true);
           } catch (error) {
-            this.errorMessage.set("Couldn't prepare the pairing code, please try again.");
+            this.sessionError.set("Couldn't prepare the pairing code, please try again.");
+            this.resetSessionError();
           }
         },
         error: (err) => {
-          this.errorMessage.set("Couldn't create a session, please try again later");
+          this.sessionError.set("Couldn't create a session, please try again later");
+          this.resetSessionError();
         },
       });
   }
@@ -92,6 +95,11 @@ export class ScanPage implements OnInit {
     this.barcodeReceived.set(true);
     this.barcode.set(barcode);
     //Set from
+  }
+  private resetSessionError() {
+    setTimeout(() => {
+      this.sessionError.set('');
+    }, 3000);
   }
 
   public onProductFormSubmit() {}

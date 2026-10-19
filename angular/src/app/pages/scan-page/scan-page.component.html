@@ -13,7 +13,8 @@
             <app-qr-code [qrUrl]="qrUrl()" />
             } @else {
             <!--DIALOG TO CREATE A SESSION-->
-            <app-sync-phone-dialog [loadingQr]="loadingQr()" (createSession)="onCreateSession()" />
+            <app-sync-phone-dialog [sessionError]="sessionError()" [loadingQr]="loadingQr()"
+                (createSession)="onCreateSession()" />
             }
         </article>
     </section>

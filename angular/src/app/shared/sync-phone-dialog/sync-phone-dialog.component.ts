@@ -9,4 +9,5 @@ import { Component, input, InputSignal, output, OutputEmitterRef } from '@angula
 export class SyncPhoneDialogComponent {
   public loadingQr: InputSignal<boolean> = input.required<boolean>();
   public createSession: OutputEmitterRef<void> = output<void>();
+  public sessionError: InputSignal<string> = input.required<string>();
 }
