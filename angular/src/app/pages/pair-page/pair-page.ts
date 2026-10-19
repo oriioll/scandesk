@@ -6,6 +6,7 @@ import { finalize } from 'rxjs';
 import { BarcodeScannerComponent } from '../../shared/barcode-scanner/barcode-scanner.component';
 import { SkeletonComponent } from '../../shared/skeleton/skeleton.component';
 import { ScanService } from '../../services/scan.service';
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-pair-page',
@@ -77,5 +78,6 @@ export class PairPage implements OnInit {
    */
   public onBarcodeScanned(barcode: string) {
     this.scanService.sendBarcode(barcode);
+    toast.success('Barcode sent successfully!');
   }
 }
