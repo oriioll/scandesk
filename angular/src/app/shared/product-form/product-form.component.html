@@ -1,0 +1,55 @@
+<form class="formCard" [formGroup]="form" (ngSubmit)="onSubmit()" [attr.aria-busy]="loading() || submitting()">
+    <h4>{{operation() === 'insert' ? "New product" : form.controls.name.value}}</h4>
+    <small>
+        {{ barcode() + " · " + (operation() === 'insert' ? "Not in your inventory" : "Stock: " +
+        form.controls.stock.value) }}
+    </small>
+
+    <div class="formSection full">
+        <label for="barcode">Barcode *</label>
+        <input id="barcode" name="barcode" type="text" [value]="barcode()" readonly />
+    </div>
+    <div class="formSection full">
+        <label for="name">Name *</label>
+        <input id="name" name="name" type="text" formControlName="name" placeholder="CocaCola 300ml"
+            [attr.aria-invalid]="!!fieldError('name')" />
+        @if (fieldError('name'); as msg) { <span class="error fieldError">{{ msg }}</span> }
+    </div>
+    <div class="formSection">
+        <label for="price">Price (€) *</label>
+        <input id="price" name="price" type="number" inputmode="decimal" step="0.01" min="0" formControlName="price"
+            placeholder="0,89" [attr.aria-invalid]="!!fieldError('price')" />
+        @if (fieldError('price'); as msg) { <span class="error fieldError">{{ msg }}</span> }
+    </div>
+    <div class="formSection">
+        <label for="stock">Stock *</label>
+        <input id="stock" name="stock" type="number" formControlName="stock" placeholder="6"
+            [attr.aria-invalid]="!!fieldError('stock')" />
+        @if (fieldError('stock'); as msg) { <span class="error fieldError">{{ msg }}</span> }
+    </div>
+
+    @if (formError()) {
+    <div class="formError" role="alert">
+        <span class="error">{{ formError() }}</span>
+        @if (lookupFailed()) {
+        <button type="button" class="secondary" (click)="retry.emit()">Retry</button>
+        }
+    </div>
+    }
+
+    <button type="submit" [disabled]="loading() || submitting() || lookupFailed()"
+        [attr.aria-busy]="loading() || submitting()">
+        @if (loading() || submitting()) {
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-label="Loading">
+            <path fill="currentColor" opacity=".35"
+                d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" />
+            <path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
+                <animateTransform attributeName="transform" dur="1s" from="0 12 12" to="360 12 12"
+                    repeatCount="indefinite" type="rotate" />
+            </path>
+        </svg>
+        } @else {
+        {{operation() === 'insert' ? "Create product" : "Save changes"}}
+        }
+    </button>
+</form>

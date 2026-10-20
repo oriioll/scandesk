@@ -1,0 +1,69 @@
+import { Component, effect, inject, input, output } from '@angular/core';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ProductResponse } from '../../model/ProductResponse';
+import { ProductRequest } from '../../model/ProductRequest';
+
+@Component({
+  selector: 'app-product-form',
+  imports: [ReactiveFormsModule],
+  templateUrl: './product-form.component.html',
+  styleUrl: './product-form.component.css',
+})
+export class ProductFormComponent {
+  barcode = input.required<string>();
+  operation = input<'insert' | 'update'>('insert');
+  product = input<ProductResponse | null>(null);
+  loading = input(false);
+  submitting = input(false);
+  lookupFailed = input(false);
+  formError = input('');
+  fieldErrors = input<Record<string, string>>({});
+  submitted = output<ProductRequest>();
+  retry = output<void>();
+
+  private fb = inject(NonNullableFormBuilder);
+
+  public form = this.fb.group({
+    barcode: ['', [Validators.required, Validators.pattern('^[A-Za-z0-9]{8,14}$')]],
+    name: ['', [Validators.required]],
+    category_id: [''],
+    price: [0, [Validators.required, Validators.min(0)]],
+    stock: [0, [Validators.required, Validators.min(0)]],
+  });
+
+  constructor() {
+    effect(() => this.form.controls.barcode.setValue(this.barcode()));
+    effect(() => {
+      const p = this.product();
+      if (p) this.form.patchValue(p);
+    });
+    effect(() => {
+      if (this.loading() || this.lookupFailed()) this.form.disable();
+      else this.form.enable();
+    });
+    effect(() => {
+      for (const [field, msg] of Object.entries(this.fieldErrors())) {
+        const control = this.form.get(field);
+        control?.setErrors({ server: msg });
+        control?.markAsTouched();
+      }
+    });
+  }
+
+  public onSubmit() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+    this.submitted.emit(this.form.getRawValue());
+  }
+
+  public fieldError(name: 'name' | 'price' | 'stock'): string {
+    const c = this.form.controls[name];
+    if (!c.touched || !c.errors) return '';
+    if (c.errors['server']) return c.errors['server'];
+    if (c.errors['required']) return 'Required';
+    if (c.errors['min']) return 'Must be 0 or greater';
+    return 'Invalid value';
+  }
+}

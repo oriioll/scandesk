@@ -20,9 +20,12 @@
     </section>
     } @else {
     <section class="stage">
-        <div class="card">
-            <h5 style="color: var(--accent);">{{barcode()}}</h5>
-        </div>
+        <section class="stage">
+            <app-product-form [barcode]="barcode()" [operation]="formOperation()" [product]="product()"
+                [loading]="loadingProduct()" [submitting]="submitting()" [lookupFailed]="lookupFailed()"
+                [formError]="formError()" [fieldErrors]="fieldErrors()" (submitted)="onProductFormSubmit($event)"
+                (retry)="setFormMode(barcode())" />
+        </section>
     </section>
     }
 

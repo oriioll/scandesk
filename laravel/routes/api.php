@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{id}');
 
         // GET /products/:barcode - Get product by barcode (only if user owns it)
-        Route::get('/{barcode}', [ProductController::class, 'showByBarcode']);
+        Route::get('/barcode/{barcode}', [ProductController::class, 'showByBarcode']);
 
         // POST /products - Post a product for the user
         Route::post('/', [ProductController::class, 'store']);

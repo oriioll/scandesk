@@ -18,9 +18,9 @@ export class ProductService {
    * @param barcode Barcode of the product to search
    * @returns Observable<ProductResponse> The product with that barcode
    */
-  public getProductByBarcode(barcode: number): Observable<ProductResponse> {
+  public getProductByBarcode(barcode: string): Observable<ProductResponse> {
     return this.http
-      .get<ApiResponse<ProductResponse>>(`${this.apiBaseUrl}/products/${barcode}`)
+      .get<ApiResponse<ProductResponse>>(`${this.apiBaseUrl}/products/barcode/${barcode}`)
       .pipe(map((res) => res.data)); //Remove data from api response
   }
 
