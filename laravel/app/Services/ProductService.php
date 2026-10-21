@@ -25,7 +25,7 @@ class ProductService
      */
     public function getByBarcode(User $user, string $barcode): Product
     {
-        return $user->products()->where('barcode', $barcode)->firstOrFail();
+        return $user->products()->with('category')->where('barcode', $barcode)->firstOrFail();
     }
 
     /**
