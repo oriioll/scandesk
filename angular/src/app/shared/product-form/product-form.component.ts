@@ -2,6 +2,8 @@ import { Component, effect, inject, input, output } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductResponse } from '../../model/ProductResponse';
 import { ProductRequest } from '../../model/ProductRequest';
+import { CategoryResponse } from '../../model/CategoryResponse';
+import { CATEGORY_ICONS, categoryIcon } from '../../util/categories';
 
 @Component({
   selector: 'app-product-form',
@@ -20,13 +22,14 @@ export class ProductFormComponent {
   fieldErrors = input<Record<string, string>>({});
   submitted = output<ProductRequest>();
   retry = output<void>();
-
+  categories = input<CategoryResponse[]>([]);
+  protected readonly categoryIcon = categoryIcon;
   private fb = inject(NonNullableFormBuilder);
 
   public form = this.fb.group({
     barcode: ['', [Validators.required, Validators.pattern('^[A-Za-z0-9]{8,14}$')]],
     name: ['', [Validators.required]],
-    category_id: [''],
+    category_id: this.fb.control<number | null>(null, Validators.required),
     price: [0, [Validators.required, Validators.min(0)]],
     stock: [0, [Validators.required, Validators.min(0)]],
   });
@@ -35,7 +38,15 @@ export class ProductFormComponent {
     effect(() => this.form.controls.barcode.setValue(this.barcode()));
     effect(() => {
       const p = this.product();
-      if (p) this.form.patchValue(p);
+      if (p) {
+        this.form.patchValue({
+          barcode: p.barcode,
+          name: p.name,
+          category_id: p.category.id,
+          price: p.price,
+          stock: p.stock,
+        });
+      }
     });
     effect(() => {
       if (this.loading() || this.lookupFailed()) this.form.disable();
@@ -51,14 +62,15 @@ export class ProductFormComponent {
   }
 
   public onSubmit() {
-    if (this.form.invalid) {
+    const { category_id, ...rest } = this.form.getRawValue();
+    if (this.form.invalid || category_id === null) {
       this.form.markAllAsTouched();
       return;
     }
-    this.submitted.emit(this.form.getRawValue());
+    this.submitted.emit({ ...rest, category_id });
   }
 
-  public fieldError(name: 'name' | 'price' | 'stock'): string {
+  public fieldError(name: 'name' | 'category_id' | 'price' | 'stock'): string {
     const c = this.form.controls[name];
     if (!c.touched || !c.errors) return '';
     if (c.errors['server']) return c.errors['server'];

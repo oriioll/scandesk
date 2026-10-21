@@ -4,30 +4,49 @@
         {{ barcode() + " · " + (operation() === 'insert' ? "Not in your inventory" : "Stock: " +
         form.controls.stock.value) }}
     </small>
-
+    <!--BARCODE READONLY-->
     <div class="formSection full">
         <label for="barcode">Barcode *</label>
         <input id="barcode" name="barcode" type="text" [value]="barcode()" readonly />
     </div>
+    <!--PRODUCT NAME-->
     <div class="formSection full">
         <label for="name">Name *</label>
         <input id="name" name="name" type="text" formControlName="name" placeholder="CocaCola 300ml"
             [attr.aria-invalid]="!!fieldError('name')" />
         @if (fieldError('name'); as msg) { <span class="error fieldError">{{ msg }}</span> }
     </div>
+    <!--CATEGORIES DROPDOWN-->
+    <div class="formSection full">
+        <label for="category_id">Category *</label>
+        <select id="category_id" name="category_id" formControlName="category_id"
+            [attr.aria-invalid]="!!fieldError('category_id')">
+            <option class="placeholder" [ngValue]="null" disabled>Select a category</option>
+            @for (c of categories(); track c.id) {
+            <option [ngValue]="c.id">
+                <span class="catIcon" aria-hidden="true"
+                    [style.--icon]="'url(' + categoryIcon(c.name) + ')'"></span>
+                {{ c.name }}
+            </option>
+            }
+        </select>
+        @if (fieldError('category_id'); as msg) { <span class="error fieldError">{{ msg }}</span> }
+    </div>
+    <!--PRODUCT PRICE-->
     <div class="formSection">
         <label for="price">Price (€) *</label>
         <input id="price" name="price" type="number" inputmode="decimal" step="0.01" min="0" formControlName="price"
             placeholder="0,89" [attr.aria-invalid]="!!fieldError('price')" />
         @if (fieldError('price'); as msg) { <span class="error fieldError">{{ msg }}</span> }
     </div>
+    <!--STOCK-->
     <div class="formSection">
         <label for="stock">Stock *</label>
         <input id="stock" name="stock" type="number" formControlName="stock" placeholder="6"
             [attr.aria-invalid]="!!fieldError('stock')" />
         @if (fieldError('stock'); as msg) { <span class="error fieldError">{{ msg }}</span> }
     </div>
-
+    <!--ERROR MESSAGE -->
     @if (formError()) {
     <div class="formError" role="alert">
         <span class="error">{{ formError() }}</span>
@@ -37,6 +56,7 @@
     </div>
     }
 
+    <!--SUBMIT BUTTON WITH LOADING STATE-->
     <button type="submit" [disabled]="loading() || submitting() || lookupFailed()"
         [attr.aria-busy]="loading() || submitting()">
         @if (loading() || submitting()) {
