@@ -14,6 +14,8 @@ import { ProductFormComponent } from '../../shared/product-form/product-form.com
 
 import { toast } from 'ngx-sonner';
 import { ProductRequest } from '../../model/ProductRequest';
+import { CategoryService } from '../../services/category.service';
+import { CategoryResponse } from '../../model/CategoryResponse';
 
 @Component({
   selector: 'app-scan-page',
@@ -44,10 +46,12 @@ export class ScanPage implements OnInit {
   public lookupFailed = signal(false);
   public product = signal<ProductResponse | null>(null);
   public fieldErrors = signal<Record<string, string>>({});
+  public categories = signal<CategoryResponse[]>([]);
   constructor(
     private syncService: SyncService,
     private scanService: ScanService,
     private productService: ProductService,
+    private categoryService: CategoryService,
     private destroyRef: DestroyRef,
   ) {}
 
@@ -62,6 +66,10 @@ export class ScanPage implements OnInit {
       .subscribe((barcode) => {
         this.handleBarcodeScanned(barcode);
       });
+    this.categoryService.getAll().subscribe({
+      next: (res) => this.categories.set(res),
+      error: () => toast.error("Couldn't load categories"),
+    });
   }
   /**
    * Creates a pairing session and generates its QR code.
@@ -86,6 +94,9 @@ export class ScanPage implements OnInit {
           try {
             this.sessionData = res;
             const url: string = await this.getQrLink(
+              'https://speculative-glynis-trusting.ngrok-free.dev/pair#' + res.token_hash,
+            );
+            console.log(
               'https://speculative-glynis-trusting.ngrok-free.dev/pair#' + res.token_hash,
             );
             this.scanService.joinSession(res.token_hash);
@@ -145,6 +156,9 @@ export class ScanPage implements OnInit {
     this.loadingProduct.set(true);
     this.lookupFailed.set(false);
     this.formError.set('');
+    this.product.set(null);
+    this.productToUpdateId.set(null);
+    //Search to product to know if exists or not
     this.productService
       .getProductByBarcode(barcode)
       .pipe(
@@ -191,8 +205,12 @@ export class ScanPage implements OnInit {
             this.formOperation.set('update');
             this.product.set(created);
             toast.success('Product created');
+            this.barcodeReceived.set(false);
           },
-          error: (err: HttpErrorResponse) => this.handleSubmitError(err),
+          error: (err: HttpErrorResponse) => {
+            this.handleSubmitError(err);
+            console.log(err);
+          },
         });
     } else {
       this.productService
@@ -201,6 +219,7 @@ export class ScanPage implements OnInit {
         .subscribe({
           next: () => {
             toast.success('Changes saved');
+            this.barcodeReceived.set(false);
           },
           error: (err: HttpErrorResponse) => this.handleSubmitError(err),
         });
@@ -218,7 +237,7 @@ export class ScanPage implements OnInit {
     } else if (err.status === 409) {
       this.formError.set('A product with this barcode already exists.');
     } else if (err.status === 422) {
-      const visible = ['name', 'price', 'stock'];
+      const visible = ['name', 'category_id', 'price', 'stock'];
       const fields: Record<string, string> = {};
       const rest: string[] = [];
       for (const [field, msgs] of Object.entries<string[]>(err.error?.errors ?? {})) {
