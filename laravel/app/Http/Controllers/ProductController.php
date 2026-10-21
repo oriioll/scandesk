@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\products\StoreProductRequest;
+use App\Http\Requests\products\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Services\ProductService;
 use Exception;
