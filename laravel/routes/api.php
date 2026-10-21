@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PairingSessionController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -47,7 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
      */
     Route::prefix('categories')->group(function () {
         // GET /categories - Get all the categories
-        Route::get('/');
+        Route::get('/', [CategoryController::class, 'index']);
 
         // POST /categories - Post categories
         Route::post('/');
