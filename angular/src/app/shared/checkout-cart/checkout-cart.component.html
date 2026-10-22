@@ -1,0 +1,35 @@
+<section class="cart" aria-labelledby="cart-title">
+    <header class="cartHead">
+        <h4 id="cart-title">Current order</h4>
+        <small>{{ count() }} {{ count() === 1 ? 'item' : 'items' }}</small>
+    </header>
+
+    @if (items().length > 0) {
+    <ul class="list">
+        @for (item of items(); track item.id) {
+        <li class="row">
+            <div class="info">
+                <span class="name">{{ item.name }}</span>
+                <small>{{ item.quantity }} × {{ item.price | currency }}</small>
+            </div>
+            <span class="lineTotal">{{ item.price * item.quantity | currency }}</span>
+            <button type="button" class="secondary icon" [attr.aria-label]="'Remove ' + item.name"
+                (click)="remove.emit(item.id)">✕</button>
+        </li>
+        }
+    </ul>
+    } @else {
+    <!--Empty State-->
+    <p class="empty text-muted">Scan a product to add it to the order.</p>
+    }
+
+    <footer class="cartFoot">
+        <div class="totalRow">
+            <span class="text-muted">Total</span>
+            <strong class="total">{{ total() | currency }}</strong>
+        </div>
+        <button type="button" [disabled]="!canCheckout()" (click)="checkout.emit()">
+            {{ submitting() ? 'Processing…' : 'Checkout' }}
+        </button>
+    </footer>
+</section>
