@@ -1,0 +1,33 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { map, Observable } from 'rxjs';
+import { ApiResponse } from '../model/ApiResponse';
+import { CategoryResponse } from '../model/CategoryResponse';
+import { OrderItemRequest } from '../model/OrderItemRequest';
+import { OrderRequest } from '../model/OrderRequest';
+import { OrderResponse } from '../model/OrderResponse';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class OrderService {
+  private readonly apiBaseUrl = environment.apiBaseUrl;
+
+  constructor(private http: HttpClient) {}
+
+  /**
+   * Handles an API Post request to create an order
+   * @param items The items to
+   * @param idempotencyKey idempotencyKey to avoid duplicate orders
+   * @returns Observable of OrderResponse
+   */
+  public postOrder(items: OrderItemRequest[], idempotencyKey: string): Observable<OrderResponse> {
+    const request: OrderRequest = { items };
+    return this.http
+      .post<ApiResponse<OrderResponse>>(`${this.apiBaseUrl}/orders`, request, {
+        headers: { 'Idempotency-Key': idempotencyKey },
+      })
+      .pipe(map((res) => res.data));
+  }
+}
