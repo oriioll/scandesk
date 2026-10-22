@@ -1,0 +1,47 @@
+.heading {
+    display: flex;
+    flex-direction: column;
+}
+
+.page {
+    height: 100dvh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: clamp(1.25rem, 3vw, 2rem) var(--page-gutter);
+}
+
+.layout {
+    flex: 1;
+    min-height: 0;
+    /* lets the cart's list scroll instead of growing the page */
+    display: grid;
+    grid-template-columns: 22rem minmax(0, 1fr);
+    gap: 1.5rem;
+    padding-bottom: 1rem;
+}
+
+.card {
+    align-self: start;
+    padding: 2rem 1.5rem;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 8%, transparent);
+}
+
+@media (max-width: 56rem) {
+    .page {
+        height: auto;
+        min-height: 100dvh;
+    }
+
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    app-checkout-cart {
+        min-height: 22rem;
+    }
+}

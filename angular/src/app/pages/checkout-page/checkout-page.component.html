@@ -1,0 +1,22 @@
+<main class="page">
+    <!--HEADINGS-->
+    <div class="heading">
+        <h1>Checkout</h1>
+        <p>Pair your phone, scan the products and process the order.</p>
+    </div>
+    <div class="layout">
+        <article class="card">
+            <!--IF THE QR IS ALREADY GENERATED DISPLAY IT-->
+            @if (qrGenerated()) {
+            <app-qr-code [qrUrl]="qrUrl()" />
+            } @else {
+            <app-sync-phone-dialog [sessionError]="sessionError()" [loadingQr]="loadingQr()"
+                (createSession)="onCreateSession()" />
+            }
+        </article>
+
+        <app-checkout-cart [items]="cart()" [submitting]="submitting()" (remove)="onRemove($event)"
+            (checkout)="onCheckout()" />
+    </div>
+
+</main>

@@ -1,12 +1,14 @@
 import { Routes } from '@angular/router';
 import { ScanPage } from './pages/scan-page/scan-page.component';
 import { PairPage } from './pages/pair-page/pair-page';
+import { CheckoutPage } from './pages/checkout-page/checkout-page.component';
 
 const TODO: any = null;
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'scan' }, // temporal, hasta tener Landing
   { path: 'scan', component: ScanPage },
   { path: 'pair', component: PairPage },
+  { path: 'checkout', component: CheckoutPage },
   { path: '**', redirectTo: 'scan' }, // temporal, hasta tener 404
 ];
 export const routes_future: Routes = [
@@ -30,7 +32,7 @@ export const routes_future: Routes = [
     ],
   },
   { path: 'scan', component: ScanPage }, //Scan -> Get items and post them
-  { path: 'checkout', component: TODO }, //checkout -> Get items and use checkout modes
+  { path: 'checkout', component: CheckoutPage }, //checkout -> Get items and use checkout modes
 
   { path: '**', component: TODO }, // 404
 ];
