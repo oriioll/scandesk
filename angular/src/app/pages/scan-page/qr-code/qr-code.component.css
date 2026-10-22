@@ -28,3 +28,8 @@
     gap: .5rem;
     font-weight: 600;
 }
+
+figcaption {
+    display: flex;
+    flex-direction: column;
+}
