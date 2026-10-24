@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Kpi } from './kpi/kpi.component';
-import { KpiTone } from '../../model/KpiTone';
+import { KpiTone } from '../../models/dashboard/kpi-tone';
 
 @Component({
   selector: 'app-dashboard-page',

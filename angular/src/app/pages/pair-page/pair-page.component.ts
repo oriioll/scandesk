@@ -11,8 +11,8 @@ import { toast } from 'ngx-sonner';
 @Component({
   selector: 'app-pair-page',
   imports: [BarcodeScannerComponent, SkeletonComponent],
-  templateUrl: './pair-page.html',
-  styleUrl: './pair-page.css',
+  templateUrl: './pair-page.component.html',
+  styleUrl: './pair-page.component.css',
 })
 export class PairPage implements OnInit {
   private session_token = signal<string>('');

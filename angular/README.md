@@ -32,6 +32,12 @@ For a complete list of available schematics (such as `components`, `directives`,
 ng generate --help
 ```
 
+## Source organization
+
+Components live in `src/app/pages` or `src/app/shared`, with their TypeScript, template, and stylesheet files named `<name>.component.ts`, `<name>.component.html`, and `<name>.component.css`.
+
+Application types live in `src/app/models`, grouped by domain. Requests and responses use names such as `products/product.request.ts` and `orders/order.response.ts`. Supporting types that are not API requests or responses live in an appropriate domain or in `shared`.
+
 ## Building
 
 To build the project run:

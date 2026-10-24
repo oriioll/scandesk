@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { map, Observable } from 'rxjs';
-import { ApiResponse } from '../model/ApiResponse';
-import { CategoryResponse } from '../model/CategoryResponse';
-import { OrderItemRequest } from '../model/OrderItemRequest';
-import { OrderRequest } from '../model/OrderRequest';
-import { OrderResponse } from '../model/OrderResponse';
+import { ApiResponse } from '../models/shared/api.response';
+import { CategoryResponse } from '../models/categories/category.response';
+import { OrderItemRequest } from '../models/orders/order-item.request';
+import { OrderRequest } from '../models/orders/order.request';
+import { OrderResponse } from '../models/orders/order.response';
 
 @Injectable({
   providedIn: 'root',

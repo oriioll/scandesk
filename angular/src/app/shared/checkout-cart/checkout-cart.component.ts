@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
-import { CartItem } from '../../model/CartItem';
+import { CartItem } from '../../models/checkout/cart-item';
 
 @Component({
   selector: 'app-checkout-cart',

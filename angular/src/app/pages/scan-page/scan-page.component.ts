@@ -1,6 +1,6 @@
 import { Component, DestroyRef, OnInit, signal } from '@angular/core';
 import { SyncService } from '../../services/sync.service';
-import { SessionResponse } from '../../model/SessionResponse';
+import { SessionResponse } from '../../models/session/session.response';
 import { finalize } from 'rxjs';
 import QRCode from 'qrcode';
 import { QrCodeComponent } from './qr-code/qr-code.component';
@@ -8,14 +8,14 @@ import { SyncPhoneDialogComponent } from '../../shared/sync-phone-dialog/sync-ph
 import { ScanService } from '../../services/scan.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductService } from '../../services/product.service';
-import { ProductResponse } from '../../model/ProductResponse';
+import { ProductResponse } from '../../models/products/product.response';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ProductFormComponent } from '../../shared/product-form/product-form.component';
 
 import { toast } from 'ngx-sonner';
-import { ProductRequest } from '../../model/ProductRequest';
+import { ProductRequest } from '../../models/products/product.request';
 import { CategoryService } from '../../services/category.service';
-import { CategoryResponse } from '../../model/CategoryResponse';
+import { CategoryResponse } from '../../models/categories/category.response';
 
 @Component({
   selector: 'app-scan-page',

@@ -1,8 +1,8 @@
 import { Component, effect, inject, input, output } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ProductResponse } from '../../model/ProductResponse';
-import { ProductRequest } from '../../model/ProductRequest';
-import { CategoryResponse } from '../../model/CategoryResponse';
+import { ProductResponse } from '../../models/products/product.response';
+import { ProductRequest } from '../../models/products/product.request';
+import { CategoryResponse } from '../../models/categories/category.response';
 import { CATEGORY_ICONS, categoryIcon } from '../../util/categories';
 
 @Component({

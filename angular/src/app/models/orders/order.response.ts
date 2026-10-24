@@ -1,4 +1,4 @@
-import { OrderItemResponse } from './OrderItemResponse';
+import { OrderItemResponse } from './order-item.response';
 
 export interface OrderResponse {
   id: number;

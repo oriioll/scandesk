@@ -1,18 +1,18 @@
 import { Component, DestroyRef, OnInit, signal } from '@angular/core';
 import { SyncService } from '../../services/sync.service';
-import { SessionResponse } from '../../model/SessionResponse';
+import { SessionResponse } from '../../models/session/session.response';
 import { finalize } from 'rxjs';
 import QRCode from 'qrcode';
 import { SyncPhoneDialogComponent } from '../../shared/sync-phone-dialog/sync-phone-dialog.component';
 import { ScanService } from '../../services/scan.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductService } from '../../services/product.service';
-import { ProductResponse } from '../../model/ProductResponse';
+import { ProductResponse } from '../../models/products/product.response';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { toast } from 'ngx-sonner';
 import { QrCodeComponent } from '../scan-page/qr-code/qr-code.component';
-import { CartItem } from '../../model/CartItem';
+import { CartItem } from '../../models/checkout/cart-item';
 import { CheckoutCartComponent } from '../../shared/checkout-cart/checkout-cart.component';
 import { OrderService } from '../../services/order.service';
 

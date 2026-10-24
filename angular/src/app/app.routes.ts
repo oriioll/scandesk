@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { ScanPage } from './pages/scan-page/scan-page.component';
-import { PairPage } from './pages/pair-page/pair-page';
+import { PairPage } from './pages/pair-page/pair-page.component';
 import { CheckoutPage } from './pages/checkout-page/checkout-page.component';
 import { DashboardPage } from './pages/dashboard-page/dashboard-page.component';
 

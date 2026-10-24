@@ -1,5 +1,5 @@
 import { Component, inject, input } from '@angular/core';
-import { KpiTone } from '../../../model/KpiTone';
+import { KpiTone } from '../../../models/dashboard/kpi-tone';
 import { Router } from '@angular/router';
 
 @Component({

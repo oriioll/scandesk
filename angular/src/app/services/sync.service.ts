@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { SessionResponse } from '../model/SessionResponse';
+import { SessionResponse } from '../models/session/session.response';
 import { map, Observable } from 'rxjs';
-import { ApiResponse } from '../model/ApiResponse';
+import { ApiResponse } from '../models/shared/api.response';
 import { environment } from '../../environments/environment';
-import { VerifySessionResponse } from '../model/VerifySessionResponse';
+import { VerifySessionResponse } from '../models/session/verify-session.response';
 
 @Injectable({
   providedIn: 'root',

@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { map, Observable } from 'rxjs';
-import { ProductResponse } from '../model/ProductResponse';
-import { ApiResponse } from '../model/ApiResponse';
-import { ProductRequest } from '../model/ProductRequest';
+import { ProductResponse } from '../models/products/product.response';
+import { ApiResponse } from '../models/shared/api.response';
+import { ProductRequest } from '../models/products/product.request';
 
 @Injectable({
   providedIn: 'root',

@@ -5,9 +5,9 @@ import { NgxSonnerToaster } from 'ngx-sonner';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, NgxSonnerToaster],
-  templateUrl: './app.html',
-  styleUrl: './app.css',
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css',
 })
-export class App {
+export class AppComponent {
   protected readonly title = signal('angular');
 }
