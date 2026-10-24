@@ -6,7 +6,7 @@ import { DashboardPage } from './pages/dashboard-page/dashboard-page.component';
 
 const TODO: any = null;
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'scan' }, // temporal, hasta tener Landing
+  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
   { path: 'dashboard', component: DashboardPage },
   { path: 'scan', component: ScanPage },
   { path: 'pair', component: PairPage },
