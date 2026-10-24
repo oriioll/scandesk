@@ -1,0 +1,683 @@
+﻿# Branch: main
+
+## Files
+ M angular/src/app/app.config.ts
+ M angular/src/app/app.routes.ts
+ D angular/src/app/pages/checkout-page/checkout-page.css
+ D angular/src/app/pages/checkout-page/checkout-page.html
+ D angular/src/app/pages/checkout-page/checkout-page.ts
+ M angular/src/app/pages/scan-page/qr-code/qr-code.component.css
+ M laravel/app/Models/OrderItem.php
+?? angular/src/app/model/CartItem.ts
+?? angular/src/app/model/OrderItemRequest.ts
+?? angular/src/app/model/OrderItemResponse.ts
+?? angular/src/app/model/OrderRequest.ts
+?? angular/src/app/model/OrderResponse.ts
+?? angular/src/app/pages/checkout-page/checkout-page.component.css
+?? angular/src/app/pages/checkout-page/checkout-page.component.html
+?? angular/src/app/pages/checkout-page/checkout-page.component.ts
+?? angular/src/app/services/order.service.ts
+?? angular/src/app/shared/checkout-cart/checkout-cart.component.css
+?? angular/src/app/shared/checkout-cart/checkout-cart.component.html
+?? angular/src/app/shared/checkout-cart/checkout-cart.component.ts
+?? laravel/app/Http/Requests/orders/StoreOrderRequest.php
+?? laravel/app/Http/Resources/OrderItemResource.php
+?? laravel/app/Http/Resources/OrderResource.php
+
+## Details
+
+==================================================
+FILE: angular/src/app/app.config.ts   [status:  M]
+stats: +11 -1
+@@ -1,3 +1,9 @@
+-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
++import {
++  ApplicationConfig,
++  DEFAULT_CURRENCY_CODE,
++  LOCALE_ID,
++  provideBrowserGlobalErrorListeners,
++} from '@angular/core';
+ import { provideRouter } from '@angular/router';
++import localeEs from '@angular/common/locales/es';
+ 
+@@ -6,2 +12,4 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
+ import { ngrokInterceptor } from './core/ngrok.interceptor';
++import { registerLocaleData } from '@angular/common';
++registerLocaleData(localeEs);
+ 
+@@ -12,2 +20,4 @@ export const appConfig: ApplicationConfig = {
+     provideHttpClient(withInterceptors([ngrokInterceptor])),
++    { provide: LOCALE_ID, useValue: 'es' }, // 12,50 €
++    { provide: DEFAULT_CURRENCY_CODE, useValue: 'EUR' },
+   ],
+
+==================================================
+FILE: angular/src/app/app.routes.ts   [status:  M]
+stats: +3 -1
+@@ -3,2 +3,3 @@ import { ScanPage } from './pages/scan-page/scan-page.component';
+ import { PairPage } from './pages/pair-page/pair-page';
++import { CheckoutPage } from './pages/checkout-page/checkout-page.component';
+ 
+@@ -9,2 +10,3 @@ export const routes: Routes = [
+   { path: 'pair', component: PairPage },
++  { path: 'checkout', component: CheckoutPage },
+   { path: '**', redirectTo: 'scan' }, // temporal, hasta tener 404
+@@ -32,3 +34,3 @@ export const routes_future: Routes = [
+   { path: 'scan', component: ScanPage }, //Scan -> Get items and post them
+-  { path: 'checkout', component: TODO }, //checkout -> Get items and use checkout modes
++  { path: 'checkout', component: CheckoutPage }, //checkout -> Get items and use checkout modes
+ 
+
+==================================================
+FILE: angular/src/app/pages/checkout-page/checkout-page.css   [status:  D]
+DELETED
+
+==================================================
+FILE: angular/src/app/pages/checkout-page/checkout-page.html   [status:  D]
+DELETED
+
+==================================================
+FILE: angular/src/app/pages/checkout-page/checkout-page.ts   [status:  D]
+DELETED
+
+==================================================
+FILE: angular/src/app/pages/scan-page/qr-code/qr-code.component.css   [status:  M]
+stats: +5 -0
+@@ -29,2 +29,7 @@
+     font-weight: 600;
++}
++
++figcaption {
++    display: flex;
++    flex-direction: column;
+ }
+\ No newline at end of file
+
+==================================================
+FILE: laravel/app/Models/OrderItem.php   [status:  M]
+stats: +1 -0
+@@ -10,2 +10,3 @@ class OrderItem extends Model
+     // OrderItem.php
++    protected $table = 'orders_items';
+     protected $fillable = ['product_id', 'quantity', 'unit_price', 'product_name'];
+
+==================================================
+FILE: angular/src/app/model/CartItem.ts   [status: ??]
+NEW FILE, 11 lines:
+/**
+ * Interface to define a Product in the cart (quantity included)
+ * Only for frontend ux-ui display
+ */
+export interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+  stock: number;
+  quantity: number;
+}
+
+==================================================
+FILE: angular/src/app/model/OrderItemRequest.ts   [status: ??]
+NEW FILE, 4 lines:
+export interface OrderItemRequest {
+  product_id: number;
+  quantity: number;
+}
+
+==================================================
+FILE: angular/src/app/model/OrderItemResponse.ts   [status: ??]
+NEW FILE, 7 lines:
+export interface OrderItemResponse {
+  id: number;
+  product_id: number;
+  quantity: number;
+  unit_price: string;
+  product_name: string;
+}
+
+==================================================
+FILE: angular/src/app/model/OrderRequest.ts   [status: ??]
+NEW FILE, 5 lines:
+import { OrderItemRequest } from './OrderItemRequest';
+
+export interface OrderRequest {
+  items: OrderItemRequest[];
+}
+
+==================================================
+FILE: angular/src/app/model/OrderResponse.ts   [status: ??]
+NEW FILE, 7 lines:
+import { OrderItemResponse } from './OrderItemResponse';
+
+export interface OrderResponse {
+  id: number;
+  total_price: string;
+  items?: OrderItemResponse[];
+}
+
+==================================================
+FILE: angular/src/app/pages/checkout-page/checkout-page.component.css   [status: ??]
+NEW FILE, 47 lines:
+.heading {
+    display: flex;
+    flex-direction: column;
+}
+
+.page {
+    height: 100dvh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: clamp(1.25rem, 3vw, 2rem) var(--page-gutter);
+}
+
+.layout {
+    flex: 1;
+    min-height: 0;
+    /* lets the cart's list scroll instead of growing the page */
+    display: grid;
+    grid-template-columns: 22rem minmax(0, 1fr);
+    gap: 1.5rem;
+    padding-bottom: 1rem;
+}
+
+.card {
+    align-self: start;
+    padding: 2rem 1.5rem;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 8%, transparent);
+}
+
+@media (max-width: 56rem) {
+    .page {
+        height: auto;
+        min-height: 100dvh;
+    }
+
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    app-checkout-cart {
+        min-height: 22rem;
+    }
+}
+
+==================================================
+FILE: angular/src/app/pages/checkout-page/checkout-page.component.html   [status: ??]
+NEW FILE, 22 lines:
+<main class="page">
+    <!--HEADINGS-->
+    <div class="heading">
+        <h1>Checkout</h1>
+        <p>Pair your phone, scan the products and process the order.</p>
+    </div>
+    <div class="layout">
+        <article class="card">
+            <!--IF THE QR IS ALREADY GENERATED DISPLAY IT-->
+            @if (qrGenerated()) {
+            <app-qr-code [qrUrl]="qrUrl()" />
+            } @else {
+            <app-sync-phone-dialog [sessionError]="sessionError()" [loadingQr]="loadingQr()"
+                (createSession)="onCreateSession()" />
+            }
+        </article>
+
+        <app-checkout-cart [items]="cart()" [submitting]="submitting()" (remove)="onRemove($event)"
+            (checkout)="onCheckout()" />
+    </div>
+
+</main>
+
+==================================================
+FILE: angular/src/app/pages/checkout-page/checkout-page.component.ts   [status: ??]
+NEW FILE, 199 lines:
+import { Component, DestroyRef, OnInit, signal } from '@angular/core';
+import { SyncService } from '../../services/sync.service';
+import { SessionResponse } from '../../model/SessionResponse';
+import { finalize } from 'rxjs';
+import QRCode from 'qrcode';
+import { SyncPhoneDialogComponent } from '../../shared/sync-phone-dialog/sync-phone-dialog.component';
+import { ScanService } from '../../services/scan.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ProductService } from '../../services/product.service';
+import { ProductResponse } from '../../model/ProductResponse';
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { toast } from 'ngx-sonner';
+import { QrCodeComponent } from '../scan-page/qr-code/qr-code.component';
+import { CartItem } from '../../model/CartItem';
+import { CheckoutCartComponent } from '../../shared/checkout-cart/checkout-cart.component';
+import { OrderService } from '../../services/order.service';
+
+@Component({
+  selector: 'app-checkout-page',
+  imports: [QrCodeComponent, SyncPhoneDialogComponent, CheckoutCartComponent],
+  templateUrl: './checkout-page.component.html',
+  styleUrl: './checkout-page.component.css',
+})
+export class CheckoutPage implements OnInit {
+  public sessionData?: SessionResponse;
+  // UX/UI state for pairing feedback.
+  public loadingQr = signal(false);
+  public sessionError = signal('');
+
+  // UX/UI state for the QR preview.
+  public qrUrl = signal('');
+  public qrGenerated = signal(false);
+
+  //Checkout cart
+  public cart = signal<CartItem[]>([]);
+  public submitting = signal(false);
+  private idempotencyKey = crypto.randomUUID();
+
+  constructor(
+    private syncService: SyncService,
+    private scanService: ScanService,
+    private productService: ProductService,
+    public orderService: OrderService,
+    private destroyRef: DestroyRef,
+  ) {}
+
+  /**
+   * Subscribes to barcode scan events.
+   * @returns void
+   */
+  ngOnInit(): void {
+    this.scanService
+      .onReceiveBarcode()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((barcode) => {
+        this.addByBarcode(barcode);
+      });
+  }
+  /**
+   * Creates a pairing session and generates its QR code.
+   * @returns void
+   */
+  public onCreateSession() {
+    //UI-UX States
+    this.qrGenerated.set(false);
+    this.loadingQr.set(true);
+    this.sessionError.set('');
+
+    //API Request
+    this.syncService
+      .createSession()
+      .pipe(
+        finalize(() => {
+          this.loadingQr.set(false);
+        }),
+      )
+      .subscribe({
+        next: async (res) => {
+          try {
+            this.sessionData = res;
+            const url: string = await this.getQrLink(
+              'https://speculative-glynis-trusting.ngrok-free.dev/pair#' + res.token_hash,
+            );
+            console.log(
+              'https://speculative-glynis-trusting.ngrok-free.dev/pair#' + res.token_hash,
+            );
+            this.scanService.joinSession(res.token_hash);
+            this.qrUrl.set(url);
+            this.qrGenerated.set(true);
+          } catch (error) {
+            this.sessionError.set("Couldn't prepare the pairing code, please try again.");
+            this.resetSessionError();
+          }
+        },
+        error: (err) => {
+          this.sessionError.set("Couldn't create a session, please try again later");
+          this.resetSessionError();
+        },
+      });
+  }
+
+  /**
+   * Generates a QR code image URL.
+   * @param url The URL encoded in the QR code.
+   * @returns The generated QR code image URL.
+   */
+  private async getQrLink(url: string): Promise<string> {
+    return await QRCode.toDataURL(url, { width: 256, margin: 2, errorCorrectionLevel: 'M' });
+  }
+
+  /**
+   * Adds a product to the cart (if exists)
+   * @param barcode The barcode to add to cart
+   */
+  private addByBarcode(barcode: string) {
+    this.productService.getProductByBarcode(barcode).subscribe({
+      next: (p) => this.addToCart(p),
+      error: (err: HttpErrorResponse) =>
+        toast.error(
+... (truncated)
+
+==================================================
+FILE: angular/src/app/services/order.service.ts   [status: ??]
+NEW FILE, 33 lines:
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { map, Observable } from 'rxjs';
+import { ApiResponse } from '../model/ApiResponse';
+import { CategoryResponse } from '../model/CategoryResponse';
+import { OrderItemRequest } from '../model/OrderItemRequest';
+import { OrderRequest } from '../model/OrderRequest';
+import { OrderResponse } from '../model/OrderResponse';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class OrderService {
+  private readonly apiBaseUrl = environment.apiBaseUrl;
+
+  constructor(private http: HttpClient) {}
+
+  /**
+   * Handles an API Post request to create an order
+   * @param items The items to
+   * @param idempotencyKey idempotencyKey to avoid duplicate orders
+   * @returns Observable of OrderResponse
+   */
+  public postOrder(items: OrderItemRequest[], idempotencyKey: string): Observable<OrderResponse> {
+    const request: OrderRequest = { items };
+    return this.http
+      .post<ApiResponse<OrderResponse>>(`${this.apiBaseUrl}/orders`, request, {
+        headers: { 'Idempotency-Key': idempotencyKey },
+      })
+      .pipe(map((res) => res.data));
+  }
+}
+
+==================================================
+FILE: angular/src/app/shared/checkout-cart/checkout-cart.component.css   [status: ??]
+NEW FILE, 108 lines:
+:host {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.cart {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 8%, transparent);
+}
+
+.cartHead {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+/* Only the list scrolls: header and total + button stay pinned */
+.list {
+    flex: 1;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-y: auto;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.row:last-child {
+    border-bottom: 0;
+}
+
+.info {
+    min-width: 0;
+}
+
+.name {
+    display: block;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.lineTotal,
+.total {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Overrides the global button's min-width/height */
+button.icon {
+    min-width: 0;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+}
+
+.empty {
+    flex: 1;
+    display: grid;
+    place-items: center;
+    padding: 2rem 1.5rem;
+    text-align: center;
+}
+
+.cartFoot {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid var(--border);
+    border-radius: 0 0 8px 8px;
+    background: color-mix(in srgb, var(--bg) 40%, var(--surface));
+}
+
+.totalRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.total {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+}
+
+.cartFoot button {
+    width: 100%;
+    height: 3rem;
+}
+
+==================================================
+FILE: angular/src/app/shared/checkout-cart/checkout-cart.component.html   [status: ??]
+NEW FILE, 35 lines:
+<section class="cart" aria-labelledby="cart-title">
+    <header class="cartHead">
+        <h4 id="cart-title">Current order</h4>
+        <small>{{ count() }} {{ count() === 1 ? 'item' : 'items' }}</small>
+    </header>
+
+    @if (items().length > 0) {
+    <ul class="list">
+        @for (item of items(); track item.id) {
+        <li class="row">
+            <div class="info">
+                <span class="name">{{ item.name }}</span>
+                <small>{{ item.quantity }} Ã— {{ item.price | currency }}</small>
+            </div>
+            <span class="lineTotal">{{ item.price * item.quantity | currency }}</span>
+            <button type="button" class="secondary icon" [attr.aria-label]="'Remove ' + item.name"
+                (click)="remove.emit(item.id)">âœ•</button>
+        </li>
+        }
+    </ul>
+    } @else {
+    <!--Empty State-->
+    <p class="empty text-muted">Scan a product to add it to the order.</p>
+    }
+
+    <footer class="cartFoot">
+        <div class="totalRow">
+            <span class="text-muted">Total</span>
+            <strong class="total">{{ total() | currency }}</strong>
+        </div>
+        <button type="button" [disabled]="!canCheckout()" (click)="checkout.emit()">
+            {{ submitting() ? 'Processingâ€¦' : 'Checkout' }}
+        </button>
+    </footer>
+</section>
+
+==================================================
+FILE: angular/src/app/shared/checkout-cart/checkout-cart.component.ts   [status: ??]
+NEW FILE, 25 lines:
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
+import { CartItem } from '../../model/CartItem';
+
+@Component({
+  selector: 'app-checkout-cart',
+  imports: [CurrencyPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './checkout-cart.component.html',
+  styleUrl: './checkout-cart.component.css',
+})
+export class CheckoutCartComponent {
+  public items = input.required<CartItem[]>();
+  public submitting = input(false);
+  public checkout = output<void>();
+  public remove = output<number>();
+  public count = computed(() => this.items().reduce((n, i) => n + i.quantity, 0));
+  // Sum in cents to avoid float drift (0.1 + 0.2). Display only: the backend recalculates.
+  public total = computed(
+    () => this.items().reduce((sum, i) => sum + Math.round(i.price * 100) * i.quantity, 0) / 100,
+  );
+
+  // Check if can checkout - Only if the price is > (empty cart) and no submitting already
+  public canCheckout = computed(() => this.total() > 0 && !this.submitting());
+}
+
+==================================================
+FILE: laravel/app/Http/Requests/orders/StoreOrderRequest.php   [status: ??]
+NEW FILE, 48 lines:
+<?php
+
+namespace App\Http\Requests\orders;
+
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class StoreOrderRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Add the idempotency header to the validated request data.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'idempotency_key' => $this->header('Idempotency-Key'),
+        ]);
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'idempotency_key'     => ['required', 'string', 'max:64'],
+            'items'               => ['required', 'array', 'min:1'],
+            'items.*'             => ['required', 'array:product_id,quantity'],
+            'items.*.product_id'  => [
+                'required',
+                'integer',
+                Rule::exists('products', 'id')->where('user_id', $this->user()->id),
+            ],
+            'items.*.quantity'    => ['required', 'integer', 'min:1'],
+        ];
+    }
+}
+
+==================================================
+FILE: laravel/app/Http/Resources/OrderItemResource.php   [status: ??]
+NEW FILE, 25 lines:
+<?php
+
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class OrderItemResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'id'           => $this->id,
+            'product_id'   => $this->product_id,
+            'quantity'     => $this->quantity,
+            'unit_price'   => $this->unit_price,
+            'product_name' => $this->product_name,
+        ];
+    }
+}
+
+==================================================
+FILE: laravel/app/Http/Resources/OrderResource.php   [status: ??]
+NEW FILE, 23 lines:
+<?php
+
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class OrderResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'id'          => $this->id,
+            'total_price' => $this->total_price,
+            'items'       => OrderItemResource::collection($this->whenLoaded('items')),
+        ];
+    }
+}

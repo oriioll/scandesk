@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PairingSessionController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -65,7 +66,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{id}');
 
         // POST /orders - Post order
-        Route::post('/');
+        Route::post('/', [OrderController::class, 'store']);
     });
 
     /**
