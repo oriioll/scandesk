@@ -2,10 +2,12 @@ import { Routes } from '@angular/router';
 import { ScanPage } from './pages/scan-page/scan-page.component';
 import { PairPage } from './pages/pair-page/pair-page';
 import { CheckoutPage } from './pages/checkout-page/checkout-page.component';
+import { DashboardPage } from './pages/dashboard-page/dashboard-page.component';
 
 const TODO: any = null;
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'scan' }, // temporal, hasta tener Landing
+  { path: 'dashboard', component: DashboardPage },
   { path: 'scan', component: ScanPage },
   { path: 'pair', component: PairPage },
   { path: 'checkout', component: CheckoutPage },

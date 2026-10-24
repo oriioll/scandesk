@@ -1,0 +1,13 @@
+<main class="page">
+    <!--HEADINGS-->
+    <div class="heading">
+        <h1>Hi, John Doe</h1>
+        <p>Resume of your inventory today</p>
+    </div>
+    <!--KPIS-->
+    <section class="kpis">
+        @for (kpi of kpis; track kpi.label) {
+        <app-kpi [topText]="kpi.label" [value]="kpi.value.toString()" [bottomText]="kpi.hint" [tone]="kpi.tone" />
+        }
+    </section>
+</main>

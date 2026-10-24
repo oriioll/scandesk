@@ -1,0 +1,5 @@
+<article [class]="tone()" (click)="onKpiClick()">
+    <p class="label">{{topText() ? topText() : ''}}</p>
+    <p class="value">{{value()}}</p>
+    <p class="hint">{{bottomText() ? bottomText() : ''}}</p>
+</article>
