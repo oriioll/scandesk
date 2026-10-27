@@ -10,4 +10,11 @@
         <app-kpi [topText]="kpi.label" [value]="kpi.value.toString()" [bottomText]="kpi.hint" [tone]="kpi.tone" />
         }
     </section>
+    <!--FEATURES-->
+    <section class="features">
+        @for (feature of features; track feature.text) {
+        <app-dashboard-feature [card]="feature" />
+        }
+    </section>
+
 </main>

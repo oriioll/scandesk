@@ -1,0 +1,109 @@
+:host {
+    display: block;
+}
+
+article {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    height: 100%;
+    padding: 2.5rem 1.25rem;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 8%, transparent);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+article:hover,
+article:focus-within {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.top {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--primary) 14%, transparent);
+}
+
+.icon span {
+    width: 1.5rem;
+    height: 1.5rem;
+    background: var(--primary);
+    mask: var(--icon) center / contain no-repeat;
+}
+
+h3 {
+    font-size: var(--text-xl);
+}
+
+/* El enlace del título cubre toda la card */
+.stretched {
+    color: inherit;
+    text-decoration: none;
+    font-weight: inherit;
+}
+
+.stretched::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+}
+
+.stretched:focus-visible {
+    outline: none;
+}
+
+article:has(.stretched:focus-visible) {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+p {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 0.25rem;
+}
+
+.actions button {
+    position: relative;
+    z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    article {
+        transition: none;
+    }
+
+    article:hover,
+    article:focus-within {
+        transform: none;
+    }
+}
+
+@media(max-width: 768px) {
+    article {
+        padding: 1.25rem 1.25rem;
+    }
+
+}

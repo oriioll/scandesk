@@ -1,0 +1,19 @@
+<article>
+    <div class="top">
+        <div class="icon" aria-hidden="true">
+            <span [style.--icon]="'url(' + card().iconPath + ')'"></span>
+        </div>
+        <h3><a class="stretched">{{ card().title }}</a></h3>
+    </div>
+
+    <p>{{ card().text }}</p>
+
+    <div class="actions">
+        @for (btn of card().buttons; track btn.text) {
+        <button type="button" [class.secondary]="!btn.isPrincipal" [routerLink]="btn.routeTo"
+            [queryParams]="btn.queryParams">
+            {{ btn.text }}
+        </button>
+        }
+    </div>
+</article>
