@@ -14,7 +14,7 @@ class ProductService
      */
     public function getAll(User $user)
     {
-        return $user->products();
+        return $user->products()->get();
     }
 
     /**

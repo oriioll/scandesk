@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PairingSessionController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -93,10 +94,10 @@ Route::middleware('auth:sanctum')->group(function () {
  */
 Route::prefix('auth')->group(function () {
     // POST /auth/login - Logs in a user
-    Route::post('/login');
+    Route::post('/login', [UserController::class, 'login']);
 
     // POST /auth/register - Registers a user
-    Route::post('/register');
+    Route::post('/register', [UserController::class, 'register']);
 });
 
 /**
