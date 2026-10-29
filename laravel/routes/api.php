@@ -16,10 +16,10 @@ Route::middleware('auth:sanctum')->group(function () {
      */
     Route::prefix('auth')->group(function () {
         // GET /auth/me - Gets information of the current logged user
-        Route::get('/me');
+        Route::get('/me', [UserController::class, 'me']);
 
         // POST /auth/logout - Logs out a user
-        Route::post('/logout');
+        Route::post('/logout', [UserController::class, 'logout']);
     });
 
     /**
@@ -94,7 +94,7 @@ Route::middleware('auth:sanctum')->group(function () {
  */
 Route::prefix('auth')->group(function () {
     // POST /auth/login - Logs in a user
-    Route::post('/login', [UserController::class, 'login']);
+    Route::post('/login', [UserController::class, 'login'])->middleware('throttle:5,1');
 
     // POST /auth/register - Registers a user
     Route::post('/register', [UserController::class, 'register']);

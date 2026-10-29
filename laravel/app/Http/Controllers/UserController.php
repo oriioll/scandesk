@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\orders\LoginUserRequest;
 use App\Http\Requests\orders\RegisterUserRequest;
+use App\Http\Resources\UserResource;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 
@@ -19,7 +20,7 @@ class UserController extends Controller
     {
         $userToken = $this->userService->loginUser($request->validated());
         if (!$userToken) {
-            return response()->json(['error' => true, 'message' => "Couldn't login the user error credentials"], 402);
+            return response()->json(['error' => true, 'message' => "Couldn't login the user error credentials"], 401);
         }
         return response()->json([
             'message' => 'User logged in successfully',
@@ -38,6 +39,23 @@ class UserController extends Controller
             'message' => 'User created successfully successfully',
             'access_token' => $userToken,
             'token_type' => 'Bearer',
-        ]);
+        ], 201);
+    }
+
+    /**
+     * Deletes the current access token from the user to log out
+     */
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->noContent();
+    }
+
+    /**
+     * Handles GET Request to get the current user
+     */
+    public function me(Request $request)
+    {
+        return new UserResource($request->user());
     }
 }

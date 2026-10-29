@@ -10,11 +10,12 @@ class UserService
     //Logs in a user by checking credentials an generating a token
     public function loginUser(array $user): string | null
     {
-        $userExists = User::where('email', $user['email']);
+        $userExists = User::where('email', $user['email'])->first();
         //Compare with hashs the password sent and the real password
-        if (!$userExists | Hash::check($userExists->password, $user['password'])) {
+        if (!$userExists || !Hash::check($user['password'], $userExists->password)) {
             return null;
         }
+
         return $userExists->createToken('auth_token')->plainTextToken;
     }
 
@@ -26,7 +27,7 @@ class UserService
             [
                 'name' => $user['name'],
                 'email' => $user['email'],
-                'password' => Hash::make($user['name']),
+                'password' => Hash::make($user['password']),
             ]
         );
         return $user->createToken('auth_token')->plainTextToken;
