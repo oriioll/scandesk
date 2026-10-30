@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { Kpi } from './kpi/kpi.component';
 import { KpiTone } from '../../models/dashboard/kpi-tone';
 import { FeatureCard } from '../../models/dashboard/features';
-import { isPlatformBrowser } from '@angular/common';
 import { DashboardFeature } from './dashboard-features/dashboard-features.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -11,7 +11,10 @@ import { DashboardFeature } from './dashboard-features/dashboard-features.compon
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.css',
 })
-export class DashboardPage {
+export class DashboardPage implements OnInit {
+  constructor(private authService: AuthService) {}
+  public username = signal('');
+  //Array of kpis in the app
   public kpis: { label: string; value: string; hint: string; tone: KpiTone }[] = [
     { label: 'Total products', value: '248', hint: 'In 6 categories', tone: 'default' },
     { label: 'Out of stock', value: '12', hint: '4.8% of catalog', tone: 'error' },
@@ -19,6 +22,7 @@ export class DashboardPage {
     { label: "Today's sales", value: '184,50 €', hint: '14 orders', tone: 'default' },
   ];
 
+  //Array of features of the app
   public features: FeatureCard[] = [
     {
       iconPath: '/icons/product.svg',
@@ -56,4 +60,17 @@ export class DashboardPage {
       routeTo: '/scan',
     },
   ];
+  public ngOnInit(): void {
+    this.getUserName();
+  }
+  private getUserName() {
+    this.authService.whoami().subscribe({
+      next: (user) => {
+        this.username.set(user.name);
+      },
+      error: () => {
+        return;
+      },
+    });
+  }
 }
