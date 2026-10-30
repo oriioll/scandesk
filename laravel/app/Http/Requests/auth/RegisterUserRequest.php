@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Requests\orders;
+namespace App\Http\Requests\auth;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class RegisterUserRequest extends FormRequest
 {
@@ -27,7 +26,7 @@ class RegisterUserRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'numeric', 'min:8'],
+            'password' => ['required', 'string', 'min:8', 'max:50', 'regex:/^(?=.*[0-9])(?=.*[^\p{L}\p{N}\s])\S+$/u'],
         ];
     }
 }

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\orders\LoginUserRequest;
-use App\Http\Requests\orders\RegisterUserRequest;
+use App\Http\Requests\auth\LoginUserRequest;
+use App\Http\Requests\auth\RegisterUserRequest;
+use App\Http\Resources\AuthTokenResource;
 use App\Http\Resources\UserResource;
 use App\Services\UserService;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ class UserController extends Controller
         if (!$userToken) {
             return response()->json(['error' => true, 'message' => "Couldn't login the user error credentials"], 401);
         }
-        return response()->json([
+        return AuthTokenResource::make([
             'message' => 'User logged in successfully',
             'access_token' => $userToken,
             'token_type' => 'Bearer',
@@ -35,11 +36,11 @@ class UserController extends Controller
     public function register(RegisterUserRequest $request)
     {
         $userToken = $this->userService->createUser($request->validated());
-        return response()->json([
+        return AuthTokenResource::make([
             'message' => 'User created successfully successfully',
             'access_token' => $userToken,
             'token_type' => 'Bearer',
-        ], 201);
+        ])->response()->setStatusCode(201);
     }
 
     /**

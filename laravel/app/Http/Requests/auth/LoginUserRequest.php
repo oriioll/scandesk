@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Requests\orders;
+namespace App\Http\Requests\auth;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class LoginUserRequest extends FormRequest
 {
@@ -25,7 +24,7 @@ class LoginUserRequest extends FormRequest
     {
         return [
             'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'numeric', 'min:8'],
+            'password' => ['required', 'string'],
         ];
     }
 }
