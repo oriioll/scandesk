@@ -56,7 +56,9 @@ export class AuthService {
    */
   public whoami(): Observable<UserResponse> {
     return this.http
-      .get<ApiResponse<UserResponse>>(`${this.apiBaseUrl}/auth/me`)
+      .get<ApiResponse<UserResponse>>(`${this.apiBaseUrl}/auth/me`, {
+        headers: { Authorization: `Bearer ${this.accessTokenService.getToken()}` },
+      })
       .pipe(map((res) => res.data)); //Remove data from api response
   }
 

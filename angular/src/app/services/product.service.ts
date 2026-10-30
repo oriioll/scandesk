@@ -5,6 +5,7 @@ import { map, Observable } from 'rxjs';
 import { ProductResponse } from '../models/products/product.response';
 import { ApiResponse } from '../models/shared/api.response';
 import { ProductRequest } from '../models/products/product.request';
+import { AccessTokenService } from './access_token.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,10 @@ import { ProductRequest } from '../models/products/product.request';
 export class ProductService {
   private readonly apiBaseUrl = environment.apiBaseUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private accessTokenService: AccessTokenService,
+  ) {}
   /**
    * Handles an API request to search a product by a user id
    * @param barcode Barcode of the product to search
@@ -20,7 +24,9 @@ export class ProductService {
    */
   public getProductByBarcode(barcode: string): Observable<ProductResponse> {
     return this.http
-      .get<ApiResponse<ProductResponse>>(`${this.apiBaseUrl}/products/barcode/${barcode}`)
+      .get<ApiResponse<ProductResponse>>(`${this.apiBaseUrl}/products/barcode/${barcode}`, {
+        headers: { Authorization: `Bearer ${this.accessTokenService.getToken()}` },
+      })
       .pipe(map((res) => res.data)); //Remove data from api response
   }
 
@@ -31,7 +37,9 @@ export class ProductService {
    */
   public postProduct(product: ProductRequest): Observable<ProductResponse> {
     return this.http
-      .post<ApiResponse<ProductResponse>>(`${this.apiBaseUrl}/products`, product)
+      .post<ApiResponse<ProductResponse>>(`${this.apiBaseUrl}/products`, product, {
+        headers: { Authorization: `Bearer ${this.accessTokenService.getToken()}` },
+      })
       .pipe(map((res) => res.data)); //Remove data from api response
   }
 
@@ -43,7 +51,9 @@ export class ProductService {
    */
   public putProduct(id: number, product: ProductRequest): Observable<ProductResponse> {
     return this.http
-      .put<ApiResponse<ProductResponse>>(`${this.apiBaseUrl}/products/${id}`, product)
+      .put<ApiResponse<ProductResponse>>(`${this.apiBaseUrl}/products/${id}`, product, {
+        headers: { Authorization: `Bearer ${this.accessTokenService.getToken()}` },
+      })
       .pipe(map((res) => res.data)); //Remove data from api response
   }
 }

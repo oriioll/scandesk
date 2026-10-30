@@ -7,6 +7,7 @@ import { CategoryResponse } from '../models/categories/category.response';
 import { OrderItemRequest } from '../models/orders/order-item.request';
 import { OrderRequest } from '../models/orders/order.request';
 import { OrderResponse } from '../models/orders/order.response';
+import { AccessTokenService } from './access_token.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,10 @@ import { OrderResponse } from '../models/orders/order.response';
 export class OrderService {
   private readonly apiBaseUrl = environment.apiBaseUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private accessTokenService: AccessTokenService,
+  ) {}
 
   /**
    * Handles an API Post request to create an order
@@ -26,7 +30,10 @@ export class OrderService {
     const request: OrderRequest = { items };
     return this.http
       .post<ApiResponse<OrderResponse>>(`${this.apiBaseUrl}/orders`, request, {
-        headers: { 'Idempotency-Key': idempotencyKey },
+        headers: {
+          Authorization: `Bearer ${this.accessTokenService.getToken()}`,
+          'Idempotency-Key': idempotencyKey,
+        },
       })
       .pipe(map((res) => res.data));
   }
