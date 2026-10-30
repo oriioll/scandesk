@@ -61,6 +61,9 @@ export class ProductFormComponent {
     });
   }
 
+  /**
+   * Function called when form is submitted
+   */
   public onSubmit() {
     const { category_id, ...rest } = this.form.getRawValue();
     if (this.form.invalid || category_id === null) {
@@ -70,6 +73,9 @@ export class ProductFormComponent {
     this.submitted.emit({ ...rest, category_id });
   }
 
+  /**
+   * Handles errors in the form
+   */
   public fieldError(name: 'name' | 'category_id' | 'price' | 'stock'): string {
     const c = this.form.controls[name];
     if (!c.touched || !c.errors) return '';

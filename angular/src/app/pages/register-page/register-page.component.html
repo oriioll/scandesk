@@ -1,1 +1,69 @@
-<p>register-page works!</p>
+<main class="page">
+    <div class="heading">
+        <h1>Create your user</h1>
+        <p>Turn your phone into a scanner and manage your inventory and sales from your PC.</p>
+    </div>
+    <section class="stage">
+        <form class="formCard" [formGroup]="form" (ngSubmit)="onRegister($event)" [attr.aria-busy]="loading()">
+            <!--Name section-->
+            <div class="formSection full">
+                <label for="name">Name *</label>
+                <input id="name" name="name" type="text" formControlName="name" placeholder="John Doe"
+                    [attr.aria-invalid]="name.touched && name.invalid" />
+                @if (name.touched && name.errors?.['required']) {
+                <span class="error fieldError">Name is required</span>
+                } @else if (name.touched && name.errors?.['pattern']) {
+                <span class="error fieldError">Name can't contain numbers or symbols</span>
+                }
+            </div>
+            <!--Email section-->
+            <div class="formSection full">
+                <label for="email">Email *</label>
+                <input id="email" name="email" type="email" formControlName="email" placeholder="johndoe@gmail.com"
+                    [attr.aria-invalid]="email.touched && email.invalid" />
+                @if (email.touched && email.errors?.['required']) {
+                <span class="error fieldError">Email is required</span>
+                } @else if (email.touched && email.errors?.['email']) {
+                <span class="error fieldError">Enter a valid email</span>
+                }
+            </div>
+            <!--Password section-->
+            <div class="formSection full">
+                <label for="password">Password *</label>
+                <input id="password" name="password" type="password" formControlName="password"
+                    [attr.aria-invalid]="password.touched && password.invalid" />
+                @if (password.touched && password.errors?.['required']) {
+                <span class="error fieldError">Password is required</span>
+                } @else if (password.touched && password.errors?.['pattern']) {
+                <span class="error fieldError">
+                    Password must be 8-50 characters long, include at least one number and one symbol, and contain no
+                    spaces
+                </span>
+                }
+            </div>
+            <!--General error section-->
+            @if (errorMsg()) {
+            <div class="formError" role="alert">
+                <span class="error">{{ errorMsg() }}</span>
+            </div>
+            }
+
+            <!--Submit button with loading state-->
+            <button type="submit" [disabled]="loading() || form.invalid" [attr.aria-busy]="loading()">
+                @if (loading()) {
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-label="Loading">
+                    <path fill="currentColor" opacity=".35"
+                        d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" />
+                    <path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
+                        <animateTransform attributeName="transform" dur="1s" from="0 12 12" to="360 12 12"
+                            repeatCount="indefinite" type="rotate" />
+                    </path>
+                </svg>
+                } @else {
+                Create account
+                }
+            </button>
+        </form>
+    </section>
+
+</main>

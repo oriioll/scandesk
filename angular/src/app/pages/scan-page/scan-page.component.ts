@@ -189,9 +189,11 @@ export class ScanPage implements OnInit {
    * @returns void
    */
   public onProductFormSubmit(value: ProductRequest) {
+    //Verify that a product isn't already being processed or in login state
     if (this.submitting() || this.loadingProduct() || this.lookupFailed()) {
       return;
     }
+    //Reset error and loading states
     this.formError.set('');
     this.fieldErrors.set({});
     this.submitting.set(true);
@@ -201,10 +203,12 @@ export class ScanPage implements OnInit {
         .pipe(finalize(() => this.submitting.set(false)))
         .subscribe({
           next: (created: ProductResponse) => {
+            //Go to edit mode once is created
             this.productToUpdateId.set(created.id);
             this.formOperation.set('update');
             this.product.set(created);
             toast.success('Product created');
+            //Listen again to new products
             this.barcodeReceived.set(false);
           },
           error: (err: HttpErrorResponse) => {
