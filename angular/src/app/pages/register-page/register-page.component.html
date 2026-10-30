@@ -19,8 +19,8 @@
             <!--Email section-->
             <div class="formSection full">
                 <label for="email">Email *</label>
-                <input id="email" name="email" type="email" formControlName="email" placeholder="johndoe@gmail.com"
-                    [attr.aria-invalid]="email.touched && email.invalid" />
+                <input id="email" name="email" type="email" formControlName="email" autocomplete="email"
+                    placeholder="johndoe@gmail.com" [attr.aria-invalid]="email.touched && email.invalid" />
                 @if (email.touched && email.errors?.['required']) {
                 <span class="error fieldError">Email is required</span>
                 } @else if (email.touched && email.errors?.['email']) {
@@ -31,7 +31,7 @@
             <div class="formSection full">
                 <label for="password">Password *</label>
                 <input id="password" name="password" type="password" formControlName="password"
-                    [attr.aria-invalid]="password.touched && password.invalid" />
+                    autocomplete="new-password" [attr.aria-invalid]="password.touched && password.invalid" />
                 @if (password.touched && password.errors?.['required']) {
                 <span class="error fieldError">Password is required</span>
                 } @else if (password.touched && password.errors?.['pattern']) {
@@ -63,6 +63,9 @@
                 Create account
                 }
             </button>
+            <p class="full text-muted">
+                Don't have an account? <a class="pointer" routerLink="/register">Create one</a>
+            </p>
         </form>
     </section>
 

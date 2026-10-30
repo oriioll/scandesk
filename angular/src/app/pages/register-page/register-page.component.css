@@ -70,3 +70,7 @@
         grid-template-columns: 1fr;
     }
 }
+
+.pointer {
+    cursor: pointer;
+}
