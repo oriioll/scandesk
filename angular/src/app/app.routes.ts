@@ -4,6 +4,7 @@ import { PairPage } from './pages/pair-page/pair-page.component';
 import { CheckoutPage } from './pages/checkout-page/checkout-page.component';
 import { DashboardPage } from './pages/dashboard-page/dashboard-page.component';
 import { RegisterPage } from './pages/register-page/register-page.component';
+import { LoginPage } from './pages/login-page/login-page.component';
 
 const TODO: any = null;
 export const routes: Routes = [
@@ -13,6 +14,7 @@ export const routes: Routes = [
   { path: 'pair', component: PairPage },
   { path: 'checkout', component: CheckoutPage },
   { path: 'register', component: RegisterPage }, //Register page
+  { path: 'login', component: LoginPage }, //Login page
   { path: '**', redirectTo: 'scan' }, // temporal, hasta tener 404
 ];
 export const routes_future: Routes = [

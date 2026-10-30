@@ -1,1 +1,56 @@
-<p>login-page works!</p>
+<main class="page">
+    <div class="heading">
+        <h1>Log in</h1>
+        <p>Access your account to manage your inventory and checkout from your PC.</p>
+    </div>
+    <section class="stage">
+        <form class="formCard" [formGroup]="form" (ngSubmit)="onLogin($event)" [attr.aria-busy]="loading()">
+            <!--Email section-->
+            <div class="formSection full">
+                <label for="email">Email *</label>
+                <input id="email" name="email" type="email" formControlName="email" autocomplete="email"
+                    placeholder="johndoe@gmail.com" [attr.aria-invalid]="email.touched && email.invalid" />
+                @if (email.touched && email.errors?.['required']) {
+                <span class="error fieldError">Email is required</span>
+                } @else if (email.touched && email.errors?.['email']) {
+                <span class="error fieldError">Enter a valid email</span>
+                }
+            </div>
+            <!--Password section-->
+            <div class="formSection full">
+                <label for="password">Password *</label>
+                <input id="password" name="password" type="password" formControlName="password"
+                    autocomplete="current-password" [attr.aria-invalid]="password.touched && password.invalid" />
+                @if (password.touched && password.errors?.['required']) {
+                <span class="error fieldError">Password is required</span>
+                }
+            </div>
+            <!--General error section-->
+            @if (errorMsg()) {
+            <div class="formError" role="alert">
+                <span class="error">{{ errorMsg() }}</span>
+            </div>
+            }
+
+            <!--Submit button with loading state-->
+            <button type="submit" [disabled]="loading() || form.invalid" [attr.aria-busy]="loading()">
+                @if (loading()) {
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-label="Loading">
+                    <path fill="currentColor" opacity=".35"
+                        d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" />
+                    <path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
+                        <animateTransform attributeName="transform" dur="1s" from="0 12 12" to="360 12 12"
+                            repeatCount="indefinite" type="rotate" />
+                    </path>
+                </svg>
+                } @else {
+                Log In
+                }
+            </button>
+            <p class="full text-muted">
+                Don't have an account? <a class="pointer" routerLink="/register">Create one</a>
+            </p>
+        </form>
+    </section>
+
+</main>
