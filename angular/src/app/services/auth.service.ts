@@ -63,6 +63,23 @@ export class AuthService {
   }
 
   /**
+   * Handles an API request to log out the user
+   * @returns Observable<> With no content
+   */
+  public logout(): Observable<any> {
+    return this.http
+      .post(`${this.apiBaseUrl}/auth/logout`, {
+        headers: { Authorization: `Bearer ${this.accessTokenService.getToken()}` },
+      })
+      .pipe(
+        tap(() => {
+          //Remove the user token
+          this.accessTokenService.clearToken();
+        }),
+      );
+  }
+
+  /**
    * Uses whoami function to see if a user is logged or not
    * @returns Observable<boolean> to check if is logged or not
    */
