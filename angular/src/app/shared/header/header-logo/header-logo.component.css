@@ -2,6 +2,7 @@ h4 {
     display: flex;
     align-items: center;
     gap: .5rem;
+    cursor: pointer;
 }
 
 .logo-icon {

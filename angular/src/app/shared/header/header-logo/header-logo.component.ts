@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header-logo',
@@ -6,4 +7,12 @@ import { Component } from '@angular/core';
   templateUrl: './header-logo.component.html',
   styleUrl: './header-logo.component.css',
 })
-export class HeaderLogoComponent {}
+export class HeaderLogoComponent {
+  private router = inject(Router);
+  /**
+   * Handles click event on logo
+   */
+  public onLogoClick() {
+    this.router.navigate(['/dashboard']);
+  }
+}

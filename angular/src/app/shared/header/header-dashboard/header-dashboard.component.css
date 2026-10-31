@@ -1,0 +1,71 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    gap: .5rem;
+    padding: 1rem var(--page-gutter);
+    z-index: 1000;
+    position: sticky;
+    top: 0;
+    background-color: color-mix(in srgb, var(--bg) 80%, transparent);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    border-bottom: solid 1px color-mix(in srgb, var(--text-muted) 20%, transparent);
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+    header {
+        background-color: var(--bg);
+    }
+}
+
+.left,
+.right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.links {
+    display: flex;
+    gap: .75rem;
+}
+
+.navItem {
+    color: var(--text-muted);
+    text-decoration: none;
+    cursor: pointer;
+    padding: .5rem;
+    border-radius: 6px;
+    transition: all .2s ease;
+}
+
+.navItem:hover {
+    color: var(--text);
+    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+.navItem.active {
+    color: var(--text);
+    background-color: color-mix(in srgb, var(--primary) 20%, transparent);
+}
+
+.verticalSeparator {
+    height: 2rem;
+    width: 10px;
+    border-right: solid 1px color-mix(in srgb, var(--text-muted) 20%, transparent);
+}
+
+.user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--accent);
+    color: var(--bg);
+    font-weight: 600;
+    cursor: pointer;
+}

@@ -1,1 +1,22 @@
-<p>header-dashboard works!</p>
+<header>
+    <nav class="left">
+        <app-header-logo />
+        <div class="links">
+            <a class="navItem" routerLink="/dashboard" routerLinkActive="active"
+                ariaCurrentWhenActive="page">Dashboard</a>
+            <a class="navItem" routerLink="/products" routerLinkActive="active"
+                ariaCurrentWhenActive="page">Products</a>
+            <a class="navItem" routerLink="/history" routerLinkActive="active" ariaCurrentWhenActive="page">History</a>
+        </div>
+
+    </nav>
+    <div class="right">
+        <button class="secondary" routerLink="/scan">Scan</button>
+        <button class="primary" routerLink="/checkout">Checkout</button>
+        <div class="verticalSeparator"></div>
+        <app-theme-toggle />
+        <div class="user">
+            {{userAcronym}}
+        </div>
+    </div>
+</header>
