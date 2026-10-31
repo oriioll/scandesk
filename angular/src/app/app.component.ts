@@ -1,11 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NgxSonnerToaster } from 'ngx-sonner';
-import { ThemeToggleComponent } from './shared/theme-toggle/theme-toggle.component';
+import { Header } from './shared/header/header.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NgxSonnerToaster, ThemeToggleComponent],
+  imports: [RouterOutlet, NgxSonnerToaster, Header],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

@@ -5,17 +5,30 @@ import { CheckoutPage } from './pages/checkout-page/checkout-page.component';
 import { DashboardPage } from './pages/dashboard-page/dashboard-page.component';
 import { RegisterPage } from './pages/register-page/register-page.component';
 import { LoginPage } from './pages/login-page/login-page.component';
+import { HeaderVariant } from './models/header/header-variant';
 
 const TODO: any = null;
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-  { path: 'dashboard', component: DashboardPage },
-  { path: 'scan', component: ScanPage },
-  { path: 'pair', component: PairPage },
-  { path: 'checkout', component: CheckoutPage },
-  { path: 'register', component: RegisterPage }, //Register page
-  { path: 'login', component: LoginPage }, //Login page
-  { path: '**', redirectTo: 'scan' }, // temporal, hasta tener 404
+  {
+    path: '', // Groupe dashboard pages
+    data: { header: 'app' satisfies HeaderVariant },
+    children: [
+      { path: 'dashboard', component: DashboardPage },
+      { path: 'scan', component: ScanPage },
+      { path: 'checkout', component: CheckoutPage },
+    ],
+  },
+  {
+    path: '',
+    data: { header: 'auth' satisfies HeaderVariant },
+    children: [
+      { path: 'login', component: LoginPage },
+      { path: 'register', component: RegisterPage },
+    ],
+  },
+  { path: 'pair', component: PairPage, data: { header: 'none' satisfies HeaderVariant } },
+  { path: '**', redirectTo: 'dashboard' }, // temporal, hasta tener 404
 ];
 export const routes_future: Routes = [
   // Public
