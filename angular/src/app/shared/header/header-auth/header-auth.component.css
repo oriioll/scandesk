@@ -1,0 +1,21 @@
+header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 1rem var(--page-gutter);
+}
+
+.back {
+    justify-self: start;
+    color: var(--text-muted);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.back:hover {
+    color: var(--text);
+}
+
+app-theme-toggle {
+    justify-self: end;
+}

@@ -1,0 +1,12 @@
+h4 {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.logo-icon {
+    width: 1.6rem;
+    aspect-ratio: 1;
+    background-color: var(--primary);
+    mask: url("/icons/scan.svg") center / contain no-repeat;
+}
