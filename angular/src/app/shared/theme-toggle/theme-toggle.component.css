@@ -15,7 +15,7 @@
 }
 
 .theme-toggle:hover:not(:disabled) {
-  color: var(--primary);
+  color: var(--accent);
   background: transparent;
 }
 

@@ -5,6 +5,7 @@
 
 /* @import must be the first rule in the file */
 @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Figtree:wght@300..900&display=swap");
+@import "@angular/cdk/overlay-prebuilt.css";
 
 /* --------------------------------------------------------------------------
    1. Brand palette (raw values, from the brand PDF)
