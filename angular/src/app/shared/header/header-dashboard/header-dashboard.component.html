@@ -15,8 +15,40 @@
         <button class="primary" routerLink="/checkout">Checkout</button>
         <div class="verticalSeparator"></div>
         <app-theme-toggle />
-        <div class="user">
-            {{userAcronym}}
-        </div>
+        <button type="button" class="user" aria-label="User Menu" [cdkMenuTriggerFor]="menu"
+            [cdkMenuPosition]="menuPosition">
+            {{ userAcronym }}
+        </button>
+
+        <ng-template #menu>
+            <div class="menu" cdkMenu>
+                <div class="menu-user">
+                    <strong>{{ username() }}</strong>
+                    <span>{{ email() }}</span>
+                </div>
+
+                <hr class="menu-sep" />
+
+                <div class="menu-label">Theme</div>
+                <div class="theme-options">
+                    @for (opt of themeOptions; track opt.value) {
+                    <button type="button" cdkMenuItem class="theme-option"
+                        [class.active]="themeService.mode() === opt.value" (click)="themeService.set(opt.value)">
+                        {{ opt.label }}
+                    </button>
+                    }
+                </div>
+                <hr class="menu-sep" />
+                <button type="button" cdkMenuItem class="menu-item" (click)="onLogout()">
+                    <span class="error item-content">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="m16 17l5-5l-5-5m5 5H9m0 9H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        </svg>
+                        Log out
+                    </span>
+                </button>
+            </div>
+        </ng-template>
     </div>
 </header>

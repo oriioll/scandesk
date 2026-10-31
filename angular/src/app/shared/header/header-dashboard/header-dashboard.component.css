@@ -56,16 +56,117 @@ header {
     border-right: solid 1px color-mix(in srgb, var(--text-muted) 20%, transparent);
 }
 
+
+
 .user {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: .5rem;
-    width: 40px;
-    height: 40px;
+    min-width: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
     border-radius: 50%;
     background-color: var(--accent);
     color: var(--bg);
-    font-weight: 600;
-    cursor: pointer;
+    font-size: var(--text-sm);
+}
+
+.user:hover:not(:disabled),
+.user[aria-expanded="true"] {
+    background-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+}
+
+.menu {
+    min-width: 15rem;
+    padding: .5rem;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-shadow: 0 8px 24px light-dark(rgb(30 33 40 / 10%), rgb(0 0 0 / 35%));
+}
+
+.menu-user {
+    display: flex;
+    flex-direction: column;
+    padding: .5rem .75rem;
+}
+
+.menu-user strong {
+    font-weight: 700;
+}
+
+.menu-user span {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    overflow-wrap: anywhere;
+}
+
+.menu-sep {
+    height: 1px;
+    margin: .5rem 0;
+    border: 0;
+    background-color: var(--border);
+}
+
+.menu-label {
+    padding: 0 .75rem .375rem;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+/* Selector de tema */
+.theme-options {
+    display: flex;
+    gap: .25rem;
+    padding: .25rem;
+    border-radius: 8px;
+    background-color: var(--bg);
+}
+
+.theme-option {
+    flex: 1;
+    min-width: 0;
+    height: 2rem;
+    padding: 0 .5rem;
+    border-radius: 6px;
+    background-color: transparent;
+    color: var(--text-muted);
+    font-size: var(--text-xs);
+}
+
+.theme-option:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+    color: var(--text);
+}
+
+.theme-option.active,
+.theme-option.active:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--primary) 20%, transparent);
+    color: var(--text);
+}
+
+/* Cerrar sesión */
+.menu-item {
+    justify-content: flex-start;
+    width: 100%;
+    min-width: 0;
+    height: 2.5rem;
+    padding: 0 .75rem;
+    border-radius: 8px;
+    background-color: transparent;
+}
+
+.menu-item:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--error) 12%, transparent);
+}
+
+.item-content {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+
+.icon {
+    width: 1.125rem;
+    height: 1.125rem;
+    flex-shrink: 0;
 }
