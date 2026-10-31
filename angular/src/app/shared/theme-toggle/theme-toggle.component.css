@@ -1,10 +1,3 @@
-:host {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 1000;
-}
-
 .theme-toggle {
   display: grid;
   place-items: center;
