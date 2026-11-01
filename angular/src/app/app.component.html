@@ -1,3 +1,11 @@
 <ngx-sonner-toaster position="bottom-right" />
-<app-header />
-<router-outlet />
+<mat-drawer-container [hasBackdrop]="true">
+    <mat-drawer #drawer mode="over">
+        <app-drawer-nav [username]="username()" [email]="email()" (closeRequested)="drawer.close()" />
+    </mat-drawer>
+
+    <mat-drawer-content>
+        <app-header (userLoaded)="onUserLoaded($event)" (menuToggle)="drawer.toggle()" />
+        <router-outlet />
+    </mat-drawer-content>
+</mat-drawer-container>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, output, signal } from '@angular/core';
 import { HeaderLogoComponent } from '../header-logo/header-logo.component';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
@@ -26,6 +26,8 @@ export class HeaderDashboardComponent implements OnInit {
   public username = signal('');
   public email = signal('');
   public router = inject(Router);
+  readonly userLoaded = output<{ name: string; email: string }>();
+  readonly menuToggle = output<void>();
   constructor(
     private authService: AuthService,
     public themeService: ThemeService,
@@ -35,6 +37,9 @@ export class HeaderDashboardComponent implements OnInit {
       next: (data) => {
         this.username.set(data.name);
         this.email.set(data.email);
+        this.username.set(data.name);
+        this.email.set(data.email);
+        this.userLoaded.emit({ name: data.name, email: data.email });
       },
     });
   }
@@ -69,4 +74,7 @@ export class HeaderDashboardComponent implements OnInit {
   protected readonly menuPosition: ConnectedPosition[] = [
     { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top', offsetY: 8 },
   ];
+  public onBurgerClick() {
+    this.menuToggle.emit();
+  }
 }

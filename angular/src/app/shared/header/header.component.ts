@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { HeaderVariant } from '../../models/header/header-variant';
@@ -15,6 +15,9 @@ import { HeaderDashboardComponent } from './header-dashboard/header-dashboard.co
 })
 export class Header {
   private router = inject(Router);
+  public openSidebar = output();
+  readonly userLoaded = output<{ name: string; email: string }>();
+  readonly menuToggle = output<void>();
 
   /**
    * Handle what type of header display based on what router page you are
@@ -31,5 +34,8 @@ export class Header {
     let route = this.router.routerState.snapshot.root;
     while (route.firstChild) route = route.firstChild;
     return (route.data['header'] as HeaderVariant | undefined) ?? 'none';
+  }
+  public onBurgerClick() {
+    this.openSidebar.emit();
   }
 }

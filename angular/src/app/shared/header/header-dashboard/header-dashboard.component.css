@@ -170,3 +170,31 @@ header {
     height: 1.125rem;
     flex-shrink: 0;
 }
+
+.burger {
+    cursor: pointer;
+    display: none;
+}
+
+@media(max-width: 1000px) {
+    .burger {
+        display: block;
+    }
+
+    .right {
+        display: none;
+    }
+}
+
+@media(max-width: 500px) {
+    .links {
+        display: none;
+    }
+
+    .headerLogo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}

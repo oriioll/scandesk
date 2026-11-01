@@ -1,0 +1,11 @@
+mat-drawer-container {
+    height: 100dvh;
+    --mat-sidenav-container-width: min(20rem, 85vw);
+    --mat-sidenav-container-background-color: var(--bg);
+    --mat-sidenav-container-text-color: var(--text);
+    --mat-sidenav-container-divider-color: var(--border);
+    --mat-sidenav-container-shape: 0;
+    --mat-sidenav-content-background-color: var(--bg);
+    --mat-sidenav-content-text-color: var(--text);
+    --mat-sidenav-scrim-color: color-mix(in srgb, black 55%, transparent);
+}

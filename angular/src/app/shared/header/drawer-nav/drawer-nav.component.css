@@ -1,0 +1,195 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.drawer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 100%;
+    padding: 1rem;
+}
+
+.drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.close {
+    min-width: 0;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    background-color: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.close:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+/* Tarjeta de usuario */
+.card {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .75rem;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: var(--accent);
+    color: var(--bg);
+    font-size: var(--text-sm);
+    font-weight: 700;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.user-info span {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    overflow-wrap: anywhere;
+}
+
+/* Enlaces */
+.drawer-links {
+    display: flex;
+    flex-direction: column;
+    gap: .125rem;
+}
+
+.drawer-link {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    height: 2.75rem;
+    padding: 0 .75rem;
+    border-radius: 8px;
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.drawer-link:hover {
+    color: var(--text);
+    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+.drawer-link.active {
+    color: var(--text);
+    background-color: color-mix(in srgb, var(--primary) 20%, transparent);
+}
+
+/* Iconos de /public/icons: la máscara toma el color del texto */
+.icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+}
+
+.i-products,
+.i-history {
+    background-color: currentColor;
+    mask-position: center;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
+
+.i-products {
+    mask-image: url("/icons/product.svg");
+}
+
+.i-history {
+    mask-image: url("/icons/history.svg");
+}
+
+.sep {
+    width: 100%;
+    height: 1px;
+    margin: 0;
+    border: 0;
+    background-color: var(--border);
+}
+
+.drawer-actions {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.drawer-actions button {
+    width: 100%;
+    height: 2.75rem;
+}
+
+.spacer {
+    flex: 1;
+}
+
+/* Tema: mismo estilo que en el menú de usuario */
+.theme-options {
+    display: flex;
+    gap: .25rem;
+    padding: .25rem;
+    border-radius: 8px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+}
+
+.theme-option {
+    flex: 1;
+    min-width: 0;
+    height: 2.25rem;
+    padding: 0 .5rem;
+    border-radius: 6px;
+    background-color: transparent;
+    color: var(--text-muted);
+    font-size: var(--text-xs);
+}
+
+.theme-option:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+    color: var(--text);
+}
+
+.theme-option.active,
+.theme-option.active:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--primary) 20%, transparent);
+    color: var(--text);
+}
+
+.logout {
+    justify-content: flex-start;
+    width: 100%;
+    min-width: 0;
+    height: 2.75rem;
+    padding: 0 .75rem;
+    border-radius: 8px;
+    background-color: transparent;
+}
+
+.logout:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--error) 12%, transparent);
+}
+
+.item-content {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
