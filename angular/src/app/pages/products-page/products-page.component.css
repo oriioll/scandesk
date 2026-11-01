@@ -1,0 +1,122 @@
+.heading {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+}
+
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: clamp(1.25rem, 3vw, 2rem) var(--page-gutter);
+}
+
+.create-product-dialog {
+    position: fixed;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+    width: min(42rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    overflow: auto;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    box-shadow: 0 12px 32px rgb(0 0 0 / 24%);
+}
+
+.create-product-dialog::backdrop {
+    background: rgb(0 0 0 / 48%);
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.75rem;
+}
+
+app-product-form {
+    display: block;
+}
+
+.createButton {
+    width: 150px;
+}
+
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.empty h2 {
+    font-size: var(--text-xl);
+}
+
+.empty p {
+    max-width: 26rem;
+    color: var(--text-muted);
+}
+
+.empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--primary);
+}
+
+.empty-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .75rem;
+    margin-top: .5rem;
+}
+
+.empty-actions button {
+    height: 2.75rem;
+    gap: .5rem;
+}
+
+/* Iconos de /public/icons: la máscara toma el color del texto */
+.icon,
+.btn-icon {
+    background-color: currentColor;
+    mask-position: center;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
+
+.icon {
+    width: 2rem;
+    height: 2rem;
+}
+
+.btn-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+}
+
+.i-products {
+    mask-image: url("/icons/product.svg");
+}
+
+.i-scan {
+    mask-image: url("/icons/scan.svg");
+}

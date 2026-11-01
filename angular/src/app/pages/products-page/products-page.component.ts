@@ -1,9 +1,148 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, OnInit, signal, ViewChild } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { finalize } from 'rxjs';
+import { toast } from 'ngx-sonner';
+import { CategoryResponse } from '../../models/categories/category.response';
+import { ProductRequest } from '../../models/products/product.request';
+import { CategoryService } from '../../services/category.service';
+import { ProductService } from '../../services/product.service';
+import { ProductFormComponent } from '../../shared/product-form/product-form.component';
+import { ProductResponse } from '../../models/products/product.response';
 
 @Component({
   selector: 'app-products-page',
-  imports: [],
+  imports: [ProductFormComponent],
   templateUrl: './products-page.component.html',
   styleUrl: './products-page.component.css',
 })
-export class ProductsPage {}
+export class ProductsPage implements OnInit {
+  @ViewChild('createProductDialog')
+  private createProductDialog!: ElementRef<HTMLDialogElement>;
+
+  protected readonly categories = signal<CategoryResponse[]>([]);
+  protected readonly submitting = signal(false);
+  protected readonly formError = signal('');
+  protected readonly fieldErrors = signal<Record<string, string>>({});
+  protected readonly dialogOpen = signal(false);
+  public products = signal<ProductResponse[]>([]);
+
+  constructor(
+    private readonly categoryService: CategoryService,
+    private readonly productService: ProductService,
+  ) {}
+
+  /**
+   * Loads the categories needed by the product form.
+   */
+  ngOnInit(): void {
+    //Load the products
+    this.loadProducts();
+    this.categoryService.getAll().subscribe({
+      next: (categories) => this.categories.set(categories),
+      error: () => toast.error("Couldn't load categories"),
+    });
+  }
+
+  /**
+   * Fetches the api to load all the user products
+   */
+  private loadProducts() {
+    //Load the products
+    this.productService.getMyProducts().subscribe({
+      next: (products: ProductResponse[]) => this.products.set(products),
+      error: () => toast.error("Couldn't load categories"),
+    });
+  }
+  /**
+   * Opens the create-product dialog with a newly initialized empty form.
+   */
+  protected openCreateProductDialog(): void {
+    this.formError.set('');
+    this.fieldErrors.set({});
+    this.dialogOpen.set(true);
+    if (!this.createProductDialog.nativeElement.open) {
+      this.createProductDialog.nativeElement.showModal();
+    }
+  }
+
+  /**
+   * Closes the create-product dialog when its backdrop is clicked.
+   * @param event Click event from the dialog surface.
+   */
+  protected onDialogClick(event: MouseEvent): void {
+    if (event.target === this.createProductDialog.nativeElement) {
+      this.closeCreateProductDialog();
+    }
+  }
+
+  /**
+   * Closes the create-product dialog.
+   */
+  protected closeCreateProductDialog(): void {
+    if (this.createProductDialog.nativeElement.open) {
+      this.createProductDialog.nativeElement.close();
+    }
+  }
+
+  /**
+   * Clears dialog state after it has closed.
+   */
+  protected onDialogClosed(): void {
+    this.dialogOpen.set(false);
+  }
+
+  /**
+   * Creates a product from the values entered in the dialog.
+   * @param value Validated product details.
+   */
+  protected onProductFormSubmit(value: ProductRequest): void {
+    if (this.submitting()) return;
+    this.formError.set('');
+    this.fieldErrors.set({});
+    this.submitting.set(true);
+    this.productService
+      .postProduct(value)
+      .pipe(finalize(() => this.submitting.set(false)))
+      .subscribe({
+        next: () => {
+          toast.success('Product created');
+          this.loadProducts();
+          this.closeCreateProductDialog();
+        },
+        error: (error: HttpErrorResponse) => this.handleSubmitError(error),
+      });
+  }
+
+  /**
+   * Maps product creation errors to form feedback.
+   * @param error Error returned by the product API.
+   */
+  private handleSubmitError(error: HttpErrorResponse): void {
+    if (error.status === 0) {
+      this.formError.set('No connection. Check your network and try again.');
+      return;
+    }
+    if (error.status === 409) {
+      this.formError.set('A product with this barcode already exists.');
+      return;
+    }
+    if (error.status === 422) {
+      const visibleFields = ['barcode', 'name', 'category_id', 'price', 'stock'];
+      const errors = error.error?.errors as Record<string, unknown> | undefined;
+      const fieldErrors: Record<string, string> = {};
+      const generalErrors: string[] = [];
+
+      for (const [field, messages] of Object.entries(errors ?? {})) {
+        const message = Array.isArray(messages) ? messages[0] : undefined;
+        if (typeof message !== 'string') continue;
+        if (visibleFields.includes(field)) fieldErrors[field] = message;
+        else generalErrors.push(message);
+      }
+
+      this.fieldErrors.set(fieldErrors);
+      if (generalErrors.length) this.formError.set(generalErrors.join(' '));
+      return;
+    }
+    this.formError.set("Couldn't create the product, please try again later.");
+  }
+}

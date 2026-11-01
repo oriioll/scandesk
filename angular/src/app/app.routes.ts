@@ -6,6 +6,7 @@ import { DashboardPage } from './pages/dashboard-page/dashboard-page.component';
 import { RegisterPage } from './pages/register-page/register-page.component';
 import { LoginPage } from './pages/login-page/login-page.component';
 import { HeaderVariant } from './models/header/header-variant';
+import { ProductsPage } from './pages/products-page/products-page.component';
 
 const TODO: any = null;
 export const routes: Routes = [
@@ -17,6 +18,7 @@ export const routes: Routes = [
       { path: 'dashboard', component: DashboardPage },
       { path: 'scan', component: ScanPage },
       { path: 'checkout', component: CheckoutPage },
+      { path: 'products', component: ProductsPage }, // Product list page
     ],
   },
   {

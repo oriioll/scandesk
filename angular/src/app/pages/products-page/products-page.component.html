@@ -1,1 +1,35 @@
-<p>products-page works!</p>
+<main class="page">
+    <!--HEADINGS-->
+    <div class="heading">
+        <div class="tex">
+            <h1>Products</h1>
+            <p>Manage your catalog, prices and stock, all in one place.</p>
+        </div>
+        <button class="createButton" type="button" (click)="openCreateProductDialog()">+ New product</button>
+    </div>
+    @if (products().length === 0) {
+    <section class="empty">
+        <span class="empty-icon" aria-hidden="true"><span class="icon i-products"></span></span>
+        <h2>No products yet</h2>
+        <p>Add your first product by hand or scan its barcode with your phone.</p>
+        <div class="empty-actions">
+            <button type="button" routerLink="/scan">
+                <span class="btn-icon i-scan" aria-hidden="true"></span>
+                Scan a product
+            </button>
+            <button type="button" class="secondary" (click)="openCreateProductDialog()">Add manually</button>
+        </div>
+    </section>
+    }
+    <dialog #createProductDialog class="create-product-dialog" aria-label="Create product"
+        (click)="onDialogClick($event)" (close)="onDialogClosed()">
+        @if (dialogOpen()) {
+        <div class="dialog-actions">
+            <button type="button" class="secondary" (click)="closeCreateProductDialog()">Cancel</button>
+        </div>
+        <app-product-form [barcode]="''" [readonlyBarcode]="false" [emptyFields]="true" [categories]="categories()"
+            [submitting]="submitting()" [formError]="formError()" [fieldErrors]="fieldErrors()"
+            (submitted)="onProductFormSubmit($event)" />
+        }
+    </dialog>
+</main>

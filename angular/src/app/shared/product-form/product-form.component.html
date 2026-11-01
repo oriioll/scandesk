@@ -1,13 +1,17 @@
 <form class="formCard" [formGroup]="form" (ngSubmit)="onSubmit()" [attr.aria-busy]="loading() || submitting()">
     <h4>{{operation() === 'insert' ? "New product" : form.controls.name.value}}</h4>
+    @if (barcode()) {
     <small>
         {{ barcode() + " · " + (operation() === 'insert' ? "Not in your inventory" : "Stock: " +
         form.controls.stock.value) }}
     </small>
+    }
     <!--BARCODE READONLY-->
     <div class="formSection full">
         <label for="barcode">Barcode *</label>
-        <input id="barcode" name="barcode" type="text" [value]="barcode()" readonly />
+        <input id="barcode" name="barcode" type="text" formControlName="barcode"
+            [readonly]="readonlyBarcode()" placeholder="Enter barcode" [attr.aria-invalid]="!!fieldError('barcode')" />
+        @if (fieldError('barcode'); as msg) { <span class="error fieldError">{{ msg }}</span> }
     </div>
     <!--PRODUCT NAME-->
     <div class="formSection full">
