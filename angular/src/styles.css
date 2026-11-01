@@ -393,3 +393,9 @@ body [data-sonner-toast] [data-title],
 body [data-sonner-toast] [data-description] {
     color: var(--toast-fg);
 }
+
+mat-drawer-container {
+    --mat-sidenav-container-background-color: var(--bg);
+    --mat-sidenav-container-text-color: var(--text);
+    --mat-sidenav-content-background-color: var(--bg);
+}
