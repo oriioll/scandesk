@@ -17,6 +17,18 @@ export class ProductService {
     private http: HttpClient,
     private accessTokenService: AccessTokenService,
   ) {}
+
+  /**
+   * Handles an API request to get all the products
+   * @returns Observable<ProductResponse[]> With the products of the user
+   */
+  public getMyProducts(): Observable<ProductResponse[]> {
+    return this.http
+      .get<ApiResponse<ProductResponse[]>>(`${this.apiBaseUrl}/products`, {
+        headers: { Authorization: `Bearer ${this.accessTokenService.getToken()}` },
+      })
+      .pipe(map((res) => res.data)); //Remove data from api response
+  }
   /**
    * Handles an API request to search a product by a user id
    * @param barcode Barcode of the product to search
