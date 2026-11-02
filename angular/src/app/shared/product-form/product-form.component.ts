@@ -50,7 +50,7 @@ export class ProductFormComponent {
         this.form.patchValue({
           barcode: p.barcode,
           name: p.name,
-          category_id: p.category.id,
+          category_id: p.category?.id ?? null,
           price: p.price,
           stock: p.stock,
         });
