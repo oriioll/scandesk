@@ -120,3 +120,231 @@ app-product-form {
 .i-scan {
     mask-image: url("/icons/scan.svg");
 }
+
+.muted {
+    color: var(--text-muted);
+}
+
+.search {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: 0.75rem;
+    width: min(100%, 28rem);
+}
+
+.searchField {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    height: 2.5rem;
+    padding-inline: 0.75rem;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    background-color: var(--surface);
+    transition: border-color .2s ease;
+}
+
+.searchField:focus-within {
+    border-color: var(--primary);
+}
+
+.searchIcon {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    color: var(--text-muted);
+}
+
+.searcher {
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+.searcher:focus {
+    border: 0;
+    outline: none;
+}
+
+.mainFilters {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Icono de categoría: el color y el tamaño salen de aquí, no del SVG */
+.catIcon {
+    display: inline-block;
+    flex: none;
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    background-color: var(--accent);
+    -webkit-mask: var(--icon) center / contain no-repeat;
+    mask: var(--icon) center / contain no-repeat;
+}
+
+/* Select personalizable (Chromium); en otros navegadores se queda nativo */
+select,
+select::picker(select) {
+    appearance: base-select;
+}
+
+input,
+select {
+    height: 2.5rem;
+}
+
+
+select {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.625rem;
+    width: 100%;
+    padding: 0 0.75rem;
+    font: inherit;
+    font-size: var(--text-base);
+    color: var(--text);
+    background-color: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+select:focus-visible,
+select:open {
+    border-color: var(--primary);
+    outline: none;
+}
+
+select[aria-invalid="true"] {
+    border-color: var(--error);
+}
+
+select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Flecha */
+select::picker-icon {
+    color: var(--text-muted);
+    transition: rotate .2s ease;
+}
+
+select:open::picker-icon {
+    rotate: 180deg;
+}
+
+/* Desplegable */
+select::picker(select) {
+    margin-block: 0.25rem;
+    padding: 0.25rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+option {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-height: 2.25rem;
+    padding: 0 0.75rem;
+    border-radius: 4px;
+    font-size: var(--text-base);
+    cursor: pointer;
+}
+
+option:hover,
+option:focus-visible {
+    background: color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+option:checked {
+    font-weight: 600;
+    background: color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+option::checkmark {
+    display: none;
+}
+
+option.placeholder,
+option:disabled {
+    color: var(--text-muted);
+    cursor: default;
+}
+
+.i-search {
+    mask-image: url("/icons/search.svg");
+    background-color: currentColor;
+    mask-position: center;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
+
+@media (max-width: 32rem) {
+    .mainFilters {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    .search {
+        width: 100%;
+        grid-template-columns: 1fr;
+    }
+}
+
+.table-container {
+    --product-columns: minmax(7rem, 1.2fr) minmax(10rem, 2fr) minmax(8rem, 1.2fr) minmax(6rem, 1fr) minmax(5rem, 0.7fr) minmax(5rem, 0.7fr);
+
+    display: flex;
+    flex-direction: column;
+    overflow-x: auto;
+    background-color: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.table-header {
+    display: grid;
+    grid-template-columns: var(--product-columns);
+    align-items: center;
+    min-width: 46rem;
+    background-color: color-mix(in srgb, var(--text) 4%, var(--surface));
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+}
+
+.table-header>span {
+    padding: 0.875rem 1rem;
+}
+
+.table-header>span:nth-child(4),
+.table-header>span:nth-child(5) {
+    text-align: right;
+}
+
+.products {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+@media (max-width: 32rem) {
+    .table-container {
+        border-radius: 6px;
+    }
+}

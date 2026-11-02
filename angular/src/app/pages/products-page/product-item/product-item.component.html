@@ -1,0 +1,17 @@
+<span class="code">{{ product().barcode }}</span>
+<span class="font-bold">{{ product().name }}</span>
+<div>
+    <span class="badge">{{ product().category?.name ?? 'Uncategorized' }}</span>
+</div>
+<span class="price">{{ product().price }}€</span>
+<span [class.text-danger]="product().stock === 0">
+    {{ product().stock }}
+</span>
+<div class="actions">
+    <button type="button" class="product-action-button" aria-label="Edit product">
+        <span class="icon icon-edit" aria-hidden="true"></span>
+    </button>
+    <button type="button" class="product-action-button danger" aria-label="Delete product">
+        <span class="icon icon-delete" aria-hidden="true"></span>
+    </button>
+</div>

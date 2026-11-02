@@ -9,5 +9,5 @@ export interface ProductResponse {
   name: string;
   price: number;
   stock: number;
-  category: CategoryResponse;
+  category: CategoryResponse | null;
 }

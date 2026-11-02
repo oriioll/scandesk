@@ -7,6 +7,7 @@
         </div>
         <button class="createButton" type="button" (click)="openCreateProductDialog()">+ New product</button>
     </div>
+    <!--Empty state-->
     @if (products().length === 0) {
     <section class="empty">
         <span class="empty-icon" aria-hidden="true"><span class="icon i-products"></span></span>
@@ -21,6 +22,45 @@
         </div>
     </section>
     }
+    <!--Products render-->
+    <section class="products">
+        <article class="mainFilters">
+            <div class="search">
+                <div class="searchField">
+                    <span class="searchIcon i-search" aria-hidden="true"></span>
+                    <input class="searcher" [ngModel]="searchContent()" (ngModelChange)="searchContent.set($event)"
+                        [ngModelOptions]="{standalone: true}" type="search" placeholder="Search by name or barcode"
+                        aria-label="Search products by name or barcode">
+                </div>
+                <select id="category_id" name="category_id" [ngModel]="selectedCategoryId()"
+                    (ngModelChange)="selectedCategoryId.set($event)" [ngModelOptions]="{standalone: true}">
+                    <option class="placeholder" [ngValue]="null">All categories</option>
+                    @for (c of categories(); track c.id) {
+                    <option [ngValue]="c.id">
+                        <span class="catIcon" aria-hidden="true"
+                            [style.--icon]="'url(' + categoryIcon(c.name) + ')'"></span>
+                        {{ c.name }}
+                    </option>
+                    }
+                </select>
+            </div>
+            <p class="muted">{{products().length}} products</p>
+        </article>
+        <div class="table-container">
+            <div class="table-header">
+                <span>Barcode</span>
+                <span>Name</span>
+                <span>Category</span>
+                <span>Price</span>
+                <span>Stock</span>
+                <span class="text-right">Actions</span>
+            </div>
+            @for (product of PRODUCTS_TO_RENDER(); track product.id) {
+            <app-product-item [product]="product" />
+            }
+        </div>
+    </section>
+    <!--Dialog to create a product, only displayed if toggled-->
     <dialog #createProductDialog class="create-product-dialog" aria-label="Create product"
         (click)="onDialogClick($event)" (close)="onDialogClosed()">
         @if (dialogOpen()) {

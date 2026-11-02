@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, computed, ElementRef, OnInit, signal, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs';
 import { toast } from 'ngx-sonner';
@@ -8,28 +8,49 @@ import { CategoryService } from '../../services/category.service';
 import { ProductService } from '../../services/product.service';
 import { ProductFormComponent } from '../../shared/product-form/product-form.component';
 import { ProductResponse } from '../../models/products/product.response';
+import { categoryIcon } from '../../util/categories';
+import { FormsModule } from '@angular/forms';
+import { ProductItemComponent } from './product-item/product-item.component';
 
 @Component({
   selector: 'app-products-page',
-  imports: [ProductFormComponent],
+  imports: [ProductFormComponent, FormsModule, ProductItemComponent],
   templateUrl: './products-page.component.html',
   styleUrl: './products-page.component.css',
 })
 export class ProductsPage implements OnInit {
   @ViewChild('createProductDialog')
   private createProductDialog!: ElementRef<HTMLDialogElement>;
-
   protected readonly categories = signal<CategoryResponse[]>([]);
   protected readonly submitting = signal(false);
   protected readonly formError = signal('');
   protected readonly fieldErrors = signal<Record<string, string>>({});
   protected readonly dialogOpen = signal(false);
+  protected readonly categoryIcon = categoryIcon;
+  public searchContent = signal('');
+  public selectedCategoryId = signal<number | null>(null);
   public products = signal<ProductResponse[]>([]);
 
   constructor(
     private readonly categoryService: CategoryService,
     private readonly productService: ProductService,
   ) {}
+
+  /**
+   * Filters the content to render based on filters or searching applied
+   */
+  public PRODUCTS_TO_RENDER = computed(() => {
+    //Collect possible searched text
+    const searchedText = this.searchContent().toLowerCase().trim();
+    if (!searchedText || searchedText.length <= 0) {
+      return this.products();
+    }
+    return this.products().filter(
+      (p: ProductResponse) =>
+        p.name.toLowerCase().includes(searchedText) ||
+        p.barcode.toLowerCase().includes(searchedText),
+    );
+  });
 
   /**
    * Loads the categories needed by the product form.
@@ -50,7 +71,7 @@ export class ProductsPage implements OnInit {
     //Load the products
     this.productService.getMyProducts().subscribe({
       next: (products: ProductResponse[]) => this.products.set(products),
-      error: () => toast.error("Couldn't load categories"),
+      error: () => toast.error("Couldn't load products"),
     });
   }
   /**
