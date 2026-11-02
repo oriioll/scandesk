@@ -10,11 +10,11 @@ class ProductService
     /**
      * Get all products created by the user
      * @param User $user
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany List with products
+     * @return \Illuminate\Database\Eloquent\Collection<int, Product> List with products
      */
     public function getAll(User $user)
     {
-        return $user->products()->get();
+        return $user->products()->with('category')->get();
     }
 
     /**
@@ -36,7 +36,7 @@ class ProductService
      */
     public function postProduct(User $user, array $products): Product
     {
-        return $user->products()->create($products);
+        return $user->products()->create($products)->load('category');
     }
 
     /**
@@ -50,7 +50,7 @@ class ProductService
     {
         $product = $user->products()->findOrFail($id);
         $product->update($data);
-
-        return $product;
+        //Also update the history table
+        return $product->load('category');
     }
 }

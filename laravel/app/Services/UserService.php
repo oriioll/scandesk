@@ -15,6 +15,9 @@ class UserService
         if (!$userExists || !Hash::check($user['password'], $userExists->password)) {
             return null;
         }
+        //Update the last login parameter
+        $userExists->last_login = now();
+        $userExists->save();
 
         return $userExists->createToken('auth_token')->plainTextToken;
     }
@@ -30,6 +33,9 @@ class UserService
                 'password' => Hash::make($user['password']),
             ]
         );
+        //Update the last login parameter
+        $user->last_login = now();
+        $user->save();
         return $user->createToken('auth_token')->plainTextToken;
     }
 }
