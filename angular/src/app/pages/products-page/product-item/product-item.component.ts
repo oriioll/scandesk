@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { ProductResponse } from '../../../models/products/product.response';
 
 @Component({
@@ -9,4 +9,5 @@ import { ProductResponse } from '../../../models/products/product.response';
 })
 export class ProductItemComponent {
   public readonly product = input.required<ProductResponse>();
+  public editProduct = output<ProductResponse>();
 }

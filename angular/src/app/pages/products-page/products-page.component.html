@@ -56,7 +56,7 @@
                 <span class="text-right">Actions</span>
             </div>
             @for (product of PRODUCTS_TO_RENDER(); track product.id) {
-            <app-product-item [product]="product" />
+            <app-product-item [product]="product" (editProduct)="openEditProductDialog($event)" />
             }
         </div>
     </section>
@@ -69,7 +69,7 @@
         </div>
         <app-product-form [barcode]="''" [readonlyBarcode]="false" [emptyFields]="true" [categories]="categories()"
             [submitting]="submitting()" [formError]="formError()" [fieldErrors]="fieldErrors()"
-            (submitted)="onProductFormSubmit($event)" />
+            [product]="productToEdit()" [operation]="formOperation()" (submitted)="onProductFormSubmit($event)" />
         }
     </dialog>
 </main>

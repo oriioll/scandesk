@@ -30,6 +30,8 @@ export class ProductsPage implements OnInit {
   public searchContent = signal('');
   public selectedCategoryId = signal<number | null>(null);
   public products = signal<ProductResponse[]>([]);
+  public readonly formOperation = signal<'insert' | 'update'>('insert');
+  public productToEdit = signal<ProductResponse | null>(null);
 
   constructor(
     private readonly categoryService: CategoryService,
@@ -78,6 +80,22 @@ export class ProductsPage implements OnInit {
    * Opens the create-product dialog with a newly initialized empty form.
    */
   protected openCreateProductDialog(): void {
+    this.formOperation.set('insert');
+    this.formError.set('');
+    this.fieldErrors.set({});
+    this.dialogOpen.set(true);
+    if (!this.createProductDialog.nativeElement.open) {
+      this.createProductDialog.nativeElement.showModal();
+    }
+  }
+
+  /**
+   * Opens the dialog to edit a product in edit mode.
+   */
+  protected openEditProductDialog(p: ProductResponse): void {
+    console.log('RECEIVED OUTPUT');
+    this.formOperation.set('update');
+    this.productToEdit.set(p);
     this.formError.set('');
     this.fieldErrors.set({});
     this.dialogOpen.set(true);
@@ -121,17 +139,33 @@ export class ProductsPage implements OnInit {
     this.formError.set('');
     this.fieldErrors.set({});
     this.submitting.set(true);
-    this.productService
-      .postProduct(value)
-      .pipe(finalize(() => this.submitting.set(false)))
-      .subscribe({
-        next: () => {
-          toast.success('Product created');
-          this.loadProducts();
-          this.closeCreateProductDialog();
-        },
-        error: (error: HttpErrorResponse) => this.handleSubmitError(error),
-      });
+    if (this.formOperation() === 'insert') {
+      //If dialog is making insert
+      this.productService
+        .postProduct(value)
+        .pipe(finalize(() => this.submitting.set(false)))
+        .subscribe({
+          next: () => {
+            toast.success('Product created');
+            this.loadProducts();
+            this.closeCreateProductDialog();
+          },
+          error: (error: HttpErrorResponse) => this.handleSubmitError(error),
+        });
+    } else {
+      //If dialog is making update
+      this.productService
+        .putProduct(this.productToEdit()!.id, value)
+        .pipe(finalize(() => this.submitting.set(false)))
+        .subscribe({
+          next: () => {
+            toast.success('Product updated');
+            this.loadProducts();
+            this.closeCreateProductDialog();
+          },
+          error: (error: HttpErrorResponse) => this.handleSubmitError(error),
+        });
+    }
   }
 
   /**
