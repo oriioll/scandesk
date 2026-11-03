@@ -11,10 +11,11 @@ import { ProductResponse } from '../../models/products/product.response';
 import { categoryIcon } from '../../util/categories';
 import { FormsModule } from '@angular/forms';
 import { ProductItemComponent } from './product-item/product-item.component';
+import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-products-page',
-  imports: [ProductFormComponent, FormsModule, ProductItemComponent],
+  imports: [ProductFormComponent, FormsModule, ProductItemComponent, DeleteDialogComponent],
   templateUrl: './products-page.component.html',
   styleUrl: './products-page.component.css',
 })
@@ -26,6 +27,8 @@ export class ProductsPage implements OnInit {
   protected readonly formError = signal('');
   protected readonly fieldErrors = signal<Record<string, string>>({});
   protected readonly dialogOpen = signal(false);
+  protected readonly deleteOpen = signal(false);
+  public productToDelete = signal<ProductResponse | null>(null);
   protected readonly categoryIcon = categoryIcon;
   public searchContent = signal('');
   public selectedCategoryId = signal<number | null>(null);
@@ -101,6 +104,25 @@ export class ProductsPage implements OnInit {
     this.dialogOpen.set(true);
     if (!this.createProductDialog.nativeElement.open) {
       this.createProductDialog.nativeElement.showModal();
+    }
+  }
+
+  /**
+   * Opens the dialog to delete a product
+   */
+  protected openDeleteProductDialog(p: ProductResponse): void {
+    this.productToDelete.set(p);
+    this.deleteOpen.set(true);
+  }
+
+  /**
+   * Closes the dialog of delete products
+   * @param load Decide if load again produts or not
+   */
+  public onDeleteClose(load: boolean): void {
+    this.deleteOpen.set(false);
+    if (load) {
+      this.loadProducts();
     }
   }
 

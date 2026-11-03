@@ -1,0 +1,54 @@
+:host {
+    display: contents;
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: rgb(0 0 0 / 0.5);
+}
+
+.dialog {
+    width: min(100%, 26rem);
+    padding: 1.5rem;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 8%, transparent);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+button.danger {
+    background: transparent;
+    color: var(--error);
+    border-color: var(--error);
+
+    button.danger {
+        min-width: 9.5rem;
+    }
+}
+
+button.danger:hover:not(:disabled) {
+    background-color: var(--error);
+    border-color: var(--error);
+    color: light-dark(var(--snow), var(--obsidian));
+}
+
+@media (max-width: 30rem) {
+    .actions {
+        flex-direction: column-reverse;
+    }
+}

@@ -56,7 +56,8 @@
                 <span class="text-right">Actions</span>
             </div>
             @for (product of PRODUCTS_TO_RENDER(); track product.id) {
-            <app-product-item [product]="product" (editProduct)="openEditProductDialog($event)" />
+            <app-product-item [product]="product" (deleteItem)="openDeleteProductDialog($event)"
+                (editProduct)="openEditProductDialog($event)" />
             }
         </div>
     </section>
@@ -72,4 +73,7 @@
             [product]="productToEdit()" [operation]="formOperation()" (submitted)="onProductFormSubmit($event)" />
         }
     </dialog>
+    @if(deleteOpen()) {
+    <app-delete-dialog [productToDelete]="productToDelete()" (closeDialogAndLoad)="onDeleteClose($event)" />
+    }
 </main>

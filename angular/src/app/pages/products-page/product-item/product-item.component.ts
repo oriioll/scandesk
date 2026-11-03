@@ -9,5 +9,6 @@ import { ProductResponse } from '../../../models/products/product.response';
 })
 export class ProductItemComponent {
   public readonly product = input.required<ProductResponse>();
+  public deleteItem = output<ProductResponse>();
   public editProduct = output<ProductResponse>();
 }

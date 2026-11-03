@@ -11,7 +11,8 @@
     <button (click)="editProduct.emit(product())" type="button" class="product-action-button" aria-label="Edit product">
         <span class="icon icon-edit" aria-hidden="true"></span>
     </button>
-    <button type="button" class="product-action-button danger" aria-label="Delete product">
+    <button type="button" class="product-action-button danger" aria-label="Delete product"
+        (click)="deleteItem.emit(product())">
         <span class="icon icon-delete" aria-hidden="true"></span>
     </button>
 </div>

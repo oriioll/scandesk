@@ -1,0 +1,31 @@
+<div class="overlay" (click)="$event.target === $event.currentTarget && onCancel()" (keydown.escape)="onCancel()">
+    <article class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="delete-title"
+        aria-describedby="delete-desc" [attr.aria-busy]="loading()">
+        <h4 id="delete-title">Delete "{{ productToDelete()?.name || "product" }}"?</h4>
+        <p id="delete-desc" class="text-muted">
+            This can't be undone. The product will be removed from your inventory.
+        </p>
+        @if (error()) {
+        <span class="error" role="alert">Couldn't delete the product. Please try again.</span>
+        }
+        <div class="actions">
+            <button type="button" class="secondary" autofocus [disabled]="loading()"
+                (click)="onCancel()">Cancel</button>
+            <button type="button" class="danger" [disabled]="loading()" [attr.aria-busy]="loading()"
+                (click)="onDeleteProduct()">
+                @if (loading()) {
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-label="Deleting">
+                    <path fill="currentColor" opacity=".35"
+                        d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" />
+                    <path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
+                        <animateTransform attributeName="transform" dur="1s" from="0 12 12" to="360 12 12"
+                            repeatCount="indefinite" type="rotate" />
+                    </path>
+                </svg>
+                } @else {
+                Delete product
+                }
+            </button>
+        </div>
+    </article>
+</div>
