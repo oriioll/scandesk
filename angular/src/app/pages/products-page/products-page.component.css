@@ -292,18 +292,6 @@ option:disabled {
     mask-repeat: no-repeat;
 }
 
-@media (max-width: 32rem) {
-    .mainFilters {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.75rem;
-    }
-
-    .search {
-        width: 100%;
-        grid-template-columns: 1fr;
-    }
-}
 
 .table-container {
     --product-columns: minmax(7rem, 1.2fr) minmax(10rem, 2fr) minmax(8rem, 1.2fr) minmax(5.5rem, 0.9fr) minmax(5.5rem, 0.7fr) 6.5rem;
@@ -320,7 +308,6 @@ option:disabled {
     display: grid;
     grid-template-columns: var(--product-columns);
     align-items: center;
-    min-width: 46rem;
     background-color: color-mix(in srgb, var(--text) 4%, var(--surface));
     font-weight: 600;
     color: var(--text-muted);
@@ -377,5 +364,68 @@ option:disabled {
 @media (max-width: 32rem) {
     .table-container {
         border-radius: 6px;
+    }
+}
+
+.products {
+    container: products / inline-size;
+}
+
+.heading {
+    flex-wrap: wrap;
+    /* el botón baja debajo del título en pantallas estrechas */
+}
+
+.mainFilters {
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+}
+
+.search {
+    flex: 1 1 22rem;
+    width: auto;
+    max-width: 28rem;
+}
+
+/* Barcode fuera (sigue siendo buscable) */
+@container products (max-width: 50rem) {
+    .table-container {
+        --product-columns: minmax(0, 2fr) minmax(0, 1.2fr) minmax(5.5rem, 0.9fr) minmax(4.5rem, 0.6fr) 6.5rem;
+    }
+
+    .table-header>span:nth-child(1) {
+        display: none;
+    }
+}
+
+/* Category fuera */
+@container products (max-width: 36rem) {
+    .table-container {
+        --product-columns: minmax(0, 1fr) 5.5rem 4rem 6.5rem;
+    }
+
+    .table-header>span:nth-child(3) {
+        display: none;
+    }
+}
+
+/* Móvil: filtros apilados y celdas compactas */
+@container products (max-width: 26rem) {
+    .search {
+        grid-template-columns: 1fr;
+        max-width: none;
+        flex-basis: 100%;
+    }
+
+    .table-container {
+        --product-columns: minmax(0, 1fr) 5rem 2.75rem 5rem;
+    }
+
+    .table-header>span {
+        padding: 0.625rem 0.5rem;
+    }
+
+    .table-header>span:last-child {
+        padding-inline: 0.25rem;
     }
 }

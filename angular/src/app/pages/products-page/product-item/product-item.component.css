@@ -2,7 +2,6 @@
     display: grid;
     grid-template-columns: var(--product-columns);
     align-items: center;
-    min-width: 46rem;
     border-top: 1px solid var(--border);
     transition: background-color .2s ease;
 }
@@ -100,4 +99,34 @@
 
 .price {
     font-size: var(--text-lg);
+}
+
+@container products (max-width: 50rem) {
+    :host>:nth-child(1) {
+        display: none;
+    }
+}
+
+@container products (max-width: 36rem) {
+    :host>:nth-child(3) {
+        display: none;
+    }
+}
+
+@container products (max-width: 26rem) {
+
+    :host>span,
+    :host>div {
+        padding: 0.625rem 0.5rem;
+    }
+
+    :host>div:last-child {
+        padding-inline: 0.25rem;
+    }
+
+    /* El nombre puede ocupar 2 líneas en vez de cortarse con "…" */
+    :host>span:nth-child(2) {
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
 }
