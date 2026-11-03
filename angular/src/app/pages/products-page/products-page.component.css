@@ -429,3 +429,8 @@ option:disabled {
         padding-inline: 0.25rem;
     }
 }
+
+.buttons {
+    display: flex;
+    gap: .5rem;
+}

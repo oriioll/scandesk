@@ -13,10 +13,17 @@ import { FormsModule } from '@angular/forms';
 import { ProductItemComponent } from './product-item/product-item.component';
 import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
 import { SortKey } from '../../models/products/product.sortKeys';
+import { ImportProductsComponent } from '../../shared/import-products/import-products.component';
 
 @Component({
   selector: 'app-products-page',
-  imports: [ProductFormComponent, FormsModule, ProductItemComponent, DeleteDialogComponent],
+  imports: [
+    ProductFormComponent,
+    FormsModule,
+    ProductItemComponent,
+    DeleteDialogComponent,
+    ImportProductsComponent,
+  ],
   templateUrl: './products-page.component.html',
   styleUrl: './products-page.component.css',
 })

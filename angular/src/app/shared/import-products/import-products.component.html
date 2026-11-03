@@ -1,0 +1,20 @@
+@if(importing()) {
+<button type="button" class="secondary" disabled [attr.aria-busy]="importing()">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-label="Deleting">
+        <path fill="currentColor" opacity=".35"
+            d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" />
+        <path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
+            <animateTransform attributeName="transform" dur="1s" from="0 12 12" to="360 12 12" repeatCount="indefinite"
+                type="rotate" />
+        </path>
+    </svg>
+</button>
+} @else {
+<input #csv type="file" accept=".csv,text/csv" hidden (change)="onCsvSelected($event)" />
+<button type="button" class="secondary" [disabled]="importing()" [attr.aria-busy]="importing()" (click)="csv.click()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+        <path fill="none" stroke="var(--primary)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+            d="M4 13v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6M12 3v12m0 0l-3.5-3.5M12 15l3.5-3.5" />
+    </svg>Import CSV
+</button>
+}

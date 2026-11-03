@@ -5,7 +5,12 @@
             <h1>Products</h1>
             <p>Manage your catalog, prices and stock, all in one place.</p>
         </div>
-        <button class="createButton" type="button" (click)="openCreateProductDialog()">+ New product</button>
+        <div class="buttons">
+            <button class="createButton" type="button" (click)="openCreateProductDialog()">+ New
+                product</button>
+            <app-import-products />
+        </div>
+
     </div>
     <!--Empty state-->
     @if (products().length === 0) {
