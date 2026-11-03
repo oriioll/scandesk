@@ -61,4 +61,16 @@ class ProductController extends Controller
             $this->productService->updateProduct($request->user(), $id, $request->validated())
         );
     }
+
+    /**
+     * Handles a DELETE request to delete a product of a user
+     * @param UpdateProductRequest $request
+     * @param string $id The id of the product to delete
+     * @return ProductResource
+     */
+    public function destroy(Request $request, string $id)
+    {
+        $this->productService->deleteProduct($request->user(), $id);
+        return response()->noContent();
+    }
 }

@@ -53,4 +53,17 @@ class ProductService
         //Also update the history table
         return $product->load('category');
     }
+    /**
+     * Deletes a product if created by the user
+     * @param User $user
+     * @param string $id The id of the product to update
+     * @return bool
+     */
+    public function deleteProduct(User $user, string $id): bool
+    {
+        $product = $user->products()->findOrFail($id);
+        $product->delete();
+        //Also update the history table
+        return true;
+    }
 }

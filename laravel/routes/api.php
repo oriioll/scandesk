@@ -42,7 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{id}', [ProductController::class, 'update']);
 
         // DELETE /products/:id - Deletes the product (only if user owns it)
-        Route::delete('/{id}');
+        Route::delete('/{id}', [ProductController::class, 'destroy']);
     });
 
     /**

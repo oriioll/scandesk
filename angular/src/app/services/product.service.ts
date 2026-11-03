@@ -68,4 +68,15 @@ export class ProductService {
       })
       .pipe(map((res) => res.data)); //Remove data from api response
   }
+
+  /**
+   * Handles an API request to delete a product
+   * @param id - The id of the product to delete
+   * @returns No content
+   */
+  public deleteProduct(id: number): Observable<any> {
+    return this.http.delete<Observable<any>>(`${this.apiBaseUrl}/products/${id}`, {
+      headers: { Authorization: `Bearer ${this.accessTokenService.getToken()}` },
+    });
+  }
 }
