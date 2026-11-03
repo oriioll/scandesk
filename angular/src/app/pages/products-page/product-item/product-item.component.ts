@@ -1,9 +1,10 @@
 import { Component, input, output } from '@angular/core';
 import { ProductResponse } from '../../../models/products/product.response';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-product-item',
-  imports: [],
+  imports: [DecimalPipe],
   templateUrl: './product-item.component.html',
   styleUrl: './product-item.component.css',
 })

@@ -306,8 +306,7 @@ option:disabled {
 }
 
 .table-container {
-    --product-columns: minmax(7rem, 1.2fr) minmax(10rem, 2fr) minmax(8rem, 1.2fr) minmax(6rem, 1fr) minmax(5rem, 0.7fr) minmax(5rem, 0.7fr);
-
+    --product-columns: minmax(7rem, 1.2fr) minmax(10rem, 2fr) minmax(8rem, 1.2fr) minmax(5.5rem, 0.9fr) minmax(5.5rem, 0.7fr) 6.5rem;
     display: flex;
     flex-direction: column;
     overflow-x: auto;
@@ -333,8 +332,40 @@ option:disabled {
 }
 
 .table-header>span:nth-child(4),
-.table-header>span:nth-child(5) {
+.table-header>span:nth-child(5),
+.table-header>span:last-child {
     text-align: right;
+}
+
+.sort {
+    min-width: 0;
+    height: auto;
+    padding: 0;
+    gap: 0.25rem;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    overflow: visible;
+}
+
+.sort:hover:not(:disabled) {
+    background: transparent;
+    color: var(--text);
+}
+
+.sort-arrow {
+    opacity: 0.35;
+}
+
+.sort-arrow.active {
+    opacity: 1;
+    color: var(--primary);
+}
+
+.no-results {
+    padding: 2rem 1rem;
+    text-align: center;
+    border-top: 1px solid var(--border);
 }
 
 .products {

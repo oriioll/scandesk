@@ -1,7 +1,7 @@
 <main class="page">
     <!--HEADINGS-->
     <div class="heading">
-        <div class="tex">
+        <div class="text">
             <h1>Products</h1>
             <p>Manage your catalog, prices and stock, all in one place.</p>
         </div>
@@ -22,6 +22,7 @@
         </div>
     </section>
     }
+    @else {
     <!--Products render-->
     <section class="products">
         <article class="mainFilters">
@@ -44,23 +45,34 @@
                     }
                 </select>
             </div>
-            <p class="muted">{{products().length}} products</p>
+            <p class="muted">{{ SORTED_PRODUCTS().length }} {{ SORTED_PRODUCTS().length === 1 ? 'product' : 'products'
+                }}</p>
         </article>
         <div class="table-container">
             <div class="table-header">
-                <span>Barcode</span>
-                <span>Name</span>
-                <span>Category</span>
-                <span>Price</span>
-                <span>Stock</span>
-                <span class="text-right">Actions</span>
+                @for (col of columns; track col.key) {
+                <span>
+                    <button type="button" class="sort" [attr.aria-label]="'Sort by ' + col.label"
+                        (click)="toggleSort(col.key)">
+                        {{ col.label }}
+                        <span class="sort-arrow" [class.active]="sortKey() === col.key" aria-hidden="true">
+                            {{ sortKey() === col.key ? (sortDir() === 'asc' ? '↑' : '↓') : '↕' }}
+                        </span>
+                    </button>
+                </span>
+                }
+                <span>Actions</span>
             </div>
-            @for (product of PRODUCTS_TO_RENDER(); track product.id) {
+            @for (product of SORTED_PRODUCTS(); track product.id) {
             <app-product-item [product]="product" (deleteItem)="openDeleteProductDialog($event)"
                 (editProduct)="openEditProductDialog($event)" />
+            } @empty {
+            <p class="no-results muted">No products match your filters.</p>
             }
         </div>
     </section>
+    }
+
     <!--Dialog to create a product, only displayed if toggled-->
     <dialog #createProductDialog class="create-product-dialog" aria-label="Create product"
         (click)="onDialogClick($event)" (close)="onDialogClosed()">

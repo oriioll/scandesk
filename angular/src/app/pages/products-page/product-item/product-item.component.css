@@ -86,7 +86,7 @@
 .product-action-button.danger:hover,
 .product-action-button.danger:focus-visible {
     background-color: var(--error);
-    color: #fff;
+    color: light-dark(var(--snow), var(--obsidian));
 }
 
 .font-bold {

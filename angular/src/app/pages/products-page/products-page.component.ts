@@ -12,6 +12,7 @@ import { categoryIcon } from '../../util/categories';
 import { FormsModule } from '@angular/forms';
 import { ProductItemComponent } from './product-item/product-item.component';
 import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
+import { SortKey } from '../../models/products/product.sortKeys';
 
 @Component({
   selector: 'app-products-page',
@@ -47,15 +48,61 @@ export class ProductsPage implements OnInit {
   public PRODUCTS_TO_RENDER = computed(() => {
     //Collect possible searched text
     const searchedText = this.searchContent().toLowerCase().trim();
-    if (!searchedText || searchedText.length <= 0) {
+    //Check if filters are active
+    if ((!searchedText || searchedText.length <= 0) && !this.selectedCategoryId()) {
       return this.products();
     }
+    //Return the products applying all the filters
     return this.products().filter(
       (p: ProductResponse) =>
-        p.name.toLowerCase().includes(searchedText) ||
-        p.barcode.toLowerCase().includes(searchedText),
+        (p.name.toLowerCase().includes(searchedText) ||
+          p.barcode.toLowerCase().includes(searchedText)) &&
+        (!this.selectedCategoryId() || p.category?.id === this.selectedCategoryId()),
     );
   });
+  protected readonly columns: { key: SortKey; label: string }[] = [
+    { key: 'barcode', label: 'Barcode' },
+    { key: 'name', label: 'Name' },
+    { key: 'category', label: 'Category' },
+    { key: 'price', label: 'Price' },
+    { key: 'stock', label: 'Stock' },
+  ];
+  protected readonly sortKey = signal<SortKey | null>(null);
+  protected readonly sortDir = signal<'asc' | 'desc'>('asc');
+
+  /** Applies the sort on top of the already filtered products */
+  public SORTED_PRODUCTS = computed(() => {
+    const key = this.sortKey();
+    const list = this.PRODUCTS_TO_RENDER();
+    if (!key) return list;
+    const dir = this.sortDir() === 'asc' ? 1 : -1;
+    return [...list].sort((a, b) => dir * this.compare(a, b, key));
+  });
+
+  /** Same column → flips direction. New column → ascending. */
+  protected toggleSort(key: SortKey): void {
+    if (this.sortKey() === key) {
+      this.sortDir.update((d) => (d === 'asc' ? 'desc' : 'asc'));
+    } else {
+      this.sortKey.set(key);
+      this.sortDir.set('asc');
+    }
+  }
+
+  private compare(a: ProductResponse, b: ProductResponse, key: SortKey): number {
+    switch (key) {
+      case 'price':
+        return Number(a.price) - Number(b.price); // Laravel puede devolver el DECIMAL como string
+      case 'stock':
+        return a.stock - b.stock;
+      case 'category':
+        return (a.category?.name ?? 'Uncategorized').localeCompare(
+          b.category?.name ?? 'Uncategorized',
+        );
+      default: // barcode | name
+        return a[key].localeCompare(b[key], undefined, { numeric: true });
+    }
+  }
 
   /**
    * Loads the categories needed by the product form.
