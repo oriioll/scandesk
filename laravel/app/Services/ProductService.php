@@ -29,6 +29,17 @@ class ProductService
     }
 
     /**
+     * Get the product with a id if created by the user
+     * @param User $user
+     * @param string $id The id to search the product
+     * @return Product
+     */
+    public function getById(User $user, string $id): Product
+    {
+        return $user->products()->with('category')->where('id', $id)->firstOrFail();
+    }
+
+    /**
      * Inserts a user into the db, for the logged user
      * @param User $user
      * @param array $products Array of products gotten from request

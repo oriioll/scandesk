@@ -38,6 +38,18 @@ class ProductController extends Controller
     }
 
     /**
+     * Handles a GET request to get the product with an id
+     * @param Request $request
+     * @return ProductResource
+     */
+    public function show(Request $request, string $id): ProductResource
+    {
+        return new ProductResource(
+            $this->productService->getById($request->user(), $id)
+        );
+    }
+
+    /**
      * Handles a POST request of a product
      * @param Request $request
      * @return ProductResource

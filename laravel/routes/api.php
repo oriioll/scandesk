@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [ProductController::class, 'index']);
 
         // GET /products/:id - Get product by id (only if user owns it)
-        Route::get('/{id}');
+        Route::get('/{id}', [ProductController::class, 'show']);
 
         // GET /products/:barcode - Get product by barcode (only if user owns it)
         Route::get('/barcode/{barcode}', [ProductController::class, 'showByBarcode']);
