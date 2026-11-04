@@ -1,1 +1,25 @@
-<p>product-detail-page works!</p>
+<main class="page">
+    @if(isLoading()){
+    <h1>LOADING</h1>
+    } @else if(!error() && product()) {
+    <section class="productInfo">
+        <span class="muted" routerLink="/products">← Products</span>
+        <h1>{{product()!.name}}</h1>
+        <div class="categoryChip">
+            <span>{{product()!.category?.name}}</span>
+        </div>
+        <svg #barcodeSvg></svg>
+        <div class="kpi">
+            <span>Price</span>
+            <h2>{{product()?.price}}€</h2>
+        </div>
+        <div class="kpi">
+            <span>Stock</span>
+            <h2>{{product()?.stock}}<span>pcs</span></h2>
+        </div>
+        <button type="button" class="delete">Delete product</button>
+    </section>
+    } @else {
+    <h1>Product not found, try again</h1>
+    }
+</main>
