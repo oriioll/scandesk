@@ -3,6 +3,10 @@
     flex-direction: column;
 }
 
+.greeting-skeleton {
+    max-width: 100%;
+}
+
 .page {
     height: auto;
     width: 100%;

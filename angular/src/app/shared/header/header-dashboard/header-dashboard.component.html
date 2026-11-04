@@ -20,16 +20,28 @@
         <button class="primary" routerLink="/checkout">Checkout</button>
         <div class="verticalSeparator"></div>
         <app-theme-toggle />
-        <button type="button" class="user" aria-label="User Menu" [cdkMenuTriggerFor]="menu"
+        <button type="button" class="user" aria-label="User Menu" [attr.aria-busy]="loadingUser()"
+            [cdkMenuTriggerFor]="menu"
             [cdkMenuPosition]="menuPosition">
-            {{ userAcronym }}
+            @if (loadingUser()) {
+            <app-skeleton width="2.5rem" height="2.5rem" radius="50%" />
+            } @else {
+            {{ profileLoadError() ? '?' : userAcronym }}
+            }
         </button>
 
         <ng-template #menu>
             <div class="menu" cdkMenu>
-                <div class="menu-user">
+                <div class="menu-user" [attr.aria-busy]="loadingUser()">
+                    @if (loadingUser()) {
+                    <app-skeleton width="8rem" height="1rem" />
+                    <app-skeleton width="11rem" height=".875rem" />
+                    } @else if (profileLoadError()) {
+                    <span role="alert">Couldn't load profile details.</span>
+                    } @else {
                     <strong>{{ username() }}</strong>
                     <span>{{ email() }}</span>
+                    }
                 </div>
 
                 <hr class="menu-sep" />

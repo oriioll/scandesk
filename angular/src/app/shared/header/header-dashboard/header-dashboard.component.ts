@@ -7,6 +7,8 @@ import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 import { ConnectedPosition } from '@angular/cdk/overlay';
 import { ThemeService } from '../../../services/theme.service';
 import { ThemeMode } from '../../../models/header/theme-mode';
+import { finalize } from 'rxjs';
+import { SkeletonComponent } from '../../skeleton/skeleton.component';
 
 @Component({
   selector: 'app-header-app',
@@ -15,6 +17,7 @@ import { ThemeMode } from '../../../models/header/theme-mode';
     RouterLinkActive,
     RouterLink,
     ThemeToggleComponent,
+    SkeletonComponent,
     CdkMenuTrigger,
     CdkMenu,
     CdkMenuItem,
@@ -25,21 +28,30 @@ import { ThemeMode } from '../../../models/header/theme-mode';
 export class HeaderDashboardComponent implements OnInit {
   public username = signal('');
   public email = signal('');
+  public loadingUser = signal(true);
+  public profileLoadError = signal(false);
   public router = inject(Router);
   readonly userLoaded = output<{ name: string; email: string }>();
+  readonly userLoadFinished = output<boolean>();
   readonly menuToggle = output<void>();
   constructor(
     private authService: AuthService,
     public themeService: ThemeService,
   ) {}
   ngOnInit(): void {
-    this.authService.whoami().subscribe({
+    this.authService
+      .whoami()
+      .pipe(finalize(() => this.loadingUser.set(false)))
+      .subscribe({
       next: (data) => {
         this.username.set(data.name);
         this.email.set(data.email);
-        this.username.set(data.name);
-        this.email.set(data.email);
         this.userLoaded.emit({ name: data.name, email: data.email });
+        this.userLoadFinished.emit(true);
+      },
+      error: () => {
+        this.profileLoadError.set(true);
+        this.userLoadFinished.emit(false);
       },
     });
   }

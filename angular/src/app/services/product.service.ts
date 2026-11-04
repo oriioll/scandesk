@@ -30,13 +30,26 @@ export class ProductService {
       .pipe(map((res) => res.data)); //Remove data from api response
   }
   /**
-   * Handles an API request to search a product by a user id
+   * Handles an API request to search a product by a barcode
    * @param barcode Barcode of the product to search
    * @returns Observable<ProductResponse> The product with that barcode
    */
   public getProductByBarcode(barcode: string): Observable<ProductResponse> {
     return this.http
       .get<ApiResponse<ProductResponse>>(`${this.apiBaseUrl}/products/barcode/${barcode}`, {
+        headers: { Authorization: `Bearer ${this.accessTokenService.getToken()}` },
+      })
+      .pipe(map((res) => res.data)); //Remove data from api response
+  }
+
+  /**
+   * Handles an API request to search a product by a id
+   * @param id Id of the product to search
+   * @returns Observable<ProductResponse> The product with that id
+   */
+  public getProductById(id: number): Observable<ProductResponse> {
+    return this.http
+      .get<ApiResponse<ProductResponse>>(`${this.apiBaseUrl}/products/${id}`, {
         headers: { Authorization: `Bearer ${this.accessTokenService.getToken()}` },
       })
       .pipe(map((res) => res.data)); //Remove data from api response

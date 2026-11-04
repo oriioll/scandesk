@@ -17,6 +17,7 @@ export class Header {
   private router = inject(Router);
   public openSidebar = output();
   readonly userLoaded = output<{ name: string; email: string }>();
+  readonly userLoadFinished = output<boolean>();
   readonly menuToggle = output<void>();
 
   /**

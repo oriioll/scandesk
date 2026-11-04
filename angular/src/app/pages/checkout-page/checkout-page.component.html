@@ -15,7 +15,8 @@
             }
         </article>
 
-        <app-checkout-cart [items]="cart()" [submitting]="submitting()" (remove)="onRemove($event)"
+        <app-checkout-cart [items]="cart()" [loading]="loadingProduct()" [submitting]="submitting()"
+            (remove)="onRemove($event)"
             (checkout)="onCheckout()" />
     </div>
 

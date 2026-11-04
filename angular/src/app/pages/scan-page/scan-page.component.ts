@@ -47,6 +47,7 @@ export class ScanPage implements OnInit {
   public product = signal<ProductResponse | null>(null);
   public fieldErrors = signal<Record<string, string>>({});
   public categories = signal<CategoryResponse[]>([]);
+  public loadingCategories = signal(true);
   constructor(
     private syncService: SyncService,
     private scanService: ScanService,
@@ -66,10 +67,13 @@ export class ScanPage implements OnInit {
       .subscribe((barcode) => {
         this.handleBarcodeScanned(barcode);
       });
-    this.categoryService.getAll().subscribe({
-      next: (res) => this.categories.set(res),
-      error: () => toast.error("Couldn't load categories"),
-    });
+    this.categoryService
+      .getAll()
+      .pipe(finalize(() => this.loadingCategories.set(false)))
+      .subscribe({
+        next: (res) => this.categories.set(res),
+        error: () => toast.error("Couldn't load categories"),
+      });
   }
   /**
    * Creates a pairing session and generates its QR code.

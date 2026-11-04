@@ -22,7 +22,8 @@
     <section class="stage">
         <section class="stage">
             <app-product-form [barcode]="barcode()" [operation]="formOperation()" [product]="product()"
-                [categories]="categories()" [loading]="loadingProduct()" [submitting]="submitting()"
+                [categories]="categories()" [categoriesLoading]="loadingCategories()" [loading]="loadingProduct()"
+                [submitting]="submitting()"
                 [lookupFailed]="lookupFailed()" [formError]="formError()" [fieldErrors]="fieldErrors()"
                 (submitted)="onProductFormSubmit($event)" (retry)="setFormMode(barcode())" />
         </section>

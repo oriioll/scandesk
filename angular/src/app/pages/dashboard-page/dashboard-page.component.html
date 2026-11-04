@@ -1,7 +1,15 @@
 <main class="page">
     <!--HEADINGS-->
     <div class="heading">
-        <h1>Hi, {{username()}}</h1>
+        <h1 [attr.aria-busy]="loadingUsername()">
+            @if (loadingUsername()) {
+            <app-skeleton class="greeting-skeleton" width="12rem" height="2.5rem" />
+            } @else if (usernameLoadError()) {
+            Welcome
+            } @else {
+            Hi, {{username()}}
+            }
+        </h1>
         <p>Resume of your inventory today</p>
     </div>
     <!--KPIS-->

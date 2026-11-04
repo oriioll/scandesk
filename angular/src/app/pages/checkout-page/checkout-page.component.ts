@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, OnInit, signal } from '@angular/core';
 import { SyncService } from '../../services/sync.service';
 import { SessionResponse } from '../../models/session/session.response';
 import { finalize } from 'rxjs';
@@ -34,6 +34,8 @@ export class CheckoutPage implements OnInit {
 
   //Checkout cart
   public cart = signal<CartItem[]>([]);
+  private readonly pendingProductLookups = signal(0);
+  public readonly loadingProduct = computed(() => this.pendingProductLookups() > 0);
   public submitting = signal(false);
   private idempotencyKey = crypto.randomUUID();
 
@@ -114,13 +116,17 @@ export class CheckoutPage implements OnInit {
    * @param barcode The barcode to add to cart
    */
   private addByBarcode(barcode: string) {
-    this.productService.getProductByBarcode(barcode).subscribe({
-      next: (p) => this.addToCart(p),
-      error: (err: HttpErrorResponse) =>
-        toast.error(
-          err.status === 404 ? `Unknown barcode ${barcode}` : "Couldn't look up the product",
-        ),
-    });
+    this.pendingProductLookups.update((count) => count + 1);
+    this.productService
+      .getProductByBarcode(barcode)
+      .pipe(finalize(() => this.pendingProductLookups.update((count) => count - 1)))
+      .subscribe({
+        next: (p) => this.addToCart(p),
+        error: (err: HttpErrorResponse) =>
+          toast.error(
+            err.status === 404 ? `Unknown barcode ${barcode}` : "Couldn't look up the product",
+          ),
+      });
   }
 
   /**

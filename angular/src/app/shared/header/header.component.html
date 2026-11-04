@@ -2,6 +2,7 @@
 @case ('landing') { <app-header-landing /> }
 @case ('auth') { <app-header-auth /> }
 @case ('app') {
-<app-header-app (userLoaded)="userLoaded.emit($event)" (menuToggle)="menuToggle.emit()" />
+<app-header-app (userLoaded)="userLoaded.emit($event)" (userLoadFinished)="userLoadFinished.emit($event)"
+    (menuToggle)="menuToggle.emit()" />
 }
 }

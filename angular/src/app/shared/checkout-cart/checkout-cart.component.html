@@ -1,10 +1,14 @@
-<section class="cart" aria-labelledby="cart-title">
+<section class="cart" aria-labelledby="cart-title" [attr.aria-busy]="loading()">
     <header class="cartHead">
         <h4 id="cart-title">Current order</h4>
+        @if (loading() && items().length === 0) {
+        <app-skeleton width="2.5rem" height=".875rem" />
+        } @else {
         <small>{{ count() }} {{ count() === 1 ? 'item' : 'items' }}</small>
+        }
     </header>
 
-    @if (items().length > 0) {
+    @if (items().length > 0 || loading()) {
     <ul class="list">
         @for (item of items(); track item.id) {
         <li class="row">
@@ -17,6 +21,16 @@
                 (click)="remove.emit(item.id)">✕</button>
         </li>
         }
+        @if (loading()) {
+        <li class="row loading-row" aria-hidden="true">
+            <div class="info">
+                <app-skeleton width="78%" height="1rem" />
+                <app-skeleton width="42%" height=".75rem" />
+            </div>
+            <app-skeleton width="4rem" height="1rem" />
+            <app-skeleton width="2rem" height="2rem" radius="4px" />
+        </li>
+        }
     </ul>
     } @else {
     <!--Empty State-->
@@ -26,7 +40,11 @@
     <footer class="cartFoot">
         <div class="totalRow">
             <span class="text-muted">Total</span>
+            @if (loading() && items().length === 0) {
+            <app-skeleton width="5rem" height="1.75rem" />
+            } @else {
             <strong class="total">{{ total() | currency }}</strong>
+            }
         </div>
         <button type="button" [disabled]="!canCheckout()" (click)="checkout.emit()">
             {{ submitting() ? 'Processing…' : 'Checkout' }}

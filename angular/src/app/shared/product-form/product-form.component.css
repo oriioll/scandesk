@@ -28,6 +28,15 @@
     margin-bottom: -0.75rem;
 }
 
+.form-title-skeleton,
+.form-meta-skeleton {
+    grid-column: 1 / -1;
+}
+
+.form-title-skeleton {
+    margin-bottom: -0.75rem;
+}
+
 .formCard>small {
     padding-bottom: 1rem;
     border-bottom: 1px solid var(--border);

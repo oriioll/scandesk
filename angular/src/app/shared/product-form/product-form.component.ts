@@ -4,10 +4,11 @@ import { ProductResponse } from '../../models/products/product.response';
 import { ProductRequest } from '../../models/products/product.request';
 import { CategoryResponse } from '../../models/categories/category.response';
 import { CATEGORY_ICONS, categoryIcon } from '../../util/categories';
+import { SkeletonComponent } from '../skeleton/skeleton.component';
 
 @Component({
   selector: 'app-product-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, SkeletonComponent],
   templateUrl: './product-form.component.html',
   styleUrl: './product-form.component.css',
 })
@@ -25,6 +26,7 @@ export class ProductFormComponent {
   submitted = output<ProductRequest>();
   retry = output<void>();
   categories = input<CategoryResponse[]>([]);
+  categoriesLoading = input(false);
   protected readonly categoryIcon = categoryIcon;
   private fb = inject(NonNullableFormBuilder);
 

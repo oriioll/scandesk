@@ -14,6 +14,8 @@ import { ProductItemComponent } from './product-item/product-item.component';
 import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
 import { SortKey } from '../../models/products/product.sortKeys';
 import { ImportProductsComponent } from '../../shared/import-products/import-products.component';
+import { SkeletonComponent } from '../../shared/skeleton/skeleton.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-products-page',
@@ -23,6 +25,7 @@ import { ImportProductsComponent } from '../../shared/import-products/import-pro
     ProductItemComponent,
     DeleteDialogComponent,
     ImportProductsComponent,
+    SkeletonComponent,
   ],
   templateUrl: './products-page.component.html',
   styleUrl: './products-page.component.css',
@@ -31,6 +34,7 @@ export class ProductsPage implements OnInit {
   @ViewChild('createProductDialog')
   private createProductDialog!: ElementRef<HTMLDialogElement>;
   protected readonly categories = signal<CategoryResponse[]>([]);
+  protected readonly loadingCategories = signal(true);
   protected readonly submitting = signal(false);
   protected readonly formError = signal('');
   protected readonly fieldErrors = signal<Record<string, string>>({});
@@ -41,12 +45,16 @@ export class ProductsPage implements OnInit {
   public searchContent = signal('');
   public selectedCategoryId = signal<number | null>(null);
   public products = signal<ProductResponse[]>([]);
+  protected readonly loadingProducts = signal(true);
+  protected readonly productsError = signal(false);
+  protected readonly productSkeletonRows = [0, 1, 2, 3, 4];
   public readonly formOperation = signal<'insert' | 'update'>('insert');
   public productToEdit = signal<ProductResponse | null>(null);
 
   constructor(
     private readonly categoryService: CategoryService,
     private readonly productService: ProductService,
+    private readonly router: Router,
   ) {}
 
   /**
@@ -117,21 +125,32 @@ export class ProductsPage implements OnInit {
   ngOnInit(): void {
     //Load the products
     this.loadProducts();
-    this.categoryService.getAll().subscribe({
-      next: (categories) => this.categories.set(categories),
-      error: () => toast.error("Couldn't load categories"),
-    });
+    this.categoryService
+      .getAll()
+      .pipe(finalize(() => this.loadingCategories.set(false)))
+      .subscribe({
+        next: (categories) => this.categories.set(categories),
+        error: () => toast.error("Couldn't load categories"),
+      });
   }
 
   /**
    * Fetches the api to load all the user products
    */
-  private loadProducts() {
+  protected loadProducts() {
     //Load the products
-    this.productService.getMyProducts().subscribe({
-      next: (products: ProductResponse[]) => this.products.set(products),
-      error: () => toast.error("Couldn't load products"),
-    });
+    this.loadingProducts.set(true);
+    this.productsError.set(false);
+    this.productService
+      .getMyProducts()
+      .pipe(finalize(() => this.loadingProducts.set(false)))
+      .subscribe({
+        next: (products: ProductResponse[]) => this.products.set(products),
+        error: () => {
+          this.productsError.set(true);
+          toast.error("Couldn't load products");
+        },
+      });
   }
   /**
    * Opens the create-product dialog with a newly initialized empty form.
@@ -275,5 +294,12 @@ export class ProductsPage implements OnInit {
       return;
     }
     this.formError.set("Couldn't create the product, please try again later.");
+  }
+
+  /**
+   * Handles the product click by going to its detail page
+   */
+  public onProductClick(product: ProductResponse) {
+    this.router.navigate(['/products/' + product.id]);
   }
 }

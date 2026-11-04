@@ -7,6 +7,7 @@ import { RegisterPage } from './pages/register-page/register-page.component';
 import { LoginPage } from './pages/login-page/login-page.component';
 import { HeaderVariant } from './models/header/header-variant';
 import { ProductsPage } from './pages/products-page/products-page.component';
+import { ProductDetailPage } from './pages/product-detail-page/product-detail-page.component';
 
 const TODO: any = null;
 export const routes: Routes = [
@@ -15,22 +16,23 @@ export const routes: Routes = [
     path: '', // Groupe dashboard pages
     data: { header: 'app' satisfies HeaderVariant },
     children: [
-      { path: 'dashboard', component: DashboardPage },
-      { path: 'scan', component: ScanPage },
-      { path: 'checkout', component: CheckoutPage },
+      { path: 'dashboard', component: DashboardPage }, // Dashboard page
+      { path: 'scan', component: ScanPage }, //Scan -> Get items and post them
+      { path: 'checkout', component: CheckoutPage }, //checkout -> Get items and use checkout modes
       { path: 'products', component: ProductsPage }, // Product list page
+      { path: 'products/:id', component: ProductDetailPage }, // Product detail page
     ],
   },
   {
     path: '',
     data: { header: 'auth' satisfies HeaderVariant },
     children: [
-      { path: 'login', component: LoginPage },
-      { path: 'register', component: RegisterPage },
+      { path: 'login', component: LoginPage }, //Login page
+      { path: 'register', component: RegisterPage }, //Register page
     ],
   },
-  { path: 'pair', component: PairPage, data: { header: 'none' satisfies HeaderVariant } },
-  { path: '**', redirectTo: 'dashboard' }, // temporal, hasta tener 404
+  { path: 'pair', component: PairPage, data: { header: 'none' satisfies HeaderVariant } }, // phone sync: /pair#<token>
+  { path: '**', redirectTo: 'dashboard' }, // 404 temp redirect
 ];
 export const routes_future: Routes = [
   // Public

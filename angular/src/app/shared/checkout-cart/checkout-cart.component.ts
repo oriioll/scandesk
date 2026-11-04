@@ -1,16 +1,18 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { CartItem } from '../../models/checkout/cart-item';
+import { SkeletonComponent } from '../skeleton/skeleton.component';
 
 @Component({
   selector: 'app-checkout-cart',
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, SkeletonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './checkout-cart.component.html',
   styleUrl: './checkout-cart.component.css',
 })
 export class CheckoutCartComponent {
   public items = input.required<CartItem[]>();
+  public loading = input(false);
   public submitting = input(false);
   public checkout = output<void>();
   public remove = output<number>();

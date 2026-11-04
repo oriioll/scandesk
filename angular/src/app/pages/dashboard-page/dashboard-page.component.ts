@@ -1,19 +1,23 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { finalize } from 'rxjs';
 import { Kpi } from './kpi/kpi.component';
 import { KpiTone } from '../../models/dashboard/kpi-tone';
 import { FeatureCard } from '../../models/dashboard/features';
 import { DashboardFeature } from './dashboard-features/dashboard-features.component';
 import { AuthService } from '../../services/auth.service';
+import { SkeletonComponent } from '../../shared/skeleton/skeleton.component';
 
 @Component({
   selector: 'app-dashboard-page',
-  imports: [Kpi, DashboardFeature],
+  imports: [Kpi, DashboardFeature, SkeletonComponent],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.css',
 })
 export class DashboardPage implements OnInit {
   constructor(private authService: AuthService) {}
   public username = signal('');
+  public loadingUsername = signal(true);
+  public usernameLoadError = signal(false);
   //Array of kpis in the app
   public kpis: { label: string; value: string; hint: string; tone: KpiTone }[] = [
     { label: 'Total products', value: '248', hint: 'In 6 categories', tone: 'default' },
@@ -64,12 +68,15 @@ export class DashboardPage implements OnInit {
     this.getUserName();
   }
   private getUserName() {
-    this.authService.whoami().subscribe({
+    this.authService
+      .whoami()
+      .pipe(finalize(() => this.loadingUsername.set(false)))
+      .subscribe({
       next: (user) => {
         this.username.set(user.name);
       },
       error: () => {
-        return;
+        this.usernameLoadError.set(true);
       },
     });
   }

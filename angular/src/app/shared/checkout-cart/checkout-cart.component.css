@@ -46,6 +46,16 @@
     border-bottom: 0;
 }
 
+.loading-row app-skeleton {
+    max-width: 100%;
+}
+
+.loading-row .info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
 .info {
     min-width: 0;
 }

@@ -12,8 +12,40 @@
         </div>
 
     </div>
+    @if (loadingProducts()) {
+    <section class="products" aria-label="Loading products" aria-busy="true">
+        <div class="skeleton-filters">
+            <app-skeleton width="min(100%, 28rem)" height="2.5rem" radius="6px" />
+            <app-skeleton width="7rem" height="1rem" />
+        </div>
+        <div class="table-container">
+            <div class="table-header">
+                @for (col of columns; track col.key) {
+                <span>{{ col.label }}</span>
+                }
+                <span>Actions</span>
+            </div>
+            @for (row of productSkeletonRows; track row) {
+            <div class="skeleton-row">
+                <app-skeleton width="75%" height=".875rem" />
+                <app-skeleton width="82%" height="1.125rem" />
+                <app-skeleton width="68%" height=".875rem" />
+                <app-skeleton width="55%" height="1rem" />
+                <app-skeleton width="42%" height="1rem" />
+                <app-skeleton width="3.5rem" height="1.75rem" radius="4px" />
+            </div>
+            }
+        </div>
+    </section>
+    } @else if (productsError()) {
+    <section class="load-error" role="alert">
+        <h2>Couldn't load products</h2>
+        <p>Check your connection and try again.</p>
+        <button type="button" class="secondary" (click)="loadProducts()">Retry</button>
+    </section>
+    }
     <!--Empty state-->
-    @if (products().length === 0) {
+    @else if (products().length === 0) {
     <section class="empty">
         <span class="empty-icon" aria-hidden="true"><span class="icon i-products"></span></span>
         <h2>No products yet</h2>
@@ -38,6 +70,9 @@
                         [ngModelOptions]="{standalone: true}" type="search" placeholder="Search by name or barcode"
                         aria-label="Search products by name or barcode">
                 </div>
+                @if (loadingCategories()) {
+                <app-skeleton class="category-filter-skeleton" width="100%" height="2.5rem" radius="6px" />
+                } @else {
                 <select id="category_id" name="category_id" [ngModel]="selectedCategoryId()"
                     (ngModelChange)="selectedCategoryId.set($event)" [ngModelOptions]="{standalone: true}">
                     <option class="placeholder" [ngValue]="null">All categories</option>
@@ -49,6 +84,7 @@
                     </option>
                     }
                 </select>
+                }
             </div>
             <p class="muted">{{ SORTED_PRODUCTS().length }} {{ SORTED_PRODUCTS().length === 1 ? 'product' : 'products'
                 }}</p>
@@ -69,8 +105,8 @@
                 <span>Actions</span>
             </div>
             @for (product of SORTED_PRODUCTS(); track product.id) {
-            <app-product-item [product]="product" (deleteItem)="openDeleteProductDialog($event)"
-                (editProduct)="openEditProductDialog($event)" />
+            <app-product-item (click)="onProductClick(product)" [product]="product"
+                (deleteItem)="openDeleteProductDialog($event)" (editProduct)="openEditProductDialog($event)" />
             } @empty {
             <p class="no-results muted">No products match your filters.</p>
             }

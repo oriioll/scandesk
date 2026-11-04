@@ -16,9 +16,24 @@ export class AppComponent {
   readonly drawer = viewChild.required<MatDrawer>('drawer');
   protected readonly username = signal('');
   protected readonly email = signal('');
+  protected readonly userLoading = signal(true);
+  protected readonly userLoadError = signal(false);
 
   protected onUserLoaded(user: { name: string; email: string }): void {
     this.username.set(user.name);
     this.email.set(user.email);
+  }
+
+  /**
+   * Completes the shared profile loading state for the header and drawer.
+   * @param succeeded Whether the profile request succeeded.
+   * @return void
+   * @author Copilot
+   * @since 2026-11-04
+   * @throws Never throws.
+   */
+  protected onUserLoadFinished(succeeded: boolean): void {
+    this.userLoading.set(false);
+    this.userLoadError.set(!succeeded);
   }
 }

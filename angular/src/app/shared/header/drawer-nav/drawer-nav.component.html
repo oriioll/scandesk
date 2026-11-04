@@ -9,11 +9,22 @@
         </button>
     </div>
 
-    <div class="card">
-        <span class="avatar">{{ userAcronym() }}</span>
+    <div class="card" [attr.aria-busy]="loading()">
+        @if (loading()) {
+        <app-skeleton class="avatar-skeleton" width="2.5rem" height="2.5rem" radius="50%" />
+        } @else {
+        <span class="avatar">{{ loadError() ? '?' : userAcronym() }}</span>
+        }
         <div class="user-info">
+            @if (loading()) {
+            <app-skeleton width="7rem" height="1rem" />
+            <app-skeleton width="10rem" height=".875rem" />
+            } @else if (loadError()) {
+            <span role="alert">Couldn't load profile details.</span>
+            } @else {
             <strong>{{ username() }}</strong>
             <span>{{ email() }}</span>
+            }
         </div>
     </div>
 
