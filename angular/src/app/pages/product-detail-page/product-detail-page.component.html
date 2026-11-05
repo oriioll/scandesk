@@ -1,23 +1,198 @@
 <main class="page">
     @if(isLoading()){
-    <h1>LOADING</h1>
+    <div class="detailLayout loadingLayout" role="status" aria-label="Loading product details" aria-busy="true">
+        <section class="productInfo loadingInfo">
+            <app-skeleton class="loadingBackLink" width="7rem" height=".875rem" />
+            <app-skeleton class="loadingTitle" width="80%" height="2.5rem" />
+            <app-skeleton class="loadingCategory" width="6.5rem" height="1.5rem" radius="999px" />
+            <app-skeleton class="loadingBarcode" width="min(80%, 22rem)" height="6.5rem" />
+            <div class="loadingKpi">
+                <app-skeleton width="3rem" height=".875rem" />
+                <app-skeleton width="6rem" height="2rem" />
+            </div>
+            <div class="loadingKpi">
+                <app-skeleton width="3rem" height=".875rem" />
+                <app-skeleton width="4.5rem" height="2rem" />
+            </div>
+            <app-skeleton width="9rem" height="3rem" radius="6px" />
+        </section>
+        <section class="editSection loadingEdit" aria-hidden="true">
+            <app-skeleton width="8rem" height="1.5rem" />
+            <div class="loadingForm">
+                <div class="loadingField full">
+                    <app-skeleton width="4rem" height=".875rem" />
+                    <app-skeleton height="3rem" radius="6px" />
+                </div>
+                <div class="loadingField full">
+                    <app-skeleton width="3rem" height=".875rem" />
+                    <app-skeleton height="3rem" radius="6px" />
+                </div>
+                <div class="loadingField full">
+                    <app-skeleton width="4rem" height=".875rem" />
+                    <app-skeleton height="3rem" radius="6px" />
+                </div>
+                <div class="loadingField">
+                    <app-skeleton width="4.5rem" height=".875rem" />
+                    <app-skeleton height="3rem" radius="6px" />
+                </div>
+                <div class="loadingField">
+                    <app-skeleton width="3rem" height=".875rem" />
+                    <app-skeleton height="3rem" radius="6px" />
+                </div>
+                <div class="loadingActions full">
+                    <app-skeleton width="8rem" height="3rem" radius="6px" />
+                    <app-skeleton width="6rem" height="3rem" radius="6px" />
+                </div>
+            </div>
+        </section>
+    </div>
     }@else if(error()) {
     <app-product-not-found />
-    } @else {<section class="productInfo">
-        <span class="muted" routerLink="/products">← Products</span>
-        <h1>{{product()!.name}}</h1>
-        <div class="categoryChip">
-            <span>{{product()!.category?.name}}</span>
-        </div>
-        <svg #barcodeSvg></svg>
-        <div class="kpi">
-            <span>Price</span>
-            <h2>{{product()?.price}}€</h2>
-        </div>
-        <div class="kpi">
-            <span>Stock</span>
-            <h2>{{product()?.stock}}<span>pcs</span></h2>
-        </div>
-        <button type="button" class="delete">Delete product</button>
-    </section>}
-</main>
+    } @else {
+
+    <!-- Mobile edit drawer (same pattern as header drawer) -->
+    <mat-drawer-container class="drawerContainer" [hasBackdrop]="true">
+        <mat-drawer #editDrawer mode="over" position="end">
+            <div class="drawer">
+                <div class="drawer-head">
+                    <h3>Edit product</h3>
+                    <button type="button" class="close" aria-label="Close edit panel" (click)="editDrawer.close()">
+                        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+                            <path fill="currentColor"
+                                d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z" />
+                        </svg>
+                    </button>
+                </div>
+                <ng-container *ngTemplateOutlet="editFormTpl"></ng-container>
+            </div>
+        </mat-drawer>
+
+        <mat-drawer-content>
+            <div class="detailLayout">
+                <!-- LEFT: product info & barcode -->
+                <section class="productInfo">
+                    <span class="muted" routerLink="/products">← Products</span>
+                    <h1>{{product()!.name}}</h1>
+                    <div class="categoryChip">
+                        <span>{{product()!.category?.name}}</span>
+                    </div>
+                    <svg #barcodeSvg></svg>
+                    <div class="kpi">
+                        <span>Price</span>
+                        <h2>{{product()?.price}}€</h2>
+                    </div>
+                    <div class="kpi">
+                        <span>Stock</span>
+                        <h2>{{product()?.stock}}<span>pcs</span></h2>
+                    </div>
+                    <!-- Mobile-only edit button -->
+                    <button type="button" class="editToggle" (click)="editDrawer.open()">Edit
+                        product</button>
+                    <button type="button" class="delete">Delete product</button>
+                </section>
+
+                <!-- RIGHT: edit form (desktop only) -->
+                <section class="editSection">
+                    <h3>Edit product</h3>
+                    <ng-container *ngTemplateOutlet="editFormTpl"></ng-container>
+                </section>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+
+    <!-- Shared edit form template -->
+    <ng-template #editFormTpl>
+        <form class="editForm" [formGroup]="editForm" (ngSubmit)="onSave()">
+
+            <!-- Barcode (full width) -->
+            <div class="formSection full">
+                <label for="edit-barcode">Barcode *</label>
+                <input id="edit-barcode" type="text" formControlName="barcode" placeholder="Enter barcode"
+                    [attr.aria-invalid]="!!fieldError('barcode')" />
+                @if (fieldError('barcode'); as msg) {
+                <span class="fieldError">{{ msg }}</span>
+                }
+            </div>
+
+            <!-- Name (full width) -->
+            <div class="formSection full">
+                <label for="edit-name">Name *</label>
+                <input id="edit-name" type="text" formControlName="name" placeholder="CocaCola 300ml"
+                    [attr.aria-invalid]="!!fieldError('name')" />
+                @if (fieldError('name'); as msg) {
+                <span class="fieldError">{{ msg }}</span>
+                }
+            </div>
+
+            <!-- Category (full width) -->
+            <div class="formSection full">
+                <label for="edit-category">Category *</label>
+                @if (categoriesLoading()) {
+                <select disabled>
+                    <option>Loading…</option>
+                </select>
+                } @else {
+                <select id="edit-category" formControlName="category_id"
+                    [attr.aria-invalid]="!!fieldError('category_id')">
+                    <option class="placeholder" [ngValue]="null" disabled>Select a category</option>
+                    @for (c of categories(); track c.id) {
+                    <option [ngValue]="c.id">
+                        <span class="catIcon" aria-hidden="true"
+                            [style.--icon]="'url(' + categoryIcon(c.name) + ')'"></span>
+                        {{ c.name }}
+                    </option>
+                    }
+                </select>
+                }
+                @if (fieldError('category_id'); as msg) {
+                <span class="fieldError">{{ msg }}</span>
+                }
+            </div>
+
+            <!-- Price & Stock (half width each) -->
+            <div class="formSection">
+                <label for="edit-price">Price (€) *</label>
+                <input id="edit-price" type="number" inputmode="decimal" step="0.01" min="0" formControlName="price"
+                    placeholder="0.89" [attr.aria-invalid]="!!fieldError('price')" />
+                @if (fieldError('price'); as msg) {
+                <span class="fieldError">{{ msg }}</span>
+                }
+            </div>
+
+            <div class="formSection">
+                <label for="edit-stock">Stock *</label>
+                <input id="edit-stock" type="number" min="0" formControlName="stock" placeholder="6"
+                    [attr.aria-invalid]="!!fieldError('stock')" />
+                @if (fieldError('stock'); as msg) {
+                <span class="fieldError">{{ msg }}</span>
+                }
+            </div>
+
+            <!-- Form-level error -->
+            @if (formError()) {
+            <div class="formSection full">
+                <span class="formError">{{ formError() }}</span>
+            </div>
+            }
+
+            <!-- Actions -->
+            <div class="formSection full formActions">
+                <button type="submit" [disabled]="submitting()">
+                    @if (submitting()) {
+                    <svg viewBox="0 0 24 24" width="20" height="20" aria-label="Loading">
+                        <path fill="currentColor" opacity=".35"
+                            d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" />
+                        <path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
+                            <animateTransform attributeName="transform" dur="1s" from="0 12 12" to="360 12 12"
+                                repeatCount="indefinite" type="rotate" />
+                        </path>
+                    </svg>
+                    } @else {
+                    Save changes
+                    }
+                </button>
+                <button type="button" class="secondary" (click)="onCancel()" [disabled]="submitting()">Cancel</button>
+            </div>
+        </form>
+    </ng-template>
+    }
