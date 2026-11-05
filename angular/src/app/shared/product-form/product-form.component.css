@@ -191,11 +191,15 @@
     cursor: pointer;
 }
 
-.formSection option:hover,
 .formSection option:focus-visible {
     background: color-mix(in srgb, var(--primary) 12%, transparent);
 }
 
+@media (hover: hover) {
+    .formSection option:hover {
+        background: color-mix(in srgb, var(--primary) 12%, transparent);
+    }
+}
 .formSection option:checked {
     font-weight: 600;
     background: color-mix(in srgb, var(--primary) 18%, transparent);

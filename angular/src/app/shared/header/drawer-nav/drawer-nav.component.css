@@ -27,8 +27,10 @@
     border: 1px solid var(--border);
 }
 
-.close:hover:not(:disabled) {
-    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+@media (hover: hover) {
+    .close:hover:not(:disabled) {
+        background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+    }
 }
 
 /* Tarjeta de usuario */
@@ -90,9 +92,11 @@
     text-decoration: none;
 }
 
-.drawer-link:hover {
-    color: var(--text);
-    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+@media (hover: hover) {
+    .drawer-link:hover {
+        color: var(--text);
+        background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+    }
 }
 
 .drawer-link.active {
@@ -167,13 +171,14 @@
     font-size: var(--text-xs);
 }
 
-.theme-option:hover:not(:disabled) {
-    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
-    color: var(--text);
+@media (hover: hover) {
+    .theme-option:hover:not(:disabled) {
+        background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+        color: var(--text);
+    }
 }
 
-.theme-option.active,
-.theme-option.active:hover:not(:disabled) {
+.theme-option.active {
     background-color: color-mix(in srgb, var(--primary) 20%, transparent);
     color: var(--text);
 }
@@ -188,8 +193,10 @@
     background-color: transparent;
 }
 
-.logout:hover:not(:disabled) {
-    background-color: color-mix(in srgb, var(--error) 12%, transparent);
+@media (hover: hover) {
+    .logout:hover:not(:disabled) {
+        background-color: color-mix(in srgb, var(--error) 12%, transparent);
+    }
 }
 
 .item-content {

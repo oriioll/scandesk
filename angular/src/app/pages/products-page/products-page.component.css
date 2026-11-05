@@ -313,9 +313,14 @@ option {
     cursor: pointer;
 }
 
-option:hover,
 option:focus-visible {
     background: color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+@media (hover: hover) {
+    option:hover {
+        background: color-mix(in srgb, var(--primary) 12%, transparent);
+    }
 }
 
 option:checked {
@@ -384,9 +389,11 @@ option:disabled {
     overflow: visible;
 }
 
-.sort:hover:not(:disabled) {
-    background: transparent;
-    color: var(--text);
+@media (hover: hover) {
+    .sort:hover:not(:disabled) {
+        background: transparent;
+        color: var(--text);
+    }
 }
 
 .sort-arrow {

@@ -41,10 +41,12 @@ button.danger {
     }
 }
 
-button.danger:hover:not(:disabled) {
-    background-color: var(--error);
-    border-color: var(--error);
-    color: light-dark(var(--snow), var(--obsidian));
+@media (hover: hover) {
+    button.danger:hover:not(:disabled) {
+        background-color: var(--error);
+        border-color: var(--error);
+        color: light-dark(var(--snow), var(--obsidian));
+    }
 }
 
 @media (max-width: 30rem) {

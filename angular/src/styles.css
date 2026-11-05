@@ -252,9 +252,11 @@ a {
     transition: color 0.15s ease;
 }
 
-a:hover {
-    color: var(--primary-hover);
-    text-decoration-thickness: 2px;
+@media (hover: hover) {
+    a:hover {
+        color: var(--primary-hover);
+        text-decoration-thickness: 2px;
+    }
 }
 
 small {
@@ -287,8 +289,10 @@ button {
     transition: all .15s ease;
 }
 
-button:hover:not(:disabled) {
-    background-color: var(--primary-hover);
+@media (hover: hover) {
+    button:hover:not(:disabled) {
+        background-color: var(--primary-hover);
+    }
 }
 
 button:active:not(:disabled) {
@@ -309,8 +313,10 @@ button.secondary {
     box-shadow: none;
 }
 
-button.secondary:hover:not(:disabled) {
-    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+@media (hover: hover) {
+    button.secondary:hover:not(:disabled) {
+        background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+    }
 }
 
 input {

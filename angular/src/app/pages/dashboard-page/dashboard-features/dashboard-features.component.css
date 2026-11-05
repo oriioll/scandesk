@@ -16,10 +16,16 @@ article {
     transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
-article:hover,
 article:focus-within {
     border-color: var(--accent);
     transform: translateY(-2px);
+}
+
+@media (hover: hover) {
+    article:hover {
+        border-color: var(--accent);
+        transform: translateY(-2px);
+    }
 }
 
 .top {
@@ -95,9 +101,14 @@ p {
         transition: none;
     }
 
-    article:hover,
     article:focus-within {
         transform: none;
+    }
+
+    @media (hover: hover) {
+        article:hover {
+            transform: none;
+        }
     }
 }
 

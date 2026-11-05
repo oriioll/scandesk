@@ -12,8 +12,10 @@ header {
     cursor: pointer;
 }
 
-.back:hover {
-    color: var(--text);
+@media (hover: hover) {
+    .back:hover {
+        color: var(--text);
+    }
 }
 
 app-theme-toggle {

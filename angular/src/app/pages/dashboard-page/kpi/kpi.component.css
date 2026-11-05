@@ -15,9 +15,11 @@ article {
     transition: all .2s ease;
 }
 
-article:hover {
-    cursor: pointer;
-    border: 1px solid var(--accent);
+@media (hover: hover) {
+    article:hover {
+        cursor: pointer;
+        border: 1px solid var(--accent);
+    }
 }
 
 .label {

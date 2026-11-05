@@ -6,8 +6,10 @@
     transition: background-color .2s ease;
 }
 
-:host(:hover) {
-    background-color: color-mix(in srgb, var(--text) 3%, var(--surface));
+@media (hover: hover) {
+    :host(:hover) {
+        background-color: color-mix(in srgb, var(--text) 3%, var(--surface));
+    }
 }
 
 :host>span,
@@ -76,16 +78,26 @@
     color: var(--error);
 }
 
-.product-action-button:hover,
 .product-action-button:focus-visible {
     background-color: var(--primary-hover);
     color: var(--on-primary);
 }
 
-.product-action-button.danger:hover,
 .product-action-button.danger:focus-visible {
     background-color: var(--error);
     color: light-dark(var(--snow), var(--obsidian));
+}
+
+@media (hover: hover) {
+    .product-action-button:hover {
+        background-color: var(--primary-hover);
+        color: var(--on-primary);
+    }
+
+    .product-action-button.danger:hover {
+        background-color: var(--error);
+        color: light-dark(var(--snow), var(--obsidian));
+    }
 }
 
 .font-bold {
