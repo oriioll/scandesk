@@ -4,10 +4,11 @@ import { ProductResponse } from '../../models/products/product.response';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import JsBarcode from 'jsbarcode';
+import { ProductNotFoundComponent } from './product-not-found/product-not-found.component';
 
 @Component({
   selector: 'app-product-detail-page',
-  imports: [RouterLink],
+  imports: [RouterLink, ProductNotFoundComponent],
   templateUrl: './product-detail-page.component.html',
   styleUrl: './product-detail-page.component.css',
 })

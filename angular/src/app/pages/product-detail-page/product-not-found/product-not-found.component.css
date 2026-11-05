@@ -1,0 +1,9 @@
+section {
+    width: 100%;
+    padding: clamp(1.25rem, 3vw, 2rem) var(--page-gutter);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
