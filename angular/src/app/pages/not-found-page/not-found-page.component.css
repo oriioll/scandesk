@@ -1,0 +1,91 @@
+.heading {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.page {
+    height: 100dvh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: clamp(1.25rem, 3vw, 2rem) var(--page-gutter);
+}
+
+.buttons {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.scanner-container {
+    position: relative;
+    width: clamp(30px, 80vw, 620px);
+    height: clamp(180px, 40vh, 340px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+.error-code {
+    font-size: clamp(8rem, 15vw, 12rem);
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: 4px;
+    z-index: 1;
+    line-height: 1;
+}
+
+.laser-line {
+    position: absolute;
+    top: 50%;
+    left: 2%;
+    right: 2%;
+    height: 3px;
+    background-color: var(--error);
+    box-shadow: 0 0 10px var(--error), 0 0 18px var(--error);
+    transform: translateY(-50%);
+    z-index: 2;
+}
+
+.corner {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-color: var(--accent);
+    border-style: solid;
+}
+
+.top-left {
+    top: 0;
+    left: 0;
+    border-width: 4px 0 0 4px;
+}
+
+.top-right {
+    top: 0;
+    right: 0;
+    border-width: 4px 4px 0 0;
+}
+
+.bottom-left {
+    bottom: 0;
+    left: 0;
+    border-width: 0 0 4px 4px;
+}
+
+.bottom-right {
+    bottom: 0;
+    right: 0;
+    border-width: 0 4px 4px 0;
+}
+
+.heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}

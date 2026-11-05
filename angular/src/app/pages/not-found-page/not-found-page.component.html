@@ -1,1 +1,21 @@
-<p>not-found-page works!</p>
+<main class="page">
+    <div class="scanner-container">
+        <span class="corner top-left"></span>
+        <span class="corner top-right"></span>
+        <span class="corner bottom-left"></span>
+        <span class="corner bottom-right"></span>
+
+        <div class="laser-line"></div>
+        <span class="error-code">404</span>
+    </div>
+
+    <div class="heading">
+        <h1>Without results</h1>
+        <p>We couldn't read anything in this direction</p>
+    </div>
+
+    <div class="buttons">
+        <button type="button" (click)="goDashboard()">Go to the dashboard</button>
+        <button class="secondary" type="button" (click)="goBack()">Go back</button>
+    </div>
+</main>

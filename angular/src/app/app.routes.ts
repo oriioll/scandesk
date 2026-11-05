@@ -8,6 +8,7 @@ import { LoginPage } from './pages/login-page/login-page.component';
 import { HeaderVariant } from './models/header/header-variant';
 import { ProductsPage } from './pages/products-page/products-page.component';
 import { ProductDetailPage } from './pages/product-detail-page/product-detail-page.component';
+import { NotFoundPage } from './pages/not-found-page/not-found-page.component';
 
 const TODO: any = null;
 export const routes: Routes = [
@@ -32,7 +33,7 @@ export const routes: Routes = [
     ],
   },
   { path: 'pair', component: PairPage, data: { header: 'none' satisfies HeaderVariant } }, // phone sync: /pair#<token>
-  { path: '**', redirectTo: 'dashboard' }, // 404 temp redirect
+  { path: '**', component: NotFoundPage }, // 404
 ];
 export const routes_future: Routes = [
   // Public
