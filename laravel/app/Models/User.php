@@ -26,6 +26,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+    public function stockHistories(): HasMany
+    {
+        return $this->hasMany(StockHistory::class);
+    }
     public function pairingSessions(): HasMany
     {
         return $this->hasMany(PairingSession::class);

@@ -7,6 +7,7 @@ use App\Models\User;
 
 class ProductService
 {
+    public function __construct(private HistoryService $historyService) {}
     /**
      * Get all products created by the user
      * @param User $user
@@ -47,7 +48,9 @@ class ProductService
      */
     public function postProduct(User $user, array $products): Product
     {
-        return $user->products()->create($products)->load('category');
+        $created = $user->products()->create($products)->load('category');
+        $this->historyService->productCreation($user, $created);
+        return $created;
     }
 
     /**
@@ -60,8 +63,14 @@ class ProductService
     public function updateProduct(User $user, string $id, array $data): Product
     {
         $product = $user->products()->findOrFail($id);
-        $product->update($data);
-        //Also update the history table
+        $old = clone $product;
+        $product->fill($data);
+        $fields = array_keys($product->getDirty());
+        $product->save();
+        //Loop all the edited fields
+        foreach ($fields as $field) {
+            $this->historyService->productEdition($user, $old, $product, $field);
+        }
         return $product->load('category');
     }
     /**
@@ -74,7 +83,7 @@ class ProductService
     {
         $product = $user->products()->findOrFail($id);
         $product->delete();
-        //Also update the history table
+        $this->historyService->productRemoval($user, $product);
         return true;
     }
 }
