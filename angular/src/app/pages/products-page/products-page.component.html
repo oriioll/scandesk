@@ -8,7 +8,7 @@
         <div class="buttons">
             <button class="createButton" type="button" (click)="openCreateProductDialog()">+ New
                 product</button>
-            <app-import-products />
+            <app-import-products (reload)="loadProducts()" />
         </div>
 
     </div>
