@@ -82,8 +82,8 @@ class ProductService
     public function deleteProduct(User $user, string $id): bool
     {
         $product = $user->products()->findOrFail($id);
-        $product->delete();
         $this->historyService->productRemoval($user, $product);
+        $product->delete();
         return true;
     }
 }

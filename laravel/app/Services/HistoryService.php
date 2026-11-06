@@ -25,7 +25,14 @@ class HistoryService
      */
     public function productCreation(User $user, Product $product): StockHistory
     {
-        return StockHistory::create(['product_id' => $product->id, 'user_id' => $user->id, 'field' => 'all', 'operation' => 'CREATE', 'old_value' => null, 'new_value' => $product->name]);
+        return StockHistory::create([
+            'product_id' => $product->id,
+            'user_id' => $user->id,
+            'field' => 'all',
+            'operation' => 'CREATE',
+            'old_value' => null,
+            'new_value' => $product->name === null ? null : (string) $product->name,
+        ]);
     }
     /**
      * Handles the history of a product delete
@@ -35,7 +42,14 @@ class HistoryService
      */
     public function productRemoval(User $user, Product $product): StockHistory
     {
-        return StockHistory::create(['product_id' => $product->id, 'user_id' => $user->id, 'field' => 'all', 'operation' => 'DELETE', 'old_value' => $product->name, 'new_value' => null]);
+        return StockHistory::create([
+            'product_id' => $product->id,
+            'user_id' => $user->id,
+            'field' => 'all',
+            'operation' => 'DELETE',
+            'old_value' => $product->name === null ? null : (string) $product->name,
+            'new_value' => null,
+        ]);
     }
     /**
      * Handles the history of a product edition
@@ -46,6 +60,16 @@ class HistoryService
      */
     public function productEdition(User $user, Product $old_product, Product $new_product, string $editedField): StockHistory
     {
-        return StockHistory::create(['product_id' => $new_product->id, 'user_id' => $user->id, 'field' => $editedField, 'operation' => 'EDIT', 'old_value' => $old_product->editedField, 'new_value' => $new_product->editedField]);
+        $oldValue = $old_product->{$editedField};
+        $newValue = $new_product->{$editedField};
+
+        return StockHistory::create([
+            'product_id' => $new_product->id,
+            'user_id' => $user->id,
+            'field' => $editedField,
+            'operation' => 'EDIT',
+            'old_value' => $oldValue === null ? null : (string) $oldValue,
+            'new_value' => $newValue === null ? null : (string) $newValue,
+        ]);
     }
 }
