@@ -134,7 +134,6 @@ export class ProductDetailPage implements OnInit {
   protected onDeleteClose(deleted: boolean): void {
     this.deleteOpen.set(false);
     if (deleted) {
-      toast.success('Product deleted successfully');
       this.router.navigate(['/products']);
     }
   }
