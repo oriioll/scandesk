@@ -88,7 +88,7 @@
                     <!-- Mobile-only edit button -->
                     <button type="button" class="editToggle" (click)="editDrawer.open()">Edit
                         product</button>
-                    <button type="button" class="delete">Delete product</button>
+                    <button type="button" class="delete" (click)="deleteOpen.set(true)">Delete product</button>
                 </section>
 
                 <!-- RIGHT: edit form (desktop only) -->
@@ -99,6 +99,10 @@
             </div>
         </mat-drawer-content>
     </mat-drawer-container>
+
+    @if (deleteOpen()) {
+    <app-delete-dialog [productToDelete]="product()" (closeDialogAndLoad)="onDeleteClose($event)" />
+    }
 
     <!-- Shared edit form template -->
     <ng-template #editFormTpl>

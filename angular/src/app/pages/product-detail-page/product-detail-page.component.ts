@@ -1,7 +1,7 @@
 import { Component, effect, ElementRef, inject, OnInit, signal, viewChild } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { ProductResponse } from '../../models/products/product.response';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import JsBarcode from 'jsbarcode';
 import { ProductNotFoundComponent } from './product-not-found/product-not-found.component';
@@ -15,6 +15,7 @@ import { categoryIcon } from '../../util/categories';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { NgTemplateOutlet } from '@angular/common';
 import { SkeletonComponent } from '../../shared/skeleton/skeleton.component';
+import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-product-detail-page',
@@ -25,6 +26,7 @@ import { SkeletonComponent } from '../../shared/skeleton/skeleton.component';
     MatSidenavModule,
     NgTemplateOutlet,
     SkeletonComponent,
+    DeleteDialogComponent,
   ],
   templateUrl: './product-detail-page.component.html',
   styleUrl: './product-detail-page.component.css',
@@ -36,6 +38,7 @@ export class ProductDetailPage implements OnInit {
     private readonly productService: ProductService,
     private readonly categoryService: CategoryService,
     private route: ActivatedRoute,
+    private readonly router: Router,
   ) {
     effect(() => {
       this.renderBarcode();
@@ -55,6 +58,7 @@ export class ProductDetailPage implements OnInit {
   // Form state
   protected submitting = signal(false);
   protected formError = signal('');
+  protected readonly deleteOpen = signal(false);
 
   // Html items
   public barcodeSvg = viewChild<ElementRef<SVGElement>>('barcodeSvg');
@@ -121,6 +125,18 @@ export class ProductDetailPage implements OnInit {
   protected onCancel(): void {
     const p = this.product();
     if (p) this.patchForm(p);
+  }
+
+  /**
+   * Closes the delete confirmation and returns to the product list after deletion.
+   * @param deleted Whether the product was successfully deleted.
+   */
+  protected onDeleteClose(deleted: boolean): void {
+    this.deleteOpen.set(false);
+    if (deleted) {
+      toast.success('Product deleted successfully');
+      this.router.navigate(['/products']);
+    }
   }
 
   /**
