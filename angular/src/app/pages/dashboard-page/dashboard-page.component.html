@@ -13,11 +13,29 @@
         <p>Resume of your inventory today</p>
     </div>
     <!--KPIS-->
-    <section class="kpis">
-        @for (kpi of kpis; track kpi.label) {
-        <app-kpi [topText]="kpi.label" [value]="kpi.value.toString()" [bottomText]="kpi.hint" [tone]="kpi.tone" />
+    @if (loadingUsername() || loadingKPIs()) {
+    <section class="kpis" aria-label="Loading KPIs" aria-busy="true">
+        @for (i of kpiSkeletons; track i) {
+        <div class="kpi-skeleton">
+            <app-skeleton width="55%" height=".875rem" />
+            <app-skeleton width="40%" height="2rem" />
+            <app-skeleton width="70%" height=".75rem" />
+        </div>
         }
     </section>
+    } @else if (kpiError() || usernameLoadError()) {
+    <section class="load-error" role="alert">
+        <h3>Couldn't load your KPIs</h3>
+        <p>Check your connection and try again.</p>
+        <button type="button" class="secondary" (click)="retry()">Retry</button>
+    </section>
+    } @else {
+    <section class="kpis">
+        @for (kpi of kpis; track kpi.label) {
+        <app-kpi [topText]="kpi.label" [value]="kpi.value" [bottomText]="kpi.hint" [tone]="kpi.tone" />
+        }
+    </section>
+    }
     <!--FEATURES-->
     <section class="features">
         @for (feature of features; track feature.text) {

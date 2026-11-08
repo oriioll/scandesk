@@ -6,7 +6,10 @@ import { FeatureCard } from '../../models/dashboard/features';
 import { DashboardFeature } from './dashboard-features/dashboard-features.component';
 import { AuthService } from '../../services/auth.service';
 import { SkeletonComponent } from '../../shared/skeleton/skeleton.component';
+import { KPI } from '../../models/dashboard/kpi.response';
+import { DashboardService } from '../../services/dashboard.service';
 
+const EUR = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
 @Component({
   selector: 'app-dashboard-page',
   imports: [Kpi, DashboardFeature, SkeletonComponent],
@@ -14,16 +17,23 @@ import { SkeletonComponent } from '../../shared/skeleton/skeleton.component';
   styleUrl: './dashboard-page.component.css',
 })
 export class DashboardPage implements OnInit {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private dashboardService: DashboardService,
+  ) {}
+  protected readonly kpiSkeletons = [0, 1, 2, 3];
   public username = signal('');
   public loadingUsername = signal(true);
+  public loadingKPIs = signal(false);
+  public kpiData = signal<KPI | null>(null);
   public usernameLoadError = signal(false);
+  public kpiError = signal(false);
   //Array of kpis in the app
   public kpis: { label: string; value: string; hint: string; tone: KpiTone }[] = [
-    { label: 'Total products', value: '248', hint: 'In 6 categories', tone: 'default' },
-    { label: 'Out of stock', value: '12', hint: '4.8% of catalog', tone: 'error' },
-    { label: 'Low stock', value: '21', hint: 'Below minimum', tone: 'warning' },
-    { label: "Today's sales", value: '184,50 €', hint: '14 orders', tone: 'default' },
+    { label: 'Total products', value: '', hint: '', tone: 'default' },
+    { label: 'Out of stock', value: '', hint: '', tone: 'default' },
+    { label: 'Low stock', value: '', hint: 'Below 5 units', tone: 'default' },
+    { label: "Today's sales", value: '', hint: '', tone: 'default' },
   ];
 
   //Array of features of the app
@@ -67,17 +77,72 @@ export class DashboardPage implements OnInit {
   public ngOnInit(): void {
     this.getUserName();
   }
+  /**
+   * Loads all the data needed to build the kpis
+   */
+  private loadKpis() {
+    this.loadingKPIs.set(true);
+    this.kpiError.set(false);
+    this.dashboardService
+      .getKPIs()
+      .pipe(finalize(() => this.loadingKPIs.set(false)))
+      .subscribe({
+        next: (k) => {
+          this.kpiData.set(k);
+          const pct = k.total_products
+            ? ((k.out_of_stock / k.total_products) * 100).toFixed(1)
+            : '0';
+
+          this.kpis = [
+            {
+              label: 'Total products',
+              value: String(k.total_products),
+              hint: 'Active products',
+              tone: 'default',
+            },
+            {
+              label: 'Out of stock',
+              value: String(k.out_of_stock),
+              hint: `${pct}% of catalog`,
+              tone: k.out_of_stock > 0 ? 'error' : 'success',
+            },
+            {
+              label: 'Low stock',
+              value: String(k.low_stock),
+              hint: 'Below 5 units',
+              tone: k.low_stock > 0 ? 'warning' : 'default',
+            },
+            {
+              label: "Today's sales",
+              value: EUR.format(Number(k.today_revenue)),
+              hint: `${k.today_orders} ${k.today_orders === 1 ? 'order' : 'orders'}`,
+              tone: 'default',
+            },
+          ];
+        },
+        error: () => this.kpiError.set(true),
+      });
+  }
+  /**
+   * Loads the user name
+   */
   private getUserName() {
     this.authService
       .whoami()
       .pipe(finalize(() => this.loadingUsername.set(false)))
       .subscribe({
-      next: (user) => {
-        this.username.set(user.name);
-      },
-      error: () => {
-        this.usernameLoadError.set(true);
-      },
-    });
+        next: (user) => {
+          this.username.set(user.name);
+          this.loadKpis();
+        },
+        error: () => {
+          this.usernameLoadError.set(true);
+        },
+      });
+  }
+  protected retry(): void {
+    this.usernameLoadError.set(false);
+    this.loadingUsername.set(true);
+    this.getUserName();
   }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PairingSessionController;
@@ -12,6 +13,14 @@ use Illuminate\Support\Facades\Route;
  * Verify login middleware
  */
 Route::middleware('auth:sanctum')->group(function () {
+    /**
+     * DASHBOARD ENDPOINTS
+     */
+    Route::prefix('dashboard')->group(function () {
+        // GET /dashboard/kpis - Gets the kpis info of the current user
+        Route::get('/kpis', [DashboardController::class, 'kpis']);
+    });
+
     /**
      * AUTH ENDPOINTS
      */
