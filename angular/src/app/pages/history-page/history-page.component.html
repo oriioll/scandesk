@@ -1,1 +1,21 @@
-<p>history-page works!</p>
+<main class="page">
+    <!--HEADINGS-->
+    <div class="heading">
+        <h1>History</h1>
+        <p>Review your orders and every product change.</p>
+    </div>
+    <!--SECTIONS-->
+    <section class="cards">
+        @for (s of sections; track s.route) {
+        <a class="card" [routerLink]="s.route">
+            <span class="card-icon" aria-hidden="true"><span class="icon" [class]="'icon ' + s.icon"></span></span>
+            <h2>{{ s.title }}</h2>
+            <p>{{ s.text }}</p>
+            <span class="card-cta">
+                {{ s.cta }}
+                <span class="arrow" aria-hidden="true">→</span>
+            </span>
+        </a>
+        }
+    </section>
+</main>

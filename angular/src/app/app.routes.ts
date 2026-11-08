@@ -10,6 +10,7 @@ import { ProductsPage } from './pages/products-page/products-page.component';
 import { ProductDetailPage } from './pages/product-detail-page/product-detail-page.component';
 import { NotFoundPage } from './pages/not-found-page/not-found-page.component';
 import { HistoryProductsPage } from './pages/history-products-page/history-products-page.component';
+import { HistoryPage } from './pages/history-page/history-page.component';
 
 const TODO: any = null;
 export const routes: Routes = [
@@ -26,7 +27,7 @@ export const routes: Routes = [
       {
         path: 'history',
         children: [
-          { path: '', pathMatch: 'full', redirectTo: 'products' }, // history main menu
+          { path: '', pathMatch: 'full', component: HistoryPage }, // history main menu
           { path: 'products', component: HistoryProductsPage }, // stock or product changes
           { path: 'orders', component: NotFoundPage }, // order history not implemented
           { path: 'orders/:id', component: NotFoundPage }, // order detail not implemented

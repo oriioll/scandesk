@@ -1,0 +1,107 @@
+.page {
+    height: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: clamp(1.25rem, 3vw, 2rem) var(--page-gutter);
+}
+
+.heading {
+    display: flex;
+    flex-direction: column;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    padding: 1.75rem;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-weight: 400;
+    text-decoration: none;
+    transition: border-color .2s ease, transform .2s ease;
+}
+
+.card h2 {
+    font-size: var(--text-xl);
+}
+
+.card p {
+    color: var(--text-muted);
+}
+
+@media (hover: hover) {
+    .card:hover {
+        color: var(--text);
+        border-color: color-mix(in srgb, var(--primary) 55%, var(--border));
+        transform: translateY(-2px);
+    }
+
+    .card:hover .arrow {
+        transform: translateX(4px);
+    }
+}
+
+.card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 6px;
+    background-color: color-mix(in srgb, var(--primary) 14%, transparent);
+    color: var(--primary);
+}
+
+.card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 0.25rem;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.arrow {
+    transition: transform .2s ease;
+}
+
+.icon {
+    display: block;
+    width: 1.75rem;
+    height: 1.75rem;
+    background-color: currentColor;
+    mask-position: center;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
+
+.i-products {
+    mask-image: url("/icons/product.svg");
+}
+
+.i-cart {
+    mask-image: url("/icons/cart.svg");
+}
+
+/* Móvil: una card debajo de la otra */
+@media (max-width: 40rem) {
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: 1.25rem;
+    }
+}
