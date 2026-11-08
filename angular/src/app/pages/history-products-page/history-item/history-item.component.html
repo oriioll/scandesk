@@ -1,0 +1,9 @@
+<span class="product-name" [title]="productName()">{{ productName() }}</span>
+<span class="field">{{ history().field }}</span>
+<span><span class="chip" [attr.data-op]="history().operation">{{ history().operation }}</span></span>
+<span class="value" [title]="history().new_value ?? ''">{{ history().new_value ?? '' }}</span>
+<span class="value" [title]="history().old_value ?? ''">{{ history().old_value ?? '' }}</span>
+<span>
+    <time [attr.datetime]="history().created_at ?? null" [title]="history().created_at | date:'medium'">{{
+        history().created_at | date:'d MMM y, HH:mm' }}</time>
+</span>

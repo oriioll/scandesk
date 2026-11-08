@@ -1,1 +1,99 @@
-<p>history-products-page works!</p>
+<main class="page">
+    <!--HEADINGS-->
+    <div class="heading">
+        <h1>Product History</h1>
+        <p>Review changes made to your products, newest first.</p>
+    </div>
+    @if (loadingHistory()) {
+    <section class="history" aria-label="Loading product history" aria-busy="true">
+        <div class="skeleton-filters">
+            <app-skeleton width="min(100%, 28rem)" height="2.5rem" radius="6px" />
+            <app-skeleton width="7rem" height="1rem" />
+        </div>
+        <div class="table-container">
+            <div class="table-header">
+                @for (col of columns; track col.key) {
+                <span>{{ col.label }}</span>
+                }
+            </div>
+            @for (row of historySkeletonRows; track row) {
+            <div class="skeleton-row">
+                <app-skeleton width="75%" height=".875rem" />
+                <app-skeleton width="82%" height="1.125rem" />
+                <app-skeleton width="68%" height=".875rem" />
+                <app-skeleton width="55%" height="1rem" />
+                <app-skeleton width="42%" height="1rem" />
+                <app-skeleton width="75%" height="1rem" />
+            </div>
+            }
+        </div>
+    </section>
+    } @else if (historyError()) {
+    <section class="load-error" role="alert">
+        <h2>Couldn't load the history</h2>
+        <p>Check your connection and try again.</p>
+        <button type="button" class="secondary" (click)="loadHistory()">Retry</button>
+    </section>
+    }
+    <!--Empty state-->
+    @else if (history().length === 0) {
+    <section class="empty">
+        <span class="empty-icon" aria-hidden="true"><span class="icon i-products"></span></span>
+        <h2>No changes yet</h2>
+        <p>Create, edit or delete a product to review your history</p>
+        <div class="empty-actions">
+            <button type="button" routerLink="/products">
+                <span class="btn-icon i-scan" aria-hidden="true"></span>
+                Go to products
+            </button>
+        </div>
+    </section>
+    }
+    @else {
+    <!--Products render-->
+    <section class="history">
+        <article class="mainFilters">
+            <div class="search">
+                <div class="searchField">
+                    <span class="searchIcon i-search" aria-hidden="true"></span>
+                    <input class="searcher" [ngModel]="searchContent()" (ngModelChange)="searchContent.set($event)"
+                        [ngModelOptions]="{standalone: true}" type="search" placeholder="Search by product name"
+                        aria-label="Search history by product name">
+                </div>
+                <select id="action" name="action" [ngModel]="selectedAction()"
+                    (ngModelChange)="selectedAction.set($event)" [ngModelOptions]="{standalone: true}"
+                    aria-label="Filter by operation">
+                    <option class="placeholder" [ngValue]="null">All actions</option>
+                    @for (a of actions; track a) {
+                    <option [ngValue]="a">
+                        {{ a | uppercase }}
+                    </option>
+                    }
+                </select>
+            </div>
+            <p class="muted">{{ SORTED_HISTORY().length }} {{ SORTED_HISTORY().length === 1 ? 'change' : 'changes' }}
+            </p>
+        </article>
+        <div class="table-container">
+            <div class="table-header">
+                @for (col of columns; track col.key) {
+                <span>
+                    <button type="button" class="sort" [attr.aria-label]="'Sort by ' + col.label"
+                        (click)="toggleSort(col.key)">
+                        {{ col.label }}
+                        <span class="sort-arrow" [class.active]="sortKey() === col.key" aria-hidden="true">
+                            {{ sortKey() === col.key ? (sortDir() === 'asc' ? '↑' : '↓') : '↕' }}
+                        </span>
+                    </button>
+                </span>
+                }
+            </div>
+            @for (s of SORTED_HISTORY(); track s.id) {
+            <app-history-item [history]="s" />
+            } @empty {
+            <p class="no-results muted">No changes match your filters.</p>
+            }
+        </div>
+    </section>
+    }
+</main>
