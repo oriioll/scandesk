@@ -3,7 +3,7 @@
     <div class="heading">
         <h1 [attr.aria-busy]="loadingUsername()">
             @if (loadingUsername()) {
-            <app-skeleton class="greeting-skeleton" width="12rem" height="2.5rem" />
+            <app-skeleton class="greeting-skeleton" width="12rem" height="3.5rem" />
             } @else if (usernameLoadError()) {
             Welcome
             } @else {
