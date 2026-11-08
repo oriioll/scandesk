@@ -39,16 +39,15 @@ export class HistoryProductsPage implements OnInit {
     );
   });
 
-  protected readonly columns: { key: SortKey; label: string }[] = [
-    { key: 'name', label: 'Product name' },
-    { key: 'field', label: 'Field' },
-    { key: 'operation', label: 'Operation' },
-    { key: 'new_value', label: 'New value' },
-    { key: 'old_value', label: 'Old value' },
-    { key: 'created_at', label: 'Date' },
+  protected readonly columns: { key: SortKey; label: string; sortable: boolean; cls?: string }[] = [
+    { key: 'created_at', label: 'Date', sortable: true },
+    { key: 'name', label: 'Product', sortable: true },
+    { key: 'operation', label: 'Operation', sortable: true, cls: 'col-op' },
+    { key: 'field', label: 'Field', sortable: false, cls: 'col-field' },
+    { key: 'new_value', label: 'Change', sortable: false },
   ];
-  protected readonly sortKey = signal<SortKey | null>(null);
-  protected readonly sortDir = signal<'asc' | 'desc'>('asc');
+  protected readonly sortKey = signal<SortKey | null>('created_at');
+  protected readonly sortDir = signal<'asc' | 'desc'>('desc');
 
   public readonly SORTED_HISTORY = computed(() => {
     const key = this.sortKey();

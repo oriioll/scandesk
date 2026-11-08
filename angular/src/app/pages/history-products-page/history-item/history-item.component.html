@@ -1,9 +1,18 @@
-<span class="product-name" [title]="productName()">{{ productName() }}</span>
-<span class="field">{{ history().field }}</span>
-<span><span class="chip" [attr.data-op]="history().operation">{{ history().operation }}</span></span>
-<span class="value" [title]="history().new_value ?? ''">{{ history().new_value ?? '' }}</span>
-<span class="value" [title]="history().old_value ?? ''">{{ history().old_value ?? '' }}</span>
-<span>
+<span class="date">
     <time [attr.datetime]="history().created_at ?? null" [title]="history().created_at | date:'medium'">{{
-        history().created_at | date:'d MMM y, HH:mm' }}</time>
+        history().created_at | date:'d MMM, HH:mm' }}</time>
+</span>
+<span class="product-name" [title]="productName()">{{ productName() }}</span>
+<span class="col-op"><span class="chip" [attr.data-op]="history().operation">{{ history().operation }}</span></span>
+<span class="field col-field">{{ fieldLabel() }}</span>
+<span class="change">
+    @let c = change();
+    @if (c.kind === 'edit') {
+    <span class="old">{{ c.old }}</span>
+    <span class="arrow" aria-hidden="true">→</span>
+    }
+    <span class="new" [class.removed]="c.kind === 'delete'">{{ c.text }}</span>
+    @if (c.delta) {
+    <span class="delta" [class.up]="c.delta.up" [class.down]="!c.delta.up">{{ c.delta.label }}</span>
+    }
 </span>

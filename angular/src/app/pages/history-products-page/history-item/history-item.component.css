@@ -60,3 +60,57 @@ time {
 .chip[data-op="delete"] {
     --chip: var(--error);
 }
+
+.change {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.change .old,
+.change .new {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.old,
+.arrow,
+.removed {
+    color: var(--text-muted);
+}
+
+.removed {
+    text-decoration: line-through;
+}
+
+.arrow,
+.delta {
+    flex: none;
+}
+
+.delta {
+    font-size: var(--text-sm);
+    font-weight: 700;
+}
+
+.delta.up {
+    color: var(--success);
+}
+
+.delta.down {
+    color: var(--error);
+}
+
+@container history (max-width: 40rem) {
+    .col-field {
+        display: none;
+    }
+}
+
+@container history (max-width: 28rem) {
+    .col-op {
+        display: none;
+    }
+}

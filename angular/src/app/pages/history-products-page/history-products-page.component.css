@@ -118,11 +118,11 @@
 }
 
 .i-products {
-    mask-image: url("/icons/product.svg");
+    mask-image: url("/icons/history.svg");
 }
 
 .i-scan {
-    mask-image: url("/icons/scan.svg");
+    mask-image: url("/icons/product.svg");
 }
 
 .muted {
@@ -292,7 +292,7 @@ option:disabled {
 
 
 .table-container {
-    --history-columns: minmax(0, 1.6fr) minmax(0, 0.8fr) minmax(5.5rem, 0.8fr) minmax(0, 1.2fr) minmax(0, 1.2fr) minmax(8.5rem, 1fr);
+    --history-columns: minmax(9rem, 1fr) minmax(0, 1.6fr) minmax(6rem, 0.8fr) minmax(0, 0.8fr) minmax(0, 1.8fr);
     display: flex;
     flex-direction: column;
     overflow-x: auto;
@@ -387,6 +387,26 @@ option:disabled {
         grid-template-columns: 1fr;
         max-width: none;
         flex-basis: 100%;
+    }
+}
+
+@container history (max-width: 40rem) {
+    .table-container {
+        --history-columns: minmax(8rem, 1fr) minmax(0, 1.4fr) minmax(5.5rem, 0.8fr) minmax(0, 1.6fr);
+    }
+
+    .col-field {
+        display: none;
+    }
+}
+
+@container history (max-width: 28rem) {
+    .table-container {
+        --history-columns: minmax(7.5rem, 1fr) minmax(0, 1.2fr) minmax(0, 1.6fr);
+    }
+
+    .col-op {
+        display: none;
     }
 }
 
