@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PairingSessionController;
 use App\Http\Controllers\ProductController;
@@ -75,7 +76,7 @@ Route::middleware('auth:sanctum')->group(function () {
      */
     Route::prefix('history')->group(function () {
         // GET /history/products - Get the history of all the product changes for user
-        Route::get('/products');
+        Route::get('/products', [HistoryController::class, 'index']);
     });
 
     /**

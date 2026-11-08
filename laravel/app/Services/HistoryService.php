@@ -15,7 +15,10 @@ class HistoryService
      */
     public function getAll(User $user)
     {
-        return $user->stockHistories()->get();
+        return $user->stockHistories()
+            ->with('product:id,name')
+            ->latest()
+            ->get();
     }
 
     /**

@@ -16,7 +16,10 @@ class HistoryResource extends JsonResource
     {
         return [
             'id' => (int) $this->id,
-            'product_id' => $this->product_id,
+            'product'    => $this->whenLoaded('product', fn() => [
+                'id'      => $this->product->id,
+                'name'    => $this->product->name,
+            ]),
             'user_id' => $this->user_id,
             'field' => $this->field,
             'old_value' => $this->old_value,
