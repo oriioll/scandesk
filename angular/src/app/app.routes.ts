@@ -9,6 +9,7 @@ import { HeaderVariant } from './models/header/header-variant';
 import { ProductsPage } from './pages/products-page/products-page.component';
 import { ProductDetailPage } from './pages/product-detail-page/product-detail-page.component';
 import { NotFoundPage } from './pages/not-found-page/not-found-page.component';
+import { HistoryProductsPage } from './pages/history-products-page/history-products-page.component';
 
 const TODO: any = null;
 export const routes: Routes = [
@@ -22,6 +23,15 @@ export const routes: Routes = [
       { path: 'checkout', component: CheckoutPage }, //checkout -> Get items and use checkout modes
       { path: 'products', component: ProductsPage }, // Product list page
       { path: 'products/:id', component: ProductDetailPage }, // Product detail page
+      {
+        path: 'history',
+        children: [
+          { path: '', pathMatch: 'full', redirectTo: 'products' }, // history main menu
+          { path: 'products', component: HistoryProductsPage }, // stock or product changes
+          { path: 'orders', component: NotFoundPage }, // order history not implemented
+          { path: 'orders/:id', component: NotFoundPage }, // order detail not implemented
+        ],
+      },
     ],
   },
   {
