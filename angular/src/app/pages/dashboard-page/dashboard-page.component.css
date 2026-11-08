@@ -34,7 +34,7 @@
     padding: 1rem 1.25rem;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 6px;
 }
 
 .load-error {
@@ -45,7 +45,7 @@
     text-align: center;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 6px;
 }
 
 .load-error p {
