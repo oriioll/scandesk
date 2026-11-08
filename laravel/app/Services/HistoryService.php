@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\HistoryAction;
 use App\Models\Product;
 use App\Models\StockHistory;
 use App\Models\User;
@@ -29,7 +30,7 @@ class HistoryService
             'product_id' => $product->id,
             'user_id' => $user->id,
             'field' => 'all',
-            'operation' => 'CREATE',
+            'operation' => HistoryAction::Create,
             'old_value' => null,
             'new_value' => $product->name === null ? null : (string) $product->name,
         ]);
@@ -46,7 +47,7 @@ class HistoryService
             'product_id' => $product->id,
             'user_id' => $user->id,
             'field' => 'all',
-            'operation' => 'DELETE',
+            'operation' => HistoryAction::Delete,
             'old_value' => $product->name === null ? null : (string) $product->name,
             'new_value' => null,
         ]);
@@ -67,7 +68,7 @@ class HistoryService
             'product_id' => $new_product->id,
             'user_id' => $user->id,
             'field' => $editedField,
-            'operation' => 'EDIT',
+            'operation' => HistoryAction::Edit,
             'old_value' => $oldValue === null ? null : (string) $oldValue,
             'new_value' => $newValue === null ? null : (string) $newValue,
         ]);
