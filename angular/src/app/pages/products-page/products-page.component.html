@@ -86,9 +86,23 @@
                 </select>
                 }
             </div>
-            <p class="muted">{{ SORTED_PRODUCTS().length }} {{ SORTED_PRODUCTS().length === 1 ? 'product' : 'products'
-                }}</p>
+            <div class="tools">
+                <p class="muted">{{ SORTED_PRODUCTS().length }} {{ SORTED_PRODUCTS().length === 1 ? 'product' :
+                    'products' }}</p>
+                <div class="view-toggle" role="group" aria-label="View mode">
+                    <button type="button" aria-label="Table view" title="Table view"
+                        [attr.aria-pressed]="viewMode() === 'table'" (click)="viewMode.set('table')">
+                        <span class="btn-icon i-list" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" aria-label="Grid view" title="Grid view"
+                        [attr.aria-pressed]="viewMode() === 'grid'" (click)="viewMode.set('grid')">
+                        <span class="btn-icon i-grid" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
         </article>
+        @if(viewMode() === 'table') {
+        <!--TABLE MODE-->
         <div class="table-container">
             <div class="table-header">
                 @for (col of columns; track col.key) {
@@ -111,6 +125,18 @@
             <p class="no-results muted">No products match your filters.</p>
             }
         </div>
+        } @else {
+        <!--GRID MODE-->
+        <div class="grid">
+            @for (product of SORTED_PRODUCTS(); track product.id) {
+            <app-product-card (click)="onProductClick(product)" [product]="product"
+                (deleteItem)="openDeleteProductDialog($event)" (editProduct)="openEditProductDialog($event)" />
+            } @empty {
+            <p class="no-results muted">No products match your filters.</p>
+            }
+        </div>
+        }
+
     </section>
     }
 

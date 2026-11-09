@@ -1,0 +1,26 @@
+<article>
+    <div class="top">
+        <span class="tile" aria-hidden="true">
+            <span class="catIcon" [style.--icon]="iconMask()"></span>
+        </span>
+        <div class="info">
+            <h4 [title]="product().name">{{ product().name }}</h4>
+            <span class="barcode">{{ product().barcode }}</span>
+        </div>
+        <p class="price">{{ product().price | currency }}</p>
+    </div>
+    <div class="bottom">
+        <span [class]="'xip ' + stockState()" title="Stock" [attr.aria-label]="product().stock + ' in stock'">{{
+            product().stock }}</span>
+        <div class="actions">
+            <button (click)="$event.stopPropagation(); editProduct.emit(product())" type="button"
+                class="product-action-button" aria-label="Edit product">
+                <span class="icon icon-edit" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="product-action-button danger" aria-label="Delete product"
+                (click)="$event.stopPropagation(); deleteItem.emit(product())">
+                <span class="icon icon-delete" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+</article>

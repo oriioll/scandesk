@@ -503,3 +503,66 @@ option:disabled {
     display: flex;
     gap: .5rem;
 }
+
+/* products.css (añadir) */
+.tools {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: auto;
+}
+
+/* Interruptor segmentado: 2.5rem de alto en total, como el buscador */
+.view-toggle {
+    display: inline-flex;
+    gap: 2px;
+    padding: 2px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    background-color: var(--surface);
+}
+
+.view-toggle button {
+    min-width: 0;
+    width: 2.25rem;
+    height: 2rem;
+    padding: 0;
+    background: transparent;
+    color: var(--text-muted);
+}
+
+.view-toggle button:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+    color: var(--text);
+}
+
+.view-toggle button[aria-pressed="true"],
+.view-toggle button[aria-pressed="true"]:hover:not(:disabled) {
+    background-color: var(--primary);
+    color: var(--on-primary);
+}
+
+.i-list {
+    mask-image: url("/icons/list.svg");
+}
+
+.i-grid {
+    mask-image: url("/icons/grid.svg");
+}
+
+.grid {
+    --gap: .75rem;
+    --min-card: 16rem;
+    --max-cols: 5;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat(auto-fill,
+            minmax(max(min(100%, var(--min-card)),
+                    calc((100% - (var(--max-cols) - 1) * var(--gap)) / var(--max-cols))),
+                1fr));
+}
+
+.grid .no-results {
+    grid-column: 1 / -1;
+    border-top: 0;
+}

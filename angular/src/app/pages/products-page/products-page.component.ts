@@ -16,6 +16,7 @@ import { SortKey } from '../../models/products/product.sortKeys';
 import { ImportProductsComponent } from '../../shared/import-products/import-products.component';
 import { SkeletonComponent } from '../../shared/skeleton/skeleton.component';
 import { Router } from '@angular/router';
+import { ProductCardComponent } from './product-card/product-card.component';
 
 @Component({
   selector: 'app-products-page',
@@ -26,6 +27,7 @@ import { Router } from '@angular/router';
     DeleteDialogComponent,
     ImportProductsComponent,
     SkeletonComponent,
+    ProductCardComponent,
   ],
   templateUrl: './products-page.component.html',
   styleUrl: './products-page.component.css',
@@ -50,6 +52,7 @@ export class ProductsPage implements OnInit {
   protected readonly productSkeletonRows = [0, 1, 2, 3, 4];
   public readonly formOperation = signal<'insert' | 'update'>('insert');
   public productToEdit = signal<ProductResponse | null>(null);
+  protected viewMode = signal<'table' | 'grid'>('table');
 
   constructor(
     private readonly categoryService: CategoryService,
