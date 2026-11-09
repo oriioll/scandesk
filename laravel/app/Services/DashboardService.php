@@ -2,10 +2,14 @@
 
 namespace App\Services;
 
+use ApiException;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Database\QueryException;
+use PDOException;
+use Throwable;
 
 class DashboardService
 {
@@ -14,16 +18,32 @@ class DashboardService
      */
     public function getKpis(User $user): array
     {
-        $products = $this->productCounters($user);
-        $today = $this->todaySales($user);
+        try {
+            $products = $this->productCounters($user);
+            $today = $this->todaySales($user);
 
-        return [
-            'total_products' => (int) $products->total,
-            'out_of_stock'   => (int) $products->out_of_stock,
-            'low_stock'      => (int) $products->low_stock,
-            'today_orders'   => (int) $today->orders,
-            'today_revenue'  => (string) $today->revenue,
-        ];
+            return [
+                'total_products' => (int) ($products->total ?? 0),
+                'out_of_stock'   => (int) ($products->out_of_stock ?? 0),
+                'low_stock'      => (int) ($products->low_stock ?? 0),
+                'today_orders'   => (int) ($today->orders ?? 0),
+                'today_revenue'  => (string) ($today->revenue ?? '0.00'),
+            ];
+        } catch (QueryException | PDOException $e) {
+            throw new ApiException(
+                message: 'A database error occurred while calculating KPIs.',
+                errorCode: 'DATABASE_ERROR',
+                status: 500,
+                previous: $e
+            );
+        } catch (Throwable $e) {
+            throw new ApiException(
+                message: 'An unexpected error occurred while processing KPI data.',
+                errorCode: 'INTERNAL_SERVER_ERROR',
+                status: 500,
+                previous: $e
+            );
+        }
     }
 
     /**

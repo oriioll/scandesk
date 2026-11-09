@@ -20,9 +20,6 @@ class UserController extends Controller
     public function login(LoginUserRequest $request)
     {
         $userToken = $this->userService->loginUser($request->validated());
-        if (!$userToken) {
-            return response()->json(['error' => true, 'message' => "Couldn't login the user error credentials"], 401);
-        }
         return AuthTokenResource::make([
             'message' => 'User logged in successfully',
             'access_token' => $userToken,

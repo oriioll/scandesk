@@ -2,10 +2,14 @@
 
 namespace App\Services;
 
+use ApiException;
 use App\HistoryAction;
 use App\Models\Product;
 use App\Models\StockHistory;
 use App\Models\User;
+use Illuminate\Database\QueryException;
+use PDOException;
+use Throwable;
 
 class HistoryService
 {
@@ -15,10 +19,26 @@ class HistoryService
      */
     public function getAll(User $user)
     {
-        return $user->stockHistories()
-            ->with('product:id,name')
-            ->latest()
-            ->get();
+        try {
+            return $user->stockHistories()
+                ->with('product:id,name')
+                ->latest()
+                ->get();
+        } catch (QueryException | PDOException $e) {
+            throw new ApiException(
+                message: 'A database error occurred while fetching stock history.',
+                errorCode: 'DATABASE_ERROR',
+                status: 500,
+                previous: $e
+            );
+        } catch (Throwable $e) {
+            throw new ApiException(
+                message: 'An unexpected error occurred while processing stock history.',
+                errorCode: 'INTERNAL_SERVER_ERROR',
+                status: 500,
+                previous: $e
+            );
+        }
     }
 
     /**
