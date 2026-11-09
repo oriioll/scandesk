@@ -5,10 +5,10 @@ namespace App\Services;
 use App\Exceptions\ApiException;
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use PDOException;
-use Ramsey\Collection\Collection;
 use Throwable;
 
 class ProductService

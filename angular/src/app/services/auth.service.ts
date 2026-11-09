@@ -68,7 +68,7 @@ export class AuthService {
    */
   public logout(): Observable<any> {
     return this.http
-      .post(`${this.apiBaseUrl}/auth/logout`, {
+      .post(`${this.apiBaseUrl}/auth/logout`, null, {
         headers: { Authorization: `Bearer ${this.accessTokenService.getToken()}` },
       })
       .pipe(
