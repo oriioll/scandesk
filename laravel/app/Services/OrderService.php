@@ -1,5 +1,8 @@
 <?php
 
+namespace App\Services;
+
+use App\Exceptions\ApiException;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Database\QueryException;

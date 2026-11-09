@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use ApiException;
+use App\Exceptions\ApiException;
 use App\Models\Category;
 use Illuminate\Database\QueryException;
 use PDOException;

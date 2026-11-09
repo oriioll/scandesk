@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use ApiException;
+use App\Exceptions\ApiException;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

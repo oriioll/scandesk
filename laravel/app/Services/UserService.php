@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use ApiException;
+use App\Exceptions\ApiException;
 use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
