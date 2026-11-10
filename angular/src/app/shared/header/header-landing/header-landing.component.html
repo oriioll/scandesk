@@ -1,1 +1,40 @@
-<p>header-landing works!</p>
+<header class="header" [class.scrolled]="scrolled()" [class.open]="menuOpen()">
+    <div class="bar container">
+        <a routerLink="/info" class="logo" aria-label="ScanDesk home" (click)="menuOpen.set(false)">
+            <app-header-logo />
+        </a>
+
+        <nav class="nav" aria-label="Main">
+            @for (l of links; track l.id) {
+            <a [href]="'/info#' + l.id" (click)="goTo($event, l.id)">{{ l.label }}</a>
+            }
+        </nav>
+
+        <div class="actions">
+            <app-theme-toggle />
+            <a routerLink="/login" class="btn btn-secondary login">Log in</a>
+            <a routerLink="/register" class="btn btn-primary cta">Get started</a>
+            <button type="button" class="burger" aria-controls="mobile-menu" [attr.aria-expanded]="menuOpen()"
+                aria-label="Toggle menu" (click)="menuOpen.set(!menuOpen())">
+                @if (menuOpen()) { <app-icon name="close" /> } @else { <app-icon name="menu" /> }
+            </button>
+        </div>
+    </div>
+
+    <div class="panel" id="mobile-menu">
+        <div class="panel-inner">
+            <div class="container panel-content">
+                <nav aria-label="Mobile">
+                    @for (l of links; track l.id) {
+                    <a [href]="'/info#' + l.id" (click)="goTo($event, l.id)">{{ l.label }}</a>
+                    }
+                </nav>
+                <div class="panel-cta">
+                    <a routerLink="/login" class="btn btn-secondary btn-lg" (click)="menuOpen.set(false)">Log in</a>
+                    <a routerLink="/register" class="btn btn-primary btn-lg" (click)="menuOpen.set(false)">Get
+                        started</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

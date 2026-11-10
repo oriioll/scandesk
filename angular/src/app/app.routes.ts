@@ -13,6 +13,7 @@ import { HistoryProductsPage } from './pages/history-products-page/history-produ
 import { HistoryPage } from './pages/history-page/history-page.component';
 import { authGuard } from './core/guard/auth.guard';
 import { guestGuard } from './core/guard/guest.guard';
+import { LandingComponent } from './pages/landing-page/landing-page.component';
 
 const TODO: any = null;
 export const routes: Routes = [
@@ -47,6 +48,11 @@ export const routes: Routes = [
     ],
     canActivate: [guestGuard], //Only for not logged users
   },
+  {
+    path: 'info',
+    component: LandingComponent,
+    data: { header: 'landing' satisfies HeaderVariant },
+  }, //Info - Landing page
   { path: 'pair', component: PairPage, data: { header: 'none' satisfies HeaderVariant } }, // phone sync: /pair#<token>
   { path: '**', component: NotFoundPage }, // 404
 ];

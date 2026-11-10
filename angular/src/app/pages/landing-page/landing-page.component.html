@@ -1,1 +1,203 @@
-<p>landing-page works!</p>
+<main>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container hero-grid">
+            <div class="hero-copy">
+                <h1>Scan with your phone. <span class="gradient-text">Manage from your desk.</span></h1>
+                <p class="lead">
+                    ScanDesk pairs your phone with your computer in seconds. Scan products to update stock
+                    or ring up a sale, with no scanner hardware and no setup headaches.
+                </p>
+                <div class="cta-row">
+                    <a routerLink="/register" class="btn btn-primary btn-lg">
+                        Get started free <app-icon name="arrow" [size]="18" />
+                    </a>
+                    <a href="#how-it-works" class="btn btn-secondary btn-lg" (click)="goTo($event, 'how-it-works')">
+                        See how it works
+                    </a>
+                </div>
+                <ul class="checks">
+                    @for (c of checks; track c) {
+                    <li><app-icon name="check" [size]="16" />{{ c }}</li>
+                    }
+                </ul>
+            </div>
+
+            <div class="stage">
+                <div class="browser">
+                    <div class="browser-bar"><i></i><i></i><i></i><span>scandesk / scan</span></div>
+                    <div class="shot" data-label="hero-desktop.png">
+                        <img [src]="img + '/hero-desktop.png'" width="2000" height="900"
+                            alt="ScanDesk scan screen on desktop" decoding="async" fetchpriority="high"
+                            (error)="onImgError($event)" />
+                    </div>
+                </div>
+                <div class="phone" aria-hidden="true">
+                    <div class="shot" data-label="hero-phone.png">
+                        <img [src]="img + '/hero-phone.png'" width="540" height="1140" alt="" decoding="async"
+                            (error)="onImgError($event)" />
+                        <span class="scanline"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how-it-works">
+        <div class="container">
+            <div class="section-head reveal">
+                <span class="kicker">How it works</span>
+                <h2>From QR to scanned in three steps</h2>
+                <p>No installs, no cables, no learning curve.</p>
+            </div>
+            <ol class="grid steps reveal">
+                @for (s of steps; track s.title) {
+                <li class="card">
+                    <span class="step-num">{{ $index + 1 }}</span>
+                    <h3>{{ s.title }}</h3>
+                    <p>{{ s.text }}</p>
+                </li>
+                }
+            </ol>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features">
+        <div class="container">
+            <div class="section-head reveal">
+                <span class="kicker">Features</span>
+                <h2>Everything you need to run your stock</h2>
+                <p>Simple tools that do one thing well, connected by the scanner in your pocket.</p>
+            </div>
+            <div class="grid features reveal">
+                @for (f of features; track f.title) {
+                <article class="card">
+                    <span class="icon-badge"><app-icon [name]="f.icon" /></span>
+                    <h3>{{ f.title }}</h3>
+                    <p>{{ f.text }}</p>
+                </article>
+                }
+            </div>
+
+            <div class="showcase">
+                @for (s of showcase; track s.title) {
+                <div class="row reveal" [class.reverse]="$index % 2 === 1">
+                    <div class="row-copy">
+                        <span class="kicker">{{ s.kicker }}</span>
+                        <h3>{{ s.title }}</h3>
+                        <p>{{ s.text }}</p>
+                        <ul class="bullets">
+                            @for (b of s.bullets; track b) {
+                            <li><app-icon name="check" [size]="18" /><span>{{ b }}</span></li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="browser">
+                        <div class="browser-bar"><i></i><i></i><i></i></div>
+                        <div class="shot" [attr.data-label]="s.image">
+                            <img [src]="img + '/' + s.image" width="2000" height="900" [alt]="s.alt" loading="lazy"
+                                decoding="async" (error)="onImgError($event)" />
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- SECURITY -->
+    <section id="security" class="band">
+        <div class="container">
+            <div class="section-head reveal">
+                <span class="kicker">Security</span>
+                <h2>Pairing designed to be safe by default</h2>
+                <p>Linking a phone to your desk should never put your account at risk.</p>
+            </div>
+            <div class="grid security reveal">
+                @for (s of security; track s.title) {
+                <article class="card">
+                    <span class="icon-badge"><app-icon [name]="s.icon" /></span>
+                    <h3>{{ s.title }}</h3>
+                    <p>{{ s.text }}</p>
+                </article>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+        <div class="container">
+            <div class="section-head reveal">
+                <span class="kicker">FAQ</span>
+                <h2>Frequently asked questions</h2>
+            </div>
+            <div class="faq reveal">
+                @for (f of faqs; track f.q) {
+                <details name="faq">
+                    <summary>
+                        <span>{{ f.q }}</span>
+                        <app-icon name="chevron" [size]="20" />
+                    </summary>
+                    <p class="answer">{{ f.a }}</p>
+                </details>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="final">
+        <div class="container">
+            <div class="cta-box reveal">
+                <h2>Ready to stop typing barcodes?</h2>
+                <p class="lead">Create your account and scan your first product in minutes.</p>
+                <div class="cta-row center">
+                    <a routerLink="/register" class="btn btn-primary btn-lg">
+                        Create free account <app-icon name="arrow" [size]="18" />
+                    </a>
+                    <a routerLink="/login" class="btn btn-secondary btn-lg">Log in</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container footer-grid">
+        <div class="footer-brand">
+            <a routerLink="/" class="logo" aria-label="ScanDesk home">
+                <app-header-logo />
+            </a>
+            <p>Turn your phone into a barcode scanner and manage stock and sales from your computer.</p>
+        </div>
+        <nav aria-label="Product">
+            <h4>Product</h4>
+            <a href="#how-it-works" (click)="goTo($event, 'how-it-works')">How it works</a>
+            <a href="#features" (click)="goTo($event, 'features')">Features</a>
+            <a href="#security" (click)="goTo($event, 'security')">Security</a>
+            <a href="#faq" (click)="goTo($event, 'faq')">FAQ</a>
+        </nav>
+        <nav aria-label="Account">
+            <h4>Account</h4>
+            <a routerLink="/login">Log in</a>
+            <a routerLink="/register">Sign up</a>
+        </nav>
+        <nav aria-label="Legal">
+            <h4>Legal</h4>
+            <a routerLink="/terms">Terms of service</a>
+            <a routerLink="/policy">Privacy policy</a>
+            <a routerLink="/cookies">Cookies</a>
+        </nav>
+    </div>
+    <div class="container footer-bottom">
+        <small>© {{ year }} ScanDesk. All rights reserved.</small>
+        <small>
+            Built by Oriol ·
+            <a href="https://github.com/oriioll" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </small>
+    </div>
+</footer>
