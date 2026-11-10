@@ -19,6 +19,19 @@ export class OrderService {
     private http: HttpClient,
     private accessTokenService: AccessTokenService,
   ) {}
+  /**
+   * Handles an API get all the orders
+   * @returns Observable of OrderResponse
+   */
+  public getOrders(): Observable<OrderResponse[]> {
+    return this.http
+      .get<ApiResponse<OrderResponse[]>>(`${this.apiBaseUrl}/orders`, {
+        headers: {
+          Authorization: `Bearer ${this.accessTokenService.getToken()}`,
+        },
+      })
+      .pipe(map((res) => res.data));
+  }
 
   /**
    * Handles an API Post request to create an order
