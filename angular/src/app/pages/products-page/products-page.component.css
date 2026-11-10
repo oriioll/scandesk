@@ -553,7 +553,7 @@ option:disabled {
 .grid {
     --gap: .75rem;
     --min-card: 16rem;
-    --max-cols: 5;
+    --max-cols: 4;
     display: grid;
     gap: var(--gap);
     grid-template-columns: repeat(auto-fill,

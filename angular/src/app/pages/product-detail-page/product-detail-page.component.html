@@ -63,7 +63,7 @@
                         </svg>
                     </button>
                 </div>
-                <ng-container *ngTemplateOutlet="editFormTpl"></ng-container>
+                <ng-container *ngTemplateOutlet="editFormTpl; context: { $implicit: 'drawer' }"></ng-container>
             </div>
         </mat-drawer>
 
@@ -71,30 +71,40 @@
             <div class="detailLayout">
                 <!-- LEFT: product info & barcode -->
                 <section class="productInfo">
-                    <span class="muted" routerLink="/products">← Products</span>
-                    <h1>{{product()!.name}}</h1>
+                    @let p = product()!;
+                    <a class="backLink" routerLink="/products">← Products</a>
+                    <h1>{{ p.name }}</h1>
+                    @if (p.category) {
                     <div class="categoryChip">
-                        <span>{{product()!.category?.name}}</span>
+                        <span>{{ p.category.name }}</span>
                     </div>
-                    <svg #barcodeSvg></svg>
+                    }
+                    <svg #barcodeSvg [style.display]="barcodeFailed() ? 'none' : null"></svg>
+                    @if (barcodeFailed()) {
+                    <div class="barcodeFallback" role="status">
+                        <span class="warning">Couldn't generate barcode</span>
+                        <small>{{ p.barcode }}</small>
+                    </div>
+                    }
                     <div class="kpi">
                         <span>Price</span>
-                        <h2>{{product()?.price}}€</h2>
+                        <h2>{{ p.price | currency:'EUR':'symbol':'1.2-2':'es' }}</h2>
                     </div>
                     <div class="kpi">
                         <span>Stock</span>
-                        <h2>{{product()?.stock}}<span>pcs</span></h2>
+                        <h2 [class.error]="p.stock === 0">{{ p.stock }}<span>pcs</span></h2>
+                        @if (p.stock === 0) {
+                        <span class="error">Out of stock</span>
+                        }
                     </div>
-                    <!-- Mobile-only edit button -->
-                    <button type="button" class="editToggle" (click)="editDrawer.open()">Edit
-                        product</button>
+                    <button type="button" class="editToggle" (click)="editDrawer.open()">Edit product</button>
                     <button type="button" class="delete" (click)="deleteOpen.set(true)">Delete product</button>
                 </section>
 
                 <!-- RIGHT: edit form (desktop only) -->
                 <section class="editSection">
                     <h3>Edit product</h3>
-                    <ng-container *ngTemplateOutlet="editFormTpl"></ng-container>
+                    <ng-container *ngTemplateOutlet="editFormTpl; context: { $implicit: 'desktop' }"></ng-container>
                 </section>
             </div>
         </mat-drawer-content>
@@ -181,7 +191,7 @@
 
             <!-- Actions -->
             <div class="formSection full formActions">
-                <button type="submit" [disabled]="submitting()">
+                <button type="submit" [disabled]="submitting() || editForm.pristine">
                     @if (submitting()) {
                     <svg viewBox="0 0 24 24" width="20" height="20" aria-label="Loading">
                         <path fill="currentColor" opacity=".35"

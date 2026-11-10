@@ -4,7 +4,7 @@
 
 article {
     height: 100%;
-    padding: .75rem;
+    padding: 1.5rem 1rem;
     display: flex;
     flex-direction: column;
     gap: .75rem;

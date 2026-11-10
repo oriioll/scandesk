@@ -13,7 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { toast } from 'ngx-sonner';
 import { categoryIcon } from '../../util/categories';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
-import { NgTemplateOutlet } from '@angular/common';
+import { CurrencyPipe, NgTemplateOutlet } from '@angular/common';
 import { SkeletonComponent } from '../../shared/skeleton/skeleton.component';
 import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
 
@@ -27,6 +27,7 @@ import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.
     NgTemplateOutlet,
     SkeletonComponent,
     DeleteDialogComponent,
+    CurrencyPipe,
   ],
   templateUrl: './product-detail-page.component.html',
   styleUrl: './product-detail-page.component.css',
@@ -63,6 +64,7 @@ export class ProductDetailPage implements OnInit {
   // Html items
   public barcodeSvg = viewChild<ElementRef<SVGElement>>('barcodeSvg');
   readonly editDrawer = viewChild<MatDrawer>('editDrawer');
+  protected barcodeFailed = signal(false);
 
   protected readonly categoryIcon = categoryIcon;
 
@@ -90,8 +92,8 @@ export class ProductDetailPage implements OnInit {
    * Loads the product and patches the form with current values
    * @param id the id of the product to load
    */
-  protected loadProductData(id: number): void {
-    this.isLoading.set(true);
+  protected loadProductData(id: number, silent = false): void {
+    if (!silent) this.isLoading.set(true);
     this.productService
       .getProductById(id)
       .pipe(finalize(() => this.isLoading.set(false)))
@@ -117,6 +119,7 @@ export class ProductDetailPage implements OnInit {
       price: p.price,
       stock: p.stock,
     });
+    this.editForm.markAsPristine();
   }
 
   /**
@@ -148,19 +151,17 @@ export class ProductDetailPage implements OnInit {
       return;
     }
     if (this.submitting()) return;
-
     this.formError.set('');
     this.submitting.set(true);
-
-    const payload: ProductRequest = { ...rest, category_id, price, stock };
-
+    const product: ProductRequest = { ...rest, category_id, price, stock };
     this.productService
-      .putProduct(this.id(), payload)
+      .putProduct(this.id(), product)
       .pipe(finalize(() => this.submitting.set(false)))
       .subscribe({
         next: () => {
           toast.success('Changes saved');
-          this.loadProductData(this.id());
+          this.editDrawer()?.close();
+          this.loadProductData(this.id(), true);
         },
         error: (err: HttpErrorResponse) => {
           this.handleSaveError(err);
@@ -220,21 +221,32 @@ export class ProductDetailPage implements OnInit {
   private renderBarcode(): void {
     const svg = this.barcodeSvg()?.nativeElement;
     const barcode = this.product()?.barcode;
-    if (svg && barcode) {
-      JsBarcode(svg, barcode, {
-        format: this.detectBarcodeFormat(barcode),
-        width: 3,
-        height: 100,
-        background: 'transparent',
-        lineColor: getComputedStyle(document.documentElement).getPropertyValue('--text').trim(),
-        font: 'Figtree',
-        fontSize: 14,
-        textMargin: 8,
-        marginBottom: 10,
-        marginTop: 10,
-        displayValue: true,
-      });
+    if (!svg || !barcode) return;
+
+    const preferred = this.detectBarcodeFormat(barcode);
+    const formats = preferred === 'CODE128' ? ['CODE128'] : [preferred, 'CODE128'];
+
+    for (const format of formats) {
+      try {
+        JsBarcode(svg, barcode, {
+          format,
+          width: 3,
+          height: 100,
+          background: 'transparent',
+          lineColor: getComputedStyle(document.documentElement).getPropertyValue('--text').trim(),
+          font: 'Figtree',
+          fontSize: 14,
+          textMargin: 8,
+          marginBottom: 10,
+          marginTop: 10,
+          displayValue: true,
+        });
+        this.barcodeFailed.set(false);
+        return;
+      } catch {}
     }
+    svg.replaceChildren();
+    this.barcodeFailed.set(true);
   }
 
   /**

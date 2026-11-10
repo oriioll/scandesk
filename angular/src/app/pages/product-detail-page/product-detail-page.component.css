@@ -1,6 +1,8 @@
 .page {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    padding-top: 2rem;
     gap: 1rem;
 }
 
@@ -375,4 +377,41 @@
     .drawer .editForm {
         grid-template-columns: 1fr;
     }
+}
+
+
+.backLink {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 400;
+}
+
+.backLink:hover {
+    color: var(--text);
+    text-decoration: underline;
+}
+
+.barcodeFallback {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    width: 80%;
+    padding: 1rem;
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+}
+
+.detailLayout {
+    display: flex;
+    align-items: stretch;
+    /* antes: flex-start */
+    gap: 2rem;
+    min-height: 0;
+}
+
+.editSection {
+    flex: 1;
+    border-inline-start: 1px solid var(--border);
+    /* nuevo */
+    /* resto igual */
 }
