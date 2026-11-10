@@ -30,8 +30,10 @@ class StoreProductRequest extends FormRequest
             'barcode' => [
                 'required',
                 'string',
-                'max:50',
-                Rule::unique('products', 'barcode')->where('user_id', $this->user()->id),
+                'max:64',
+                Rule::unique('products', 'barcode')
+                    ->where('user_id', $this->user()->id)
+                    ->whereNull('deleted_at'),
             ],
             'name'        => ['required', 'string', 'max:255'],
             'category_id' => ['required', 'integer', 'exists:categories,id'],
