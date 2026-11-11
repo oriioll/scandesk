@@ -6,7 +6,7 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-
+import { map } from 'rxjs';
 /**
  * Guard to check if user isn't logged, if is, go back login
  */
@@ -16,5 +16,7 @@ export const guestGuard: CanActivateFn = (
 ) => {
   const router = inject(Router);
   const authService = inject(AuthService);
-  return authService.userIsLogged() ? router.createUrlTree(['/dashboard']) : true;
+  return authService
+    .userIsLogged()
+    .pipe(map((logged) => (logged ? router.createUrlTree(['/dashboard']) : true)));
 };

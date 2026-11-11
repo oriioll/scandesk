@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { catchError, map, Observable, of, tap } from 'rxjs';
+import { catchError, finalize, map, Observable, of, tap } from 'rxjs';
 import { ApiResponse } from '../models/shared/api.response';
 import { CategoryResponse } from '../models/categories/category.response';
 import { UserResponse } from '../models/user/user.response';
@@ -72,10 +72,8 @@ export class AuthService {
         headers: { Authorization: `Bearer ${this.accessTokenService.getToken()}` },
       })
       .pipe(
-        tap(() => {
-          //Remove the user token
-          this.accessTokenService.clearToken();
-        }),
+        catchError(() => of(null)),
+        finalize(() => this.accessTokenService.clearToken()),
       );
   }
 
