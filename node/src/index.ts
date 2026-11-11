@@ -13,6 +13,7 @@ const io = new Server(server, {
     origin: [
       process.env.FRONTEND_URL as string,
       "https://speculative-glynis-trusting.ngrok-free.dev",
+      "http://tauri.localhost",
     ],
   },
 });

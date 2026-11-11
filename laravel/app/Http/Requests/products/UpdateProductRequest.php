@@ -33,7 +33,7 @@ class UpdateProductRequest extends FormRequest
                 'max:50',
                 Rule::unique('products', 'barcode')
                     ->where('user_id', $this->user()->id)
-                    ->ignore($this->route('id')),
+                    ->whereNull('deleted_at')->ignore($this->route('id')),
             ],
             'name'        => ['required', 'string', 'max:255'],
             'category_id' => ['required', 'integer', 'exists:categories,id'],
