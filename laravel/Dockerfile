@@ -53,3 +53,5 @@ ENV VIEW_COMPILED_PATH=/var/www/html/storage/framework/views
 EXPOSE 8080
 
 ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["nginx", "-g", "daemon off;"]
