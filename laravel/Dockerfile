@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.4-fpm-alpine
 
 # Instal·lar dependències del sistema i extensions de PHP per a Laravel
 RUN apk add --no-cache \
