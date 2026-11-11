@@ -15,5 +15,6 @@ php artisan view:clear
 php artisan cache:clear
 php artisan view:cache
 
-# Iniciar el servei principal (supervisor / nginx / php-fpm)
+php-fpm -D
+
 exec "$@"
