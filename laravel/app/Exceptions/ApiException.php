@@ -6,8 +6,24 @@ use Illuminate\Http\JsonResponse;
 use RuntimeException;
 use Throwable;
 
+/**
+ * Represent an API error with a response status and error code.
+ *
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 class ApiException extends RuntimeException
 {
+    /**
+     * Create an API exception with an optional previous exception.
+     *
+     * @param string $message Error message for the response.
+     * @param string $errorCode Stable identifier for the API error.
+     * @param int $status HTTP status code for the response.
+     * @param Throwable|null $previous Previous exception in the chain.
+     * @author Oriol Plazas
+     * @since 1.0.0
+     */
     public function __construct(
         string $message,
         public readonly string $errorCode,
@@ -19,7 +35,9 @@ class ApiException extends RuntimeException
 
     /**
      * Responds with the exception data
-     * @return JsonResponse
+     * @return JsonResponse JSON response containing the error message and code.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function render(): JsonResponse
     {

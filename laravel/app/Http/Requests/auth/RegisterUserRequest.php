@@ -5,10 +5,20 @@ namespace App\Http\Requests\auth;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Validate the name, email, and password required to register an account.
+ *
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 class RegisterUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
+     *
+     * @return bool Whether the request is authorized.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function authorize(): bool
     {
@@ -19,7 +29,9 @@ class RegisterUserRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string> Rules for account registration fields.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function rules(): array
     {

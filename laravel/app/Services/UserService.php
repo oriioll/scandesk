@@ -9,9 +9,22 @@ use Illuminate\Support\Facades\Hash;
 use PDOException;
 use Throwable;
 
+/**
+ * Authenticate users and create accounts.
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 class UserService
 {
     //Logs in a user by checking credentials an generating a token
+    /**
+     * Authenticate a user and issue an access token.
+     * @param array{email: string, password: string} $user Validated login credentials.
+     * @return string|null Plain-text access token.
+     * @throws ApiException when credentials are invalid or authentication fails.
+     * @author Oriol Plazas
+     * @since 1.0.0
+     */
     public function loginUser(array $user): string | null
     {
         try {
@@ -47,7 +60,14 @@ class UserService
         }
     }
 
-    //Registers in a user an generating a token
+    /**
+     * Create a user account and issue an access token.
+     * @param array{name: string, email: string, password: string} $user Validated registration details.
+     * @return string|null Plain-text access token.
+     * @throws ApiException when registration fails or the email is already in use.
+     * @author Oriol Plazas
+     * @since 1.0.0
+     */
     public function createUser(array $user): string | null
     {
         try {

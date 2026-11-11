@@ -5,12 +5,19 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Expose the product and quantity details recorded for an order item.
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 class OrderItemResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
+     * @param Request $request Request used to resolve the resource.
+     * @return array<string, mixed> Array with item id, product id, quantity, unit price, and product name.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function toArray(Request $request): array
     {

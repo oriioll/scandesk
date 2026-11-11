@@ -11,11 +11,20 @@ use Illuminate\Database\QueryException;
 use PDOException;
 use Throwable;
 
+/**
+ * Record and retrieve product stock history.
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 class HistoryService
 {
     /**
      * Get all the history changes by the user
-     * @param User $user
+     * @param User $user Owner whose history is requested.
+     * @return \Illuminate\Database\Eloquent\Collection<int, StockHistory> History entries with product summaries loaded.
+     * @throws ApiException when history cannot be retrieved.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function getAll(User $user)
     {
@@ -43,9 +52,13 @@ class HistoryService
 
     /**
      * Handles the history of a product creation
-     * @param User $user
-     * @param Product $product
-     * @return StockHistory
+     *
+     * @param User $user Owner of the new product.
+     * @param Product $product Created product.
+     * @return StockHistory Recorded creation entry.
+     * @throws \Illuminate\Database\QueryException when the history entry cannot be stored.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function productCreation(User $user, Product $product): StockHistory
     {
@@ -60,9 +73,13 @@ class HistoryService
     }
     /**
      * Handles the history of a product delete
-     * @param User $user
-     * @param Product $product
-     * @return StockHistory
+     *
+     * @param User $user Owner of the removed product.
+     * @param Product $product Removed product.
+     * @return StockHistory Recorded removal entry.
+     * @throws \Illuminate\Database\QueryException when the history entry cannot be stored.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function productRemoval(User $user, Product $product): StockHistory
     {
@@ -77,10 +94,15 @@ class HistoryService
     }
     /**
      * Handles the history of a product edition
-     * @param User $user
-     * @param Product $old_product
-     * @param Product $new_product
-     * @return StockHistory
+     *
+     * @param User $user Owner of the product.
+     * @param Product $old_product Product state before the update.
+     * @param Product $new_product Product state after the update.
+     * @param string $editedField Name of the changed field.
+     * @return StockHistory Recorded edit entry.
+     * @throws \Illuminate\Database\QueryException when the history entry cannot be stored.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function productEdition(User $user, Product $old_product, Product $new_product, string $editedField): StockHistory
     {

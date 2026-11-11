@@ -11,12 +11,27 @@ use Illuminate\Database\QueryException;
 use PDOException;
 use Throwable;
 
+/**
+ * Manage products belonging to users.
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 class ProductService
 {
+    /**
+     * Create the service with its history recorder.
+     * @param HistoryService $historyService Product change-history operations.
+     * @author Oriol Plazas
+     * @since 1.0.0
+     */
     public function __construct(private HistoryService $historyService) {}
     /**
      * Get all products created by the user
-     * @param User $user
+     * @param User $user Owner whose products are requested.
+     * @return \Illuminate\Database\Eloquent\Collection<int, Product> Products with their categories loaded.
+     * @throws ApiException when products cannot be retrieved.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function getAll(User $user): Collection
     {
@@ -41,9 +56,12 @@ class ProductService
 
     /**
      * Get the product with a barcode if created by the user
-     * @param User $user
-     * @param string $barcode The barcode to search the product
-     * @return Product
+     * @param User $user Owner whose product is requested.
+     * @param string $barcode Barcode to search for.
+     * @return Product Matching product with its category loaded.
+     * @throws ApiException when the product is missing or cannot be retrieved.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function getByBarcode(User $user, string $barcode): Product
     {
@@ -75,9 +93,12 @@ class ProductService
 
     /**
      * Get the product with a id if created by the user
-     * @param User $user
-     * @param string $id The id to search the product
-     * @return Product
+     * @param User $user Owner whose product is requested.
+     * @param string $id Product identifier.
+     * @return Product Matching product with its category loaded.
+     * @throws ApiException when the product is missing or cannot be retrieved.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function getById(User $user, string $id): Product
     {
@@ -109,9 +130,12 @@ class ProductService
 
     /**
      * Inserts a user into the db, for the logged user
-     * @param User $user
-     * @param array $products Array of products gotten from request
-     * @return Product Inserted
+     * @param User $user Owner of the new product.
+     * @param array $products Validated product attributes.
+     * @return Product Created product with its category loaded.
+     * @throws ApiException when product creation or history recording fails.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function postProduct(User $user, array $products): Product
     {
@@ -138,10 +162,13 @@ class ProductService
 
     /**
      * Updates a product if created by the user
-     * @param User $user
-     * @param string $id The id of the product to update
-     * @param array $data Validated data gotten from request
-     * @return Product Updated
+     * @param User $user Owner of the product.
+     * @param string $id Product identifier.
+     * @param array $data Validated attributes to apply.
+     * @return Product Updated product with its category loaded.
+     * @throws ApiException when the product is missing or the update fails.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function updateProduct(User $user, string $id, array $data): Product
     {
@@ -181,9 +208,12 @@ class ProductService
     }
     /**
      * Deletes a product if created by the user
-     * @param User $user
-     * @param string $id The id of the product to update
-     * @return bool
+     * @param User $user Owner of the product.
+     * @param string $id Product identifier.
+     * @return bool Whether the product was deleted.
+     * @throws ApiException when the product is missing or deletion fails.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function deleteProduct(User $user, string $id): bool
     {

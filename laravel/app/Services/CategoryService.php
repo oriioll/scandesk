@@ -8,10 +8,21 @@ use Illuminate\Database\QueryException;
 use PDOException;
 use Throwable;
 
+/**
+ * Retrieve the available product categories.
+ *
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 class CategoryService
 {
     /**
      * Get all the categories
+     *
+     * @return \Illuminate\Database\Eloquent\Collection<int, Category> Available categories.
+     * @throws ApiException when categories cannot be retrieved.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function getAll()
     {

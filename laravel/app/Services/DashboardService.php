@@ -11,10 +11,22 @@ use Illuminate\Database\QueryException;
 use PDOException;
 use Throwable;
 
+/**
+ * Calculate product and sales indicators for the dashboard.
+ *
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 class DashboardService
 {
     /**
      * Aggregated KPIs for the user's dashboard.
+     *
+     * @param User $user Owner whose dashboard data is requested.
+     * @return array{total_products: int, out_of_stock: int, low_stock: int, today_orders: int, today_revenue: string} Dashboard indicator values.
+     * @throws ApiException when KPI data cannot be calculated.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function getKpis(User $user): array
     {
@@ -48,6 +60,12 @@ class DashboardService
 
     /**
      * Returns all the count stats of the user
+     *
+     * @param User $user Owner whose product counts are requested.
+     * @return object Aggregate row containing total, out-of-stock, and low-stock counts.
+     * @throws QueryException when the product counts cannot be queried.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     private function productCounters(User $user): object
     {
@@ -60,6 +78,12 @@ class DashboardService
 
     /**
      * Returns the today user's sales
+     *
+     * @param User $user Owner whose sales are requested.
+     * @return object Aggregate row containing today's order count and revenue.
+     * @throws QueryException when today's sales cannot be queried.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     private function todaySales(User $user): object
     {

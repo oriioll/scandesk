@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Configure application-specific settings and framework defaults.
+ *
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 return [
     /**
      * TEST ENV VARIABLE: TO SKIP LOGIN AS A DEV

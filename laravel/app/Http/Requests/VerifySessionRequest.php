@@ -7,12 +7,20 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 /**
+ * Validate the pairing-session verification token.
  * Validate that a product has a name, existing category id, price, stock and the barcode doesn't exists already for that user
+ *
+ * @author Oriol Plazas
+ * @since 1.0.0
  */
 class VerifySessionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
+     *
+     * @return bool Whether the request is authorized.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function authorize(): bool
     {
@@ -22,7 +30,9 @@ class VerifySessionRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string> Rules requiring a string token hash.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function rules(): array
     {

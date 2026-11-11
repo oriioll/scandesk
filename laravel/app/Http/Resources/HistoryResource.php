@@ -5,12 +5,19 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Expose a stock-history change and its loaded product summary.
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 class HistoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
+     * @param Request $request Request used to resolve the resource.
+     * @return array<string, mixed> Array with id, optionally loaded product {id, name}, user_id, field, old_value, new_value, operation, and created_at.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function toArray(Request $request): array
     {

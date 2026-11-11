@@ -8,11 +8,18 @@ use Illuminate\Validation\Rule;
 
 /**
  * Validate that a product has a name, existing category id, price, stock and the barcode doesn't exists already for that user
+ *
+ * @author Oriol Plazas
+ * @since 1.0.0
  */
 class StoreProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
+     *
+     * @return bool Whether the request is authorized.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function authorize(): bool
     {
@@ -22,7 +29,9 @@ class StoreProductRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string> Rules for required product fields and a unique user barcode.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function rules(): array
     {

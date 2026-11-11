@@ -10,11 +10,20 @@ use Illuminate\Database\QueryException;
 use PDOException;
 use Throwable;
 
+/**
+ * Create and verify device pairing sessions.
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 class PairingSessionService
 {
     /**
      * Creates a session in the server for the logged user
-     * @param User $user Logged User
+     * @param User $user Owner of the new pairing session.
+     * @return PairingSession Created pairing session.
+     * @throws ApiException when session creation fails.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function createSession(User $user): PairingSession
     {
@@ -43,8 +52,11 @@ class PairingSessionService
     }
     /**
      * Verifies if a pairing session exists
-     * @param string $token token of the session to verify
-     * @return PairingSession if exists or null
+     * @param string $token Token hash to verify.
+     * @return PairingSession|null Matching session, or null when none exists.
+     * @throws ApiException when session verification fails.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function verifySession(string $token): ?PairingSession
     {

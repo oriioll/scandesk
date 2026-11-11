@@ -9,13 +9,23 @@ use Illuminate\Database\QueryException;
 use PDOException;
 use Throwable;
 
+/**
+ * Create orders for users.
+ *
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 class OrderService
 {
     /**
      * Inserts an order into the db, for the logged user
-     * @param User $user
-     * @param array $orders Array of orders gotten from request
-     * @return Order Inserted
+     *
+     * @param User $user Owner of the new order.
+     * @param array $orders Validated order data and items.
+     * @return Order Created order.
+     * @throws ApiException when order creation fails.
+     * @author Oriol Plazas
+     * @since 1.0.0
      */
     public function postOrder(User $user, array $orders): Order
     {
