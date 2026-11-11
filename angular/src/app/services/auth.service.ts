@@ -9,20 +9,38 @@ import { UserRequest } from '../models/user/user.request';
 import { TokenResponse } from '../models/user/token.response';
 import { AccessTokenService } from './access_token.service';
 
+/**
+ * Manage account authentication and access tokens through the API.
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly apiBaseUrl = environment.apiBaseUrl;
-
+  // --- Injected deps ---
+  /**
+   * Create the service with its API and token dependencies.
+   * @param http - HTTP client for API requests
+   * @param accessTokenService - Current access token provider
+   * @author Oriol Plazas
+   * @since 1.0.0
+   */
   constructor(
     private http: HttpClient,
     private accessTokenService: AccessTokenService,
   ) {}
 
+  // --- State ---
+  private readonly apiBaseUrl = environment.apiBaseUrl;
+
+  // --- Public API ---
   /**
    * Handles an API request to post a new user
+   * @param user - Account details to register
    * @returns Observable<TokenResponse> With the info of the token
+   * @author Oriol Plazas
+   * @since 1.0.0
    */
   public createUser(user: UserRequest): Observable<TokenResponse> {
     return this.http
@@ -38,7 +56,10 @@ export class AuthService {
 
   /**
    * Handles an API request to log in a user
+   * @param user - Credentials for the account
    * @returns Observable<TokenResponse> With the info of the token
+   * @author Oriol Plazas
+   * @since 1.0.0
    */
   public loginUser(user: UserRequest): Observable<TokenResponse> {
     return this.http.post<ApiResponse<TokenResponse>>(`${this.apiBaseUrl}/auth/login`, user).pipe(
@@ -53,6 +74,8 @@ export class AuthService {
   /**
    * Handles an API request to get the currently logged user
    * @returns Observable<UserResponse[]> With the info of the logged user
+   * @author Oriol Plazas
+   * @since 1.0.0
    */
   public whoami(): Observable<UserResponse> {
     return this.http
@@ -65,6 +88,8 @@ export class AuthService {
   /**
    * Handles an API request to log out the user
    * @returns Observable<> With no content
+   * @author Oriol Plazas
+   * @since 1.0.0
    */
   public logout(): Observable<any> {
     return this.http
@@ -80,6 +105,8 @@ export class AuthService {
   /**
    * Uses whoami function to see if a user is logged or not
    * @returns Observable<boolean> to check if is logged or not
+   * @author Oriol Plazas
+   * @since 1.0.0
    */
   public userIsLogged(): Observable<boolean> {
     return this.whoami().pipe(

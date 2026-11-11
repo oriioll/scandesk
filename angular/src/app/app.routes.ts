@@ -1,3 +1,8 @@
+/**
+ * Define application pages and their route guards and header variants.
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 import { Routes } from '@angular/router';
 import { ScanPage } from './pages/scan-page/scan-page.component';
 import { PairPage } from './pages/pair-page/pair-page.component';
@@ -17,7 +22,9 @@ import { LandingComponent } from './pages/landing-page/landing-page.component';
 
 const TODO: any = null;
 export const routes: Routes = [
+  // Redirect the root URL to the authenticated dashboard.
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+  // Authenticated pages use the app header and require authGuard.
   {
     path: '', // Groupe dashboard pages
     data: { header: 'app' satisfies HeaderVariant },
@@ -29,6 +36,7 @@ export const routes: Routes = [
       { path: 'products/:id', component: ProductDetailPage }, // Product detail page
       {
         path: 'history',
+        // History index and product entries, guarded by authGuard with the app header.
         children: [
           { path: '', pathMatch: 'full', component: HistoryPage }, // history main menu
           { path: 'products', component: HistoryProductsPage }, // stock or product changes
@@ -42,17 +50,21 @@ export const routes: Routes = [
   {
     path: '',
     data: { header: 'auth' satisfies HeaderVariant },
+    // Login and registration pages, guarded by guestGuard with the auth header.
     children: [
       { path: 'login', component: LoginPage }, //Login page
       { path: 'register', component: RegisterPage }, //Register page
     ],
     canActivate: [guestGuard], //Only for not logged users
   },
+  // Public landing page with the landing header.
   {
     path: 'info',
     component: LandingComponent,
     data: { header: 'landing' satisfies HeaderVariant },
   }, //Info - Landing page
+  // Pairing page for phone sync with no header.
   { path: 'pair', component: PairPage, data: { header: 'none' satisfies HeaderVariant } }, // phone sync: /pair#<token>
+  // Fallback page for unmatched URLs.
   { path: '**', component: NotFoundPage }, // 404
 ];

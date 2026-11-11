@@ -7,19 +7,37 @@ import { CategoryResponse } from '../models/categories/category.response';
 import { AccessTokenService } from './access_token.service';
 import { StockHistoryResponse } from '../models/history/stock-history.response';
 
+/**
+ * Retrieve stock history from the API.
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class HistoryService {
-  private readonly apiBaseUrl = environment.apiBaseUrl;
-
+  // --- Injected deps ---
+  /**
+   * Create the service with its API and token dependencies.
+   * @param http - HTTP client for API requests
+   * @param accessTokenService - Current access token provider
+   * @author Oriol Plazas
+   * @since 1.0.0
+   */
   constructor(
     private http: HttpClient,
     private accessTokenService: AccessTokenService,
   ) {}
+
+  // --- State ---
+  private readonly apiBaseUrl = environment.apiBaseUrl;
+
+  // --- Public API ---
   /**
    * Handles an API request to get history of changes
    * @returns Observable<StockHistoryResponse[]> With all the history of changes
+   * @author Oriol Plazas
+   * @since 1.0.0
    */
   public getAll(): Observable<StockHistoryResponse[]> {
     return this.http

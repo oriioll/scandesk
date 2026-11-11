@@ -2,15 +2,20 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { computed, effect, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { ThemeMode } from '../models/header/theme-mode';
 
-const STORAGE_KEY = 'scandesk-theme'; // misma clave que usaba el toggle
+const STORAGE_KEY = 'scandesk-theme';
 
-@Injectable({ providedIn: 'root' })
 /**
  * Single source of truth for the application theme
+ * @author Oriol Plazas
+ * @since 1.0.0
  */
+@Injectable({ providedIn: 'root' })
 export class ThemeService {
+  // --- Injected deps ---
   private readonly document = inject(DOCUMENT);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
+  // --- State ---
   private readonly systemDark = signal(false);
 
   /** User's choice: light, dark or follow the OS */
@@ -22,6 +27,12 @@ export class ThemeService {
     return mode === 'system' ? (this.systemDark() ? 'dark' : 'light') : mode;
   });
 
+  // --- Public API ---
+  /**
+   * Initialize the theme from the system preference and saved user choice.
+   * @author Oriol Plazas
+   * @since 1.0.0
+   */
   constructor() {
     if (!this.isBrowser) return;
 
@@ -46,11 +57,23 @@ export class ThemeService {
     });
   }
 
+  /**
+   * Set the user's preferred theme mode.
+   * @param mode - Theme preference to apply
+   * @returns void
+   * @author Oriol Plazas
+   * @since 1.0.0
+   */
   set(mode: ThemeMode): void {
     this.mode.set(mode);
   }
 
-  /** Flips the theme currently displayed */
+  /**
+   * Flips the theme currently displayed
+   * @returns void
+   * @author Oriol Plazas
+   * @since 1.0.0
+   */
   toggle(): void {
     this.set(this.resolved() === 'dark' ? 'light' : 'dark');
   }

@@ -9,19 +9,37 @@ import { OrderRequest } from '../models/orders/order.request';
 import { OrderResponse } from '../models/orders/order.response';
 import { AccessTokenService } from './access_token.service';
 
+/**
+ * Retrieve orders and submit purchases through the API.
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class OrderService {
-  private readonly apiBaseUrl = environment.apiBaseUrl;
-
+  // --- Injected deps ---
+  /**
+   * Create the service with its API and token dependencies.
+   * @param http - HTTP client for API requests
+   * @param accessTokenService - Current access token provider
+   * @author Oriol Plazas
+   * @since 1.0.0
+   */
   constructor(
     private http: HttpClient,
     private accessTokenService: AccessTokenService,
   ) {}
+
+  // --- State ---
+  private readonly apiBaseUrl = environment.apiBaseUrl;
+
+  // --- Public API ---
   /**
    * Handles an API get all the orders
    * @returns Observable of OrderResponse
+   * @author Oriol Plazas
+   * @since 1.0.0
    */
   public getOrders(): Observable<OrderResponse[]> {
     return this.http
@@ -38,6 +56,8 @@ export class OrderService {
    * @param items The items to
    * @param idempotencyKey idempotencyKey to avoid duplicate orders
    * @returns Observable of OrderResponse
+   * @author Oriol Plazas
+   * @since 1.0.0
    */
   public postOrder(items: OrderItemRequest[], idempotencyKey: string): Observable<OrderResponse> {
     const request: OrderRequest = { items };

@@ -6,19 +6,37 @@ import { ApiResponse } from '../models/shared/api.response';
 import { AccessTokenService } from './access_token.service';
 import { KPI } from '../models/dashboard/kpi.response';
 
+/**
+ * Retrieve dashboard KPI data from the API.
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class DashboardService {
-  private readonly apiBaseUrl = environment.apiBaseUrl;
-
+  // --- Injected deps ---
+  /**
+   * Create the service with its API and token dependencies.
+   * @param http - HTTP client for API requests
+   * @param accessTokenService - Current access token provider
+   * @author Oriol Plazas
+   * @since 1.0.0
+   */
   constructor(
     private http: HttpClient,
     private accessTokenService: AccessTokenService,
   ) {}
+
+  // --- State ---
+  private readonly apiBaseUrl = environment.apiBaseUrl;
+
+  // --- Public API ---
   /**
    * Handles an API request to get all the data for kpis
    * @returns Observable<KPI> With all the data for kpis
+   * @author Oriol Plazas
+   * @since 1.0.0
    */
   public getKPIs(): Observable<KPI> {
     return this.http

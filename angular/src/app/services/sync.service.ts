@@ -7,19 +7,37 @@ import { environment } from '../../environments/environment';
 import { VerifySessionResponse } from '../models/session/verify-session.response';
 import { AccessTokenService } from './access_token.service';
 
+/**
+ * Create pairing sessions and verify their tokens through the API.
+ * @author Oriol Plazas
+ * @since 1.0.0
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class SyncService {
-  private readonly apiBaseUrl = environment.apiBaseUrl;
-
+  // --- Injected deps ---
+  /**
+   * Create the service with its API and token dependencies.
+   * @param http - HTTP client for API requests
+   * @param accessTokenService - Current access token provider
+   * @author Oriol Plazas
+   * @since 1.0.0
+   */
   constructor(
     private http: HttpClient,
     private accessTokenService: AccessTokenService,
   ) {}
+
+  // --- State ---
+  private readonly apiBaseUrl = environment.apiBaseUrl;
+
+  // --- Public API ---
   /**
    * Creates a pairing session via api request
    * @returns Observable<SessionResponse> of the api response
+   * @author Oriol Plazas
+   * @since 1.0.0
    */
   public createSession(): Observable<SessionResponse> {
     return this.http
@@ -30,7 +48,10 @@ export class SyncService {
   }
   /**
    * Verifies if a session exists
+   * @param token - Pairing token to verify
    * @returns Observable<VerifySessionResponse> of the api response
+   * @author Oriol Plazas
+   * @since 1.0.0
    */
   public verifySession(token: string): Observable<VerifySessionResponse> {
     return this.http
