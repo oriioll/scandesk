@@ -20,13 +20,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copiar el projecte
+# Copiar el codi del projecte
 COPY . .
 
-# 1. Instal·lar dependències primer de tot
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-# 2. Assegurar l'existència física de TOTA l'estructura de storage de Laravel
+# 1. Crear l'estructura de carpetes ABANS de fer res de Laravel/Composer
 RUN mkdir -p \
     storage/app/public \
     storage/framework/cache/data \
@@ -36,16 +33,21 @@ RUN mkdir -p \
     storage/logs \
     bootstrap/cache
 
-# 3. Configuració explícita de permisos sobre el directori final
+# 2. Assignar permisos a les carpetes acabades de crear
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+# 3. Instal·lar dependències amb --no-scripts per evitar que package:discover peti sense base de dades/env
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+
+# 4. Ara sí, generar l'autoload i el package discovery amb l'estructura ja a lloc
+RUN composer dump-autoload --optimize --no-dev
 
 # Configuració de Nginx i Entrypoint
 COPY ./docker/nginx.conf /etc/nginx/nginx.conf
 COPY ./docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Definir la ruta de compilació de Blade per defecte com a variable d'entorn d'emergència
 ENV VIEW_COMPILED_PATH=/var/www/html/storage/framework/views
 
 EXPOSE 8080
