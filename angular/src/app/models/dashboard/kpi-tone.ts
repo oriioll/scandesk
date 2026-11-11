@@ -4,5 +4,8 @@
  * success - green color
  * warning - yellow-orange color
  * error - red color
+ *
+ * @author Oriol Plazas
+ * @since 1.0.0
  */
 export type KpiTone = 'default' | 'success' | 'warning' | 'error';
