@@ -21,26 +21,32 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 # Copiar el projecte
-COPY . /var/www/html
+COPY . .
 
-# Crear les carpetes si no existeixen i canviar permisos
-RUN mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache && \
-    chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# 1. Instal·lar dependències primer de tot
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Instal·lar dependències de Composer
-RUN composer install --no-dev --optimize-autoloader
-# Configuració de permisos de Laravel
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# 2. Assegurar l'existència física de TOTA l'estructura de storage de Laravel
+RUN mkdir -p \
+    storage/app/public \
+    storage/framework/cache/data \
+    storage/framework/sessions \
+    storage/framework/testing \
+    storage/framework/views \
+    storage/logs \
+    bootstrap/cache
 
-# Instal·lar dependències de Laravel sense dependències de dev
-RUN composer install --no-dev --optimize-autoloader
+# 3. Configuració explícita de permisos sobre el directori final
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Configuració de Nginx
+# Configuració de Nginx i Entrypoint
 COPY ./docker/nginx.conf /etc/nginx/nginx.conf
-
-# Script d'entrada per a Render
 COPY ./docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
+# Definir la ruta de compilació de Blade per defecte com a variable d'entorn d'emergència
+ENV VIEW_COMPILED_PATH=/var/www/html/storage/framework/views
 
 EXPOSE 8080
 
