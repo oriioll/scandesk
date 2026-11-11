@@ -23,6 +23,12 @@ WORKDIR /var/www/html
 # Copiar el projecte
 COPY . /var/www/html
 
+# Crear les carpetes si no existeixen i canviar permisos
+RUN mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache && \
+    chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Instal·lar dependències de Composer
+RUN composer install --no-dev --optimize-autoloader
 # Configuració de permisos de Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
