@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { io } from 'socket.io-client';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 /**
  * Join scan sessions and exchange barcode events over Socket.IO.
@@ -12,7 +13,7 @@ import { Observable } from 'rxjs';
 })
 export class ScanService {
   // --- State ---
-  private readonly socket = io({ autoConnect: false });
+  private readonly socket = io(environment.websocketsUrl, { autoConnect: false });
   private sessionToken?: string;
 
   // --- Public API ---

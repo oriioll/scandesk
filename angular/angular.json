@@ -29,6 +29,12 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
 
@@ -45,6 +51,12 @@
               "outputHashing": "all"
             },
             "development": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
@@ -54,8 +66,7 @@
         },
         "serve": {
           "options": {
-            "allowedHosts": ["speculative-glynis-trusting.ngrok-free.dev"],
-            "proxyConfig": "proxy.conf.json"
+            "allowedHosts": ["speculative-glynis-trusting.ngrok-free.dev"]
           },
           "builder": "@angular/build:dev-server",
           "configurations": {
@@ -66,7 +77,7 @@
               "buildTarget": "angular:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "production"
         },
         "test": {
           "builder": "@angular/build:unit-test"

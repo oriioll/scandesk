@@ -26,6 +26,7 @@ angular/.cache/
 
 angular/src/environments/*.ts
 !angular/src/environments/environment.ts
+!angular/src/environments/environment.prod.ts
 
 laravel/vendor/
 
