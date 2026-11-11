@@ -5,6 +5,7 @@ import { map, Observable } from 'rxjs';
 import { ApiResponse } from '../models/shared/api.response';
 import { AccessTokenService } from './access_token.service';
 import { KPI } from '../models/dashboard/kpi.response';
+import { DoughnutGraph } from '../models/dashboard/doughnut-graph.response';
 
 /**
  * Retrieve dashboard KPI data from the API.
@@ -41,6 +42,20 @@ export class DashboardService {
   public getKPIs(): Observable<KPI> {
     return this.http
       .get<ApiResponse<KPI>>(`${this.apiBaseUrl}/dashboard/kpis`, {
+        headers: { Authorization: `Bearer ${this.accessTokenService.getToken()}` },
+      })
+      .pipe(map((res) => res.data)); //Remove data from api response
+  }
+
+  /**
+   * Handles an API request to get all the data for kpis
+   * @returns Observable<DoughnutGraph> With all the data for DoughnutGraph
+   * @author Oriol Plazas
+   * @since 1.0.0
+   */
+  public getDoughnutGraphStats(): Observable<DoughnutGraph[]> {
+    return this.http
+      .get<ApiResponse<DoughnutGraph[]>>(`${this.apiBaseUrl}/dashboard/doughnut-graph`, {
         headers: { Authorization: `Bearer ${this.accessTokenService.getToken()}` },
       })
       .pipe(map((res) => res.data)); //Remove data from api response

@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Route;
 
 /**
  * Define API endpoints for authentication and user data.
- *
  * @author Oriol Plazas
  * @since 1.0.0
  */
@@ -27,6 +26,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('dashboard')->group(function () {
         // GET /dashboard/kpis - Gets the kpis info of the current user
         Route::get('/kpis', [DashboardController::class, 'kpis']);
+        // GET /dashboard/doughnut-graph - Gets the stats for the doughnut-graph of the current user
+        Route::get('/doughnut-graph', [DashboardController::class, 'doughnutGraph']);
     });
 
     /**

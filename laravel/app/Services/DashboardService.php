@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\ApiException;
+use App\Services\CategoryService;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
@@ -19,6 +20,15 @@ use Throwable;
  */
 class DashboardService
 {
+
+    /**
+     * Create the service with its category service.
+     * @param CategoryService $categoryService category service object.
+     * @author Oriol Plazas
+     * @since 1.0.0
+     */
+    public function __construct(private CategoryService $categoryService) {}
+
     /**
      * Aggregated KPIs for the user's dashboard.
      *
@@ -51,6 +61,44 @@ class DashboardService
         } catch (Throwable $e) {
             throw new ApiException(
                 message: 'An unexpected error occurred while processing KPI data.',
+                errorCode: 'INTERNAL_SERVER_ERROR',
+                status: 500,
+                previous: $e
+            );
+        }
+    }
+
+    /**
+     * Number of the user's products per category, for the doughnut chart.
+     * @param int $userId Owner whose products are counted.
+     * @return array<int, array{categoryId: int, categoryName: string, total_products: int}> One entry per category with the user's product count (0 if none).
+     * @throws ApiException when the categories or their product counts cannot be retrieved.
+     * @author Oriol Plazas
+     * @since 1.0.0
+     */
+    public function getCountOfProductsFromCategories(int $userId): array
+    {
+        try {
+            $categories = $this->categoryService->getAll();
+            $categories_and_total = [];
+            foreach ($categories as $cat) {
+                $categories_and_total[] = [
+                    'categoryId'     => $cat->id,
+                    'categoryName'   => $cat->name,
+                    'total_products' => $cat->products()->where('user_id', $userId)->count(),
+                ];
+            }
+            return $categories_and_total;
+        } catch (QueryException | PDOException $e) {
+            throw new ApiException(
+                message: 'A database error occurred while calculating the number of products for categories.',
+                errorCode: 'DATABASE_ERROR',
+                status: 500,
+                previous: $e
+            );
+        } catch (Throwable $e) {
+            throw new ApiException(
+                message: 'An unexpected error occurred while processing the number of products for categories.',
                 errorCode: 'INTERNAL_SERVER_ERROR',
                 status: 500,
                 previous: $e
