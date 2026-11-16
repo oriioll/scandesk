@@ -1,6 +1,7 @@
 <div class="graph">
     <h4>Number of products for category</h4>
     <div class="canvas-wrap">
+        <!-- Chart.js draws the category breakdown on this canvas. -->
         <canvas baseChart [data]="chartData()" [type]="doughnutChartType" [options]="options()"
             [plugins]="centerPlugins"></canvas>
     </div>
