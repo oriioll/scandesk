@@ -64,7 +64,7 @@ export class DoughnutChartComponent implements OnInit {
       responsive: true,
       maintainAspectRatio: false,
       // Keep enough room in the center for the total-count plugin.
-      cutout: '50%',
+      cutout: '60%',
       plugins: {
         legend: {
           position: 'bottom',
