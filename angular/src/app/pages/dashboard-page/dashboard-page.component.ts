@@ -8,11 +8,12 @@ import { AuthService } from '../../services/auth.service';
 import { SkeletonComponent } from '../../shared/skeleton/skeleton.component';
 import { KPI } from '../../models/dashboard/kpi.response';
 import { DashboardService } from '../../services/dashboard.service';
+import { DoughnutChartComponent } from './doughnut-chart/doughnut-chart.component';
 
 const EUR = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
 @Component({
   selector: 'app-dashboard-page',
-  imports: [Kpi, DashboardFeature, SkeletonComponent],
+  imports: [Kpi, DashboardFeature, SkeletonComponent, DoughnutChartComponent],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.css',
 })

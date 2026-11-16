@@ -28,6 +28,11 @@
     gap: 1rem;
 }
 
+.graphs {
+    display: flex;
+    gap: 1rem;
+}
+
 .kpi-skeleton {
     display: grid;
     gap: 0.75rem;

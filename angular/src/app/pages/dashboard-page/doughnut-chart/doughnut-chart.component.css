@@ -1,0 +1,19 @@
+.graph {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.graph {
+    display: flex;
+    flex-direction: column;
+    height: 360px;
+}
+
+.canvas-wrap {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+}
