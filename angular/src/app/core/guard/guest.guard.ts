@@ -5,8 +5,7 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { map } from 'rxjs';
+import { AccessTokenService } from '../../services/access_token.service';
 /**
  * Guard to check if user isn't logged, if is, go back login
  * Redirect authenticated users to the dashboard; otherwise allow the route.
@@ -21,8 +20,6 @@ export const guestGuard: CanActivateFn = (
   state: RouterStateSnapshot,
 ) => {
   const router = inject(Router);
-  const authService = inject(AuthService);
-  return authService
-    .userIsLogged()
-    .pipe(map((logged) => (logged ? router.createUrlTree(['/dashboard']) : true)));
+  const accessTokenService = inject(AccessTokenService);
+  return accessTokenService.getToken() ? router.createUrlTree(['/login']) : true;
 };
