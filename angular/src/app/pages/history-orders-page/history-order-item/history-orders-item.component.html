@@ -1,4 +1,6 @@
-<span class="order-id" [title]="'Order #' + order().id">#{{ order().id }}</span>
-<span class="order-total">{{ order().total_price | currency:'EUR':'symbol':'1.2-2':'es-ES' }}</span>
-<span class="different-items">{{ differentItems() }}</span>
-<span class="total-articles">{{ totalArticles() }}</span>
+<a class="order-row" [routerLink]="['/history/orders', order().id]">
+    <span class="order-id" [title]="'Order #' + order().id">#{{ order().id }}</span>
+    <span class="order-total">{{ order().total_price | currency:'EUR':'symbol':'1.2-2':'es-ES' }}</span>
+    <span class="different-items col-different-items">{{ differentItems() }}</span>
+    <span class="total-articles col-articles">{{ totalArticles() }}</span>
+</a>

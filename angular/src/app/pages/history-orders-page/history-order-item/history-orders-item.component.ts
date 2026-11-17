@@ -1,10 +1,11 @@
 import { Component, computed, input } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { OrderResponse } from '../../../models/orders/order.response';
 
 @Component({
   selector: 'app-history-order-item',
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, RouterLink],
   templateUrl: './history-orders-item.component.html',
   styleUrl: './history-orders-item.component.css',
 })
