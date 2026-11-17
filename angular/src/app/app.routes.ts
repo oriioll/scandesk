@@ -15,6 +15,7 @@ import { ProductsPage } from './pages/products-page/products-page.component';
 import { ProductDetailPage } from './pages/product-detail-page/product-detail-page.component';
 import { NotFoundPage } from './pages/not-found-page/not-found-page.component';
 import { HistoryProductsPage } from './pages/history-products-page/history-products-page.component';
+import { HistoryOrdersPage } from './pages/history-orders-page/history-orders-page.component';
 import { HistoryPage } from './pages/history-page/history-page.component';
 import { authGuard } from './core/guard/auth.guard';
 import { guestGuard } from './core/guard/guest.guard';
@@ -40,7 +41,7 @@ export const routes: Routes = [
         children: [
           { path: '', pathMatch: 'full', component: HistoryPage }, // history main menu
           { path: 'products', component: HistoryProductsPage }, // stock or product changes
-          { path: 'orders', component: NotFoundPage }, // order history not implemented
+          { path: 'orders', component: HistoryOrdersPage }, // order history
           { path: 'orders/:id', component: NotFoundPage }, // order detail not implemented
         ],
       },

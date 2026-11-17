@@ -84,7 +84,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Order creation and retrieval endpoints.
     Route::prefix('orders')->group(function () {
         // GET /orders - Get all the orders of the user
-        Route::get('/');
+        Route::get('/', [OrderController::class, 'index']);
 
         // GET /orders/:id - Get order by id (only if user owns it)
         Route::get('/{id}');

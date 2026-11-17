@@ -35,7 +35,7 @@ laravel/bootstrap/cache/
 .kimi
 laravel/.env
 laravel/.env.*
-
+laravel/.claude
 dist/
 build/
 out/

@@ -1,1 +1,91 @@
-<p>history-orders-page works!</p>
+<main class="page">
+    <!--HEADINGS-->
+    <div class="heading">
+        <h1>Order History</h1>
+        <p>Review your completed orders.</p>
+    </div>
+    @if (loadingOrders()) {
+    <section class="history" aria-label="Loading order history" aria-busy="true">
+        <div class="skeleton-filters">
+            <app-skeleton width="min(100%, 28rem)" height="2.5rem" radius="6px" />
+            <app-skeleton width="7rem" height="1rem" />
+        </div>
+        <div class="table-container">
+            <div class="table-header">
+                @for (col of columns; track col.key) {
+                <span [class]="col.cls ?? ''">{{ col.label }}</span>
+                }
+            </div>
+            @for (row of orderSkeletonRows; track row) {
+            <div class="skeleton-row">
+                <app-skeleton width="75%" height=".875rem" />
+                <app-skeleton width="82%" height="1.125rem" />
+                <app-skeleton width="60%" height="1rem" />
+                <app-skeleton width="55%" height="1rem" />
+            </div>
+            }
+        </div>
+    </section>
+    } @else if (ordersError()) {
+    <section class="load-error" role="alert">
+        <h2>Couldn't load the orders</h2>
+        <p>Check your connection and try again.</p>
+        <button type="button" class="secondary" (click)="loadOrders()">Retry</button>
+    </section>
+    }
+    <!--Empty state-->
+    @else if (orders().length === 0) {
+    <section class="empty">
+        <span class="empty-icon" aria-hidden="true"><span class="icon i-products"></span></span>
+        <h2>No orders yet</h2>
+        <p>Completed orders will appear here.</p>
+        <div class="empty-actions">
+            <button type="button" routerLink="/checkout">
+                <span class="btn-icon i-scan" aria-hidden="true"></span>
+                Take an order
+            </button>
+        </div>
+    </section>
+    }
+    @else {
+    <!--Orders render-->
+    <section class="history">
+        <article class="mainFilters">
+            <div class="search">
+                <div class="searchField">
+                    <span class="searchIcon i-search" aria-hidden="true"></span>
+                    <input class="searcher" [ngModel]="searchContent()" (ngModelChange)="searchContent.set($event)"
+                        [ngModelOptions]="{standalone: true}" type="search" placeholder="Search by order ID"
+                        aria-label="Search orders by order ID">
+                </div>
+            </div>
+            <p class="muted">{{ SORTED_ORDERS().length }} {{ SORTED_ORDERS().length === 1 ? 'order' : 'orders' }}
+            </p>
+        </article>
+        <div class="table-container">
+            <div class="table-header">
+                @for (col of columns; track col.key) {
+                <span [class]="col.cls ?? ''">
+                    @if (col.sortable) {
+                    <button type="button" class="sort" [attr.aria-label]="'Sort by ' + col.label"
+                        (click)="toggleSort(col.key)">
+                        {{ col.label }}
+                        <span class="sort-arrow" [class.active]="sortKey() === col.key" aria-hidden="true">
+                            {{ sortKey() === col.key ? (sortDir() === 'asc' ? '↑' : '↓') : '↕' }}
+                        </span>
+                    </button>
+                    } @else {
+                    {{ col.label }}
+                    }
+                </span>
+                }
+            </div>
+            @for (order of SORTED_ORDERS(); track order.id) {
+            <app-history-order-item [order]="order" />
+            } @empty {
+            <p class="no-results muted">No orders match your search.</p>
+            }
+        </div>
+    </section>
+    }
+</main>
