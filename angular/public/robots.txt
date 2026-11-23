@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /scan
+Disallow: /checkout
+Disallow: /products
+Disallow: /history
+Disallow: /pair
+Disallow: /login
+Disallow: /register
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+Sitemap: https://app-scandesk.vercel.app/sitemap.xml

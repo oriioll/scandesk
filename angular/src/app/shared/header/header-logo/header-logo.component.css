@@ -1,8 +1,7 @@
-h4 {
+.brand {
     display: flex;
     align-items: center;
     gap: .5rem;
-    cursor: pointer;
 }
 
 .logo-icon {

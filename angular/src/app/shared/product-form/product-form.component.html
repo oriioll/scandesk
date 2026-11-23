@@ -20,15 +20,17 @@
     <div class="formSection full">
         <label for="barcode">Barcode *</label>
         <input id="barcode" name="barcode" type="text" formControlName="barcode"
-            [readonly]="readonlyBarcode()" placeholder="Enter barcode" [attr.aria-invalid]="!!fieldError('barcode')" />
-        @if (fieldError('barcode'); as msg) { <span class="error fieldError">{{ msg }}</span> }
+            [readonly]="readonlyBarcode()" placeholder="Enter barcode" [attr.aria-invalid]="!!fieldError('barcode')"
+            [attr.aria-describedby]="fieldError('barcode') ? 'barcode-error' : null" />
+        @if (fieldError('barcode'); as msg) { <span id="barcode-error" class="error fieldError">{{ msg }}</span> }
     </div>
     <!--PRODUCT NAME-->
     <div class="formSection full">
         <label for="name">Name *</label>
         <input id="name" name="name" type="text" formControlName="name" placeholder="CocaCola 300ml"
-            [attr.aria-invalid]="!!fieldError('name')" />
-        @if (fieldError('name'); as msg) { <span class="error fieldError">{{ msg }}</span> }
+            [attr.aria-invalid]="!!fieldError('name')"
+            [attr.aria-describedby]="fieldError('name') ? 'name-error' : null" />
+        @if (fieldError('name'); as msg) { <span id="name-error" class="error fieldError">{{ msg }}</span> }
     </div>
     <!--CATEGORIES DROPDOWN-->
     <div class="formSection full">
@@ -37,7 +39,8 @@
         <app-skeleton width="100%" height="2.5rem" radius="6px" />
         } @else {
         <select id="category_id" name="category_id" formControlName="category_id"
-            [attr.aria-invalid]="!!fieldError('category_id')">
+            [attr.aria-invalid]="!!fieldError('category_id')"
+            [attr.aria-describedby]="fieldError('category_id') ? 'category-error' : null">
             <option class="placeholder" [ngValue]="null" disabled>Select a category</option>
             @for (c of categories(); track c.id) {
             <option [ngValue]="c.id">
@@ -48,21 +51,23 @@
             }
         </select>
         }
-        @if (fieldError('category_id'); as msg) { <span class="error fieldError">{{ msg }}</span> }
+        @if (fieldError('category_id'); as msg) { <span id="category-error" class="error fieldError">{{ msg }}</span> }
     </div>
     <!--PRODUCT PRICE-->
     <div class="formSection">
         <label for="price">Price (€) *</label>
         <input id="price" name="price" type="number" inputmode="decimal" step="0.01" min="0" formControlName="price"
-            placeholder="0,89" [attr.aria-invalid]="!!fieldError('price')" />
-        @if (fieldError('price'); as msg) { <span class="error fieldError">{{ msg }}</span> }
+            placeholder="0,89" [attr.aria-invalid]="!!fieldError('price')"
+            [attr.aria-describedby]="fieldError('price') ? 'price-error' : null" />
+        @if (fieldError('price'); as msg) { <span id="price-error" class="error fieldError">{{ msg }}</span> }
     </div>
     <!--STOCK-->
     <div class="formSection">
         <label for="stock">Stock *</label>
         <input id="stock" name="stock" type="number" formControlName="stock" placeholder="6"
-            [attr.aria-invalid]="!!fieldError('stock')" />
-        @if (fieldError('stock'); as msg) { <span class="error fieldError">{{ msg }}</span> }
+            [attr.aria-invalid]="!!fieldError('stock')"
+            [attr.aria-describedby]="fieldError('stock') ? 'stock-error' : null" />
+        @if (fieldError('stock'); as msg) { <span id="stock-error" class="error fieldError">{{ msg }}</span> }
     </div>
     }
     <!--ERROR MESSAGE -->

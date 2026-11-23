@@ -20,6 +20,7 @@ import { HistoryPage } from './pages/history-page/history-page.component';
 import { authGuard } from './core/guard/auth.guard';
 import { guestGuard } from './core/guard/guest.guard';
 import { LandingComponent } from './pages/landing-page/landing-page.component';
+import { LegalPageComponent } from './pages/legal-page/legal-page.component';
 
 const TODO: any = null;
 export const routes: Routes = [
@@ -30,19 +31,19 @@ export const routes: Routes = [
     path: '', // Groupe dashboard pages
     data: { header: 'app' satisfies HeaderVariant },
     children: [
-      { path: 'dashboard', component: DashboardPage }, // Dashboard page
-      { path: 'scan', component: ScanPage }, //Scan -> Get items and post them
-      { path: 'checkout', component: CheckoutPage }, //checkout -> Get items and use checkout modes
-      { path: 'products', component: ProductsPage }, // Product list page
-      { path: 'products/:id', component: ProductDetailPage }, // Product detail page
+      { path: 'dashboard', component: DashboardPage, title: 'Dashboard | ScanDesk' },
+      { path: 'scan', component: ScanPage, title: 'Scan products | ScanDesk' },
+      { path: 'checkout', component: CheckoutPage, title: 'Checkout | ScanDesk' },
+      { path: 'products', component: ProductsPage, title: 'Products | ScanDesk' },
+      { path: 'products/:id', component: ProductDetailPage, title: 'Product details | ScanDesk' },
       {
         path: 'history',
         // History index and product entries, guarded by authGuard with the app header.
         children: [
-          { path: '', pathMatch: 'full', component: HistoryPage }, // history main menu
-          { path: 'products', component: HistoryProductsPage }, // stock or product changes
-          { path: 'orders', component: HistoryOrdersPage }, // order history
-          { path: 'orders/:id', component: NotFoundPage }, // order detail not implemented
+          { path: '', pathMatch: 'full', component: HistoryPage, title: 'History | ScanDesk' },
+          { path: 'products', component: HistoryProductsPage, title: 'Product history | ScanDesk' },
+          { path: 'orders', component: HistoryOrdersPage, title: 'Order history | ScanDesk' },
+          { path: 'orders/:id', component: NotFoundPage, title: 'Page not found | ScanDesk' },
         ],
       },
     ],
@@ -53,8 +54,8 @@ export const routes: Routes = [
     data: { header: 'auth' satisfies HeaderVariant },
     // Login and registration pages, guarded by guestGuard with the auth header.
     children: [
-      { path: 'login', component: LoginPage }, //Login page
-      { path: 'register', component: RegisterPage }, //Register page
+      { path: 'login', component: LoginPage, title: 'Log in | ScanDesk' },
+      { path: 'register', component: RegisterPage, title: 'Create account | ScanDesk' },
     ],
     canActivate: [guestGuard], //Only for not logged users
   },
@@ -62,10 +63,34 @@ export const routes: Routes = [
   {
     path: 'info',
     component: LandingComponent,
+    title: 'ScanDesk | Barcode inventory and checkout',
     data: { header: 'landing' satisfies HeaderVariant },
   }, //Info - Landing page
+  {
+    path: 'terms',
+    component: LegalPageComponent,
+    title: 'Terms of service | ScanDesk',
+    data: { header: 'auth' satisfies HeaderVariant },
+  },
+  {
+    path: 'policy',
+    component: LegalPageComponent,
+    title: 'Privacy policy | ScanDesk',
+    data: { header: 'auth' satisfies HeaderVariant },
+  },
+  {
+    path: 'cookies',
+    component: LegalPageComponent,
+    title: 'Cookie policy | ScanDesk',
+    data: { header: 'auth' satisfies HeaderVariant },
+  },
   // Pairing page for phone sync with no header.
-  { path: 'pair', component: PairPage, data: { header: 'none' satisfies HeaderVariant } }, // phone sync: /pair#<token>
+  {
+    path: 'pair',
+    component: PairPage,
+    title: 'Connect your phone | ScanDesk',
+    data: { header: 'none' satisfies HeaderVariant },
+  }, // phone sync: /pair#<token>
   // Fallback page for unmatched URLs.
-  { path: '**', component: NotFoundPage }, // 404
+  { path: '**', component: NotFoundPage, title: 'Page not found | ScanDesk' }, // 404
 ];

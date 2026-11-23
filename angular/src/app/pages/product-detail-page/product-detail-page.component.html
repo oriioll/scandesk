@@ -122,9 +122,10 @@
             <div class="formSection full">
                 <label for="edit-barcode">Barcode *</label>
                 <input id="edit-barcode" type="text" formControlName="barcode" placeholder="Enter barcode"
-                    [attr.aria-invalid]="!!fieldError('barcode')" />
+                    [attr.aria-invalid]="!!fieldError('barcode')"
+                    [attr.aria-describedby]="fieldError('barcode') ? 'edit-barcode-error' : null" />
                 @if (fieldError('barcode'); as msg) {
-                <span class="fieldError">{{ msg }}</span>
+                <span id="edit-barcode-error" class="fieldError">{{ msg }}</span>
                 }
             </div>
 
@@ -132,9 +133,10 @@
             <div class="formSection full">
                 <label for="edit-name">Name *</label>
                 <input id="edit-name" type="text" formControlName="name" placeholder="CocaCola 300ml"
-                    [attr.aria-invalid]="!!fieldError('name')" />
+                    [attr.aria-invalid]="!!fieldError('name')"
+                    [attr.aria-describedby]="fieldError('name') ? 'edit-name-error' : null" />
                 @if (fieldError('name'); as msg) {
-                <span class="fieldError">{{ msg }}</span>
+                <span id="edit-name-error" class="fieldError">{{ msg }}</span>
                 }
             </div>
 
@@ -147,7 +149,8 @@
                 </select>
                 } @else {
                 <select id="edit-category" formControlName="category_id"
-                    [attr.aria-invalid]="!!fieldError('category_id')">
+                    [attr.aria-invalid]="!!fieldError('category_id')"
+                    [attr.aria-describedby]="fieldError('category_id') ? 'edit-category-error' : null">
                     <option class="placeholder" [ngValue]="null" disabled>Select a category</option>
                     @for (c of categories(); track c.id) {
                     <option [ngValue]="c.id">
@@ -159,7 +162,7 @@
                 </select>
                 }
                 @if (fieldError('category_id'); as msg) {
-                <span class="fieldError">{{ msg }}</span>
+                <span id="edit-category-error" class="fieldError">{{ msg }}</span>
                 }
             </div>
 
@@ -167,25 +170,27 @@
             <div class="formSection">
                 <label for="edit-price">Price (€) *</label>
                 <input id="edit-price" type="number" inputmode="decimal" step="0.01" min="0" formControlName="price"
-                    placeholder="0.89" [attr.aria-invalid]="!!fieldError('price')" />
+                    placeholder="0.89" [attr.aria-invalid]="!!fieldError('price')"
+                    [attr.aria-describedby]="fieldError('price') ? 'edit-price-error' : null" />
                 @if (fieldError('price'); as msg) {
-                <span class="fieldError">{{ msg }}</span>
+                <span id="edit-price-error" class="fieldError">{{ msg }}</span>
                 }
             </div>
 
             <div class="formSection">
                 <label for="edit-stock">Stock *</label>
                 <input id="edit-stock" type="number" min="0" formControlName="stock" placeholder="6"
-                    [attr.aria-invalid]="!!fieldError('stock')" />
+                    [attr.aria-invalid]="!!fieldError('stock')"
+                    [attr.aria-describedby]="fieldError('stock') ? 'edit-stock-error' : null" />
                 @if (fieldError('stock'); as msg) {
-                <span class="fieldError">{{ msg }}</span>
+                <span id="edit-stock-error" class="fieldError">{{ msg }}</span>
                 }
             </div>
 
             <!-- Form-level error -->
             @if (formError()) {
             <div class="formSection full">
-                <span class="formError">{{ formError() }}</span>
+                <span class="formError" role="alert">{{ formError() }}</span>
             </div>
             }
 

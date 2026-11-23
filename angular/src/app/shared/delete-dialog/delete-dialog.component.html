@@ -1,6 +1,6 @@
 <div class="overlay" (click)="$event.target === $event.currentTarget && onCancel()" (keydown.escape)="onCancel()">
     <article class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="delete-title"
-        aria-describedby="delete-desc" [attr.aria-busy]="loading()">
+        aria-describedby="delete-desc" [attr.aria-busy]="loading()" cdkTrapFocus cdkTrapFocusAutoCapture>
         <h4 id="delete-title">Delete "{{ productToDelete()?.name || "product" }}"?</h4>
         <p id="delete-desc" class="text-muted">
             This can't be undone. The product will be removed from your inventory.

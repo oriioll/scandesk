@@ -1,0 +1,119 @@
+:host {
+    display: block;
+}
+
+.legal-page {
+    width: min(100%, 70rem);
+    margin: 0 auto;
+    padding: clamp(2rem, 6vw, 4rem) var(--page-gutter) 4rem;
+}
+
+.legal-content {
+    max-width: 54rem;
+    margin: 0 auto;
+}
+
+.breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+}
+
+.breadcrumb a,
+.legal-footer a {
+    color: var(--primary);
+}
+
+h1 {
+    margin-bottom: 1rem;
+}
+
+.introduction {
+    max-width: 68ch;
+    color: var(--text-muted);
+    font-size: var(--text-lg);
+}
+
+section {
+    margin-top: clamp(2rem, 5vw, 3rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+h2 {
+    margin-bottom: 0.75rem;
+    font-size: var(--text-xl);
+}
+
+p,
+li {
+    max-width: 75ch;
+    line-height: var(--leading-normal);
+}
+
+section p + p {
+    margin-top: 0.75rem;
+}
+
+ul {
+    display: grid;
+    gap: 0.65rem;
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.table-scroll {
+    margin-top: 2rem;
+    overflow-x: auto;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+table {
+    width: 100%;
+    min-width: 36rem;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+caption {
+    padding: 1rem 0;
+    color: var(--text);
+    font-weight: 700;
+    text-align: left;
+}
+
+th,
+td {
+    padding: 0.75rem;
+    border-top: 1px solid var(--border);
+    vertical-align: top;
+}
+
+th {
+    color: var(--text);
+    font-weight: 700;
+}
+
+td {
+    color: var(--text-muted);
+}
+
+.legal-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+}
+
+.legal-footer nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}

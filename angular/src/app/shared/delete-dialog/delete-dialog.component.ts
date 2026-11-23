@@ -1,4 +1,5 @@
 import { Component, input, output, signal } from '@angular/core';
+import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { ProductResponse } from '../../models/products/product.response';
 import { ProductService } from '../../services/product.service';
 import { toast } from 'ngx-sonner';
@@ -6,7 +7,7 @@ import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-delete-dialog',
-  imports: [],
+  imports: [CdkTrapFocus],
   templateUrl: './delete-dialog.component.html',
   styleUrl: './delete-dialog.component.css',
 })
